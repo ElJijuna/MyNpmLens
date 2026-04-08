@@ -1,0 +1,12 @@
+## 1.0.0 (2026-04-08)
+
+### Features
+
+* phase 1 — project scaffold (Vite 8, React 19, PWA, file-based routing) ([bcbf60d](https://github.com/ElJijuna/MyNpmLens/commit/bcbf60da09d07fd0421ae0154fb724bbdba59b4d))
+* phase 2 — domain types, localStorage store and react-query favorites hooks. ([1febdd4](https://github.com/ElJijuna/MyNpmLens/commit/1febdd4602d96bfe44f964082f698a89407541b2))
+* phase 3 — API proxy layer with typed error handling and timeout ([a6d5441](https://github.com/ElJijuna/MyNpmLens/commit/a6d5441d5e28842f1485628652acd475815a85f2))
+* phase 4 — react-query hooks for all external APIs. ([fad47f2](https://github.com/ElJijuna/MyNpmLens/commit/fad47f2fc6083378b9f64310b5de4c9377ffb49e))
+* phase 5 — dashboard page with toolbar, package cards and add modal ([be4c23c](https://github.com/ElJijuna/MyNpmLens/commit/be4c23c5dbcc57e8d0d3df2019fa4429a2eb1c00))
+* phase 6 — package detail page with per-section loading and error states ([66ba3dc](https://github.com/ElJijuna/MyNpmLens/commit/66ba3dc1670aaf7f3ea966148c795c52cb8a852b))
+* phase 7 — PWA polish, responsive layout, npm logo icons ([9249b4b](https://github.com/ElJijuna/MyNpmLens/commit/9249b4bea951fe30a5a6f97559dbf9cb92d06453))
+* phase 8 — test coverage, TypeDoc and README. ([54f3577](https://github.com/ElJijuna/MyNpmLens/commit/54f3577221cedce68436337e24f1ff20a3031cb2))
