@@ -1,7 +1,7 @@
 {
   "name": "my-npm-lens",
   "private": false,
-  "version": "1.0.3",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

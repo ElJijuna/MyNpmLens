@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.0.3...v1.1.0) (2026-04-08)
+
+### Features
+
+* add vulnerabilities information. ([0e8cd24](https://github.com/ElJijuna/MyNpmLens/commit/0e8cd2478183608f64e27c4a70a6134e1eafa94b))
+
 ## [1.0.3](https://github.com/ElJijuna/MyNpmLens/compare/v1.0.2...v1.0.3) (2026-04-08)
 
 ### Bug Fixes
