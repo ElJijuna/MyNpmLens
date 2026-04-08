@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // GitHub Pages SPA redirect trick.
+      // Encodes the full path as a query param and redirects to index.html.
+      // index.html will decode it and push the correct history entry.
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          '//' +
+          l.hostname +
+          (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 2).join('/') +
+          '/?p=' +
+          encodeURIComponent(
+            l.pathname.slice(l.pathname.split('/').slice(0, 2).join('/').length),
+          ) +
+          (l.search ? '&q=' + encodeURIComponent(l.search.slice(1)) : '') +
+          l.hash,
+      );
+    </script>
+  </head>
+</html>

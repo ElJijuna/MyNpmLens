@@ -8,6 +8,23 @@
     <meta name="theme-color" content="#CB3837" />
     <meta name="description" content="Track and monitor your favorite NPM packages" />
     <title>My Npm Lens</title>
+    <script>
+      // Decode the path redirect from 404.html and restore it before the router mounts.
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('p');
+        if (p) {
+          var q = params.get('q');
+          var hash = window.location.hash;
+          var newUrl =
+            window.location.pathname +
+            decodeURIComponent(p) +
+            (q ? '?' + decodeURIComponent(q) : '') +
+            hash;
+          window.history.replaceState(null, '', newUrl);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
