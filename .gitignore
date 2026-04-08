@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+docs/
+
+# Vite
+*.local
+.vite/
+
+# TanStack Router (auto-generated — commit if you prefer traceability)
+# src/routeTree.gen.ts
+
+# PWA
+dev-dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# TypeScript build info
+*.tsbuildinfo

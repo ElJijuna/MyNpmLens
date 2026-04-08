@@ -1,0 +1,10 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/modules"],
+  "entryPointStrategy": "expand",
+  "out": "docs",
+  "name": "My Npm Lens",
+  "includeVersion": true,
+  "readme": "README.md",
+  "exclude": ["**/__tests__/**", "**/*.test.ts", "**/*.spec.ts"]
+}

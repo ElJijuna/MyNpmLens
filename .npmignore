@@ -1,0 +1,14 @@
+node_modules/
+src/
+public/
+docs/
+coverage/
+.vscode/
+.github/
+*.config.ts
+*.config.js
+tsconfig*.json
+typedoc.json
+jest.config.ts
+ROADMAP.md
+index.html
