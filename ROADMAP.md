@@ -132,11 +132,13 @@ Vista detallada de un paquete.
 
 UX final y capacidades offline.
 
-- [ ] Tema con `@gnome-ui/core` (light/dark si el sistema lo soporta)
-- [ ] Responsive design (mobile-first)
-- [ ] Service worker: cache de assets, estrategia offline para datos en caché
-- [ ] Web App Manifest: nombre, iconos, theme color, display standalone
-- [ ] Instalar como PWA en mobile/desktop
+- [x] Tema light/dark automático vía `@gnome-ui/core` tokens + `color-scheme: light dark` en CSS global
+- [x] `src/styles/global.css` — reset, fuente Cantarell/system-ui, `--gnome-window-bg-color` como fondo del body
+- [x] Responsive mobile-first — clases `.page-content` (padding adaptativo), `.package-grid` (auto-fill min 260px), `.detail-sections`
+- [x] PWA icons — `favicon.svg` (npm 'n' blanco sobre rojo), `pwa-192x192.png`, `pwa-512x512.png`, `apple-touch-icon.png`
+- [x] Web App Manifest actualizado — `theme_color: #CB3837`, `background_color: #CB3837`
+- [x] `OfflineBanner` — `useRegisterSW` + `Banner variant="info"` con botón Update cuando hay nueva versión del SW
+- [x] `OfflineBanner` montado en `__root.tsx` fuera del `Outlet`
 
 ---
 
