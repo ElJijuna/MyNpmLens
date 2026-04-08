@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.0.0...v1.0.1) (2026-04-08)
+
+### Bug Fixes
+
+* import @gnome-ui/react/styles to apply component CSS ([488ab66](https://github.com/ElJijuna/MyNpmLens/commit/488ab669af4efc4d9109daddb0107f9ed3d3dfbd))
+
 ## 1.0.0 (2026-04-08)
 
 ### Features
