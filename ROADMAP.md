@@ -73,16 +73,13 @@ Persistencia local y modelos de dominio.
 
 Fetchers que consumen las APIs externas (`modules/*/proxy`).
 
-- [ ] **npm registry** (`https://registry.npmjs.org/<package>`):
-  - nombre, versión, descripción, autor, licencia, homepage, repositorio GitHub
-- [ ] **npm downloads** (`https://api.npmjs.org/downloads/point/last-week/<package>`):
-  - descargas semanales y mensuales
-- [ ] **Bundlephobia** (`https://bundlephobia.com/api/size?package=<package>`):
-  - tamaño minificado y gzipped
-- [ ] **GitHub API** (`https://api.github.com/repos/<owner>/<repo>`):
-  - stars, forks, issues abiertos, último commit
-  - Solo si el paquete expone URL de GitHub en su registro NPM
-- [ ] Manejo de errores / timeouts por proxy
+- [x] **npm registry** → `fetchNpmPackage` — nombre, versión, descripción, autor, licencia, homepage, GitHub slug
+- [x] **npm downloads** → `fetchNpmDownloads` — weekly + monthly en paralelo con `Promise.all`
+- [x] **Bundlephobia** → `fetchBundleSize` — size, gzip, hasSideEffects
+- [x] **GitHub API** → `fetchGitHubStats` — stars, forks, openIssues, lastPushedAt, htmlUrl
+- [x] `ProxyError(service, status, message)` — error tipado compartido por todos los proxies
+- [x] `fetchWithTimeout` — AbortController con 8s timeout, lanza `ProxyError` en timeout/network
+- [x] 13 tests de proxy con `@jest-environment node` + `jest.spyOn(global, 'fetch')` (37 total)
 
 ---
 

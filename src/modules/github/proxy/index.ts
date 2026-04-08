@@ -1,0 +1,1 @@
+export { fetchGitHubStats } from './fetchGitHubStats'
