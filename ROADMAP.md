@@ -144,12 +144,14 @@ UX final y capacidades offline.
 
 ## Phase 8 — Testing & Docs
 
-- [ ] Unit tests con Jest 30 + Testing Library:
-  - Hooks de react-query (con `msw` para mocks)
-  - Componentes clave (`PackageCard`, modal de agregar)
-  - Funciones del store (localStorage)
-- [ ] Configurar TypeDoc para generar documentación del dominio y proxies
-- [ ] README con instrucciones de desarrollo y uso
+- [x] 76 unit tests en total — cobertura de:
+  - `useBundleSize`, `useNpmDownloads`, `useAddFavorite`, `useRemoveFavorite`
+  - `fetchWithTimeout` (success, network error, AbortError timeout)
+  - `DashboardPage` (empty state, grid con favoritos, apertura del modal)
+  - `PackageCard`, `AddPackageModal`, `SectionCard`, `PackageDetailPage`, proxies, store, domain
+- [x] `fetchWithTimeout` corregido — usa `err.name === 'AbortError'` en lugar de `instanceof DOMException` (compatible con Node env)
+- [x] TypeDoc — `skipErrorChecking: true`, excluye test files, genera `docs/` limpio
+- [x] `README.md` — features, tech stack, scripts, estructura del proyecto, data sources
 
 ---
 

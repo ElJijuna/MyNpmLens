@@ -17,7 +17,7 @@ export async function fetchWithTimeout(
     const res = await fetch(url, { signal: controller.signal })
     return res
   } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') {
+    if (err instanceof Error && err.name === 'AbortError') {
       throw new ProxyError(service, 'timeout', `${service} request timed out after ${timeoutMs}ms`)
     }
     throw new ProxyError(service, 'network', `${service} network error: ${String(err)}`)

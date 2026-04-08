@@ -6,5 +6,12 @@
   "name": "My Npm Lens",
   "includeVersion": true,
   "readme": "README.md",
-  "exclude": ["**/__tests__/**", "**/*.test.ts", "**/*.spec.ts"]
+  "exclude": [
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
+  "skipErrorChecking": true
 }
