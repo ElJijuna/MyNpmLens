@@ -102,19 +102,15 @@ Capa de hooks que conectan los proxies con los componentes (`modules/*/hooks`).
 
 Pantalla principal con lista de favoritos.
 
-- [ ] Toolbar: título "My Npm Lens" + botón "Add package"
-- [ ] Estado vacío: ilustración/mensaje cuando no hay favoritos
-- [ ] Modal/drawer "Add package":
-  - Input para pegar URL de NPM
-  - Validación de URL
-  - Al confirmar: guardar en store y refrescar lista
-- [ ] `PackageCard` component (resumen):
-  - Nombre, versión, descripción corta
-  - Descargas semanales
-  - Tamaño gzipped
-  - Stars de GitHub (si disponible)
-  - Badge de licencia
-- [ ] Click en card navega a `/package/:name`
+- [x] `Toolbar` — `HeaderBar` con título + slot `end` (Add button) / slot `start` (back button)
+- [x] `EmptyState` — `StatusPage` con `StarOutline` icon y botón Add
+- [x] `AddPackageModal` — `Dialog` con `TextField`, validación via `parseNpmUrl`, `useAddFavorite` mutation
+- [x] `PackageCard` — `Card interactive`: nombre, versión, descripción, descargas semanales, gzip, stars GitHub, badge de licencia
+- [x] `DashboardPage` — grid responsive, estado vacío, modal wired
+- [x] Click en card navega a `/package/:name` via `useNavigate`
+- [x] `@gnome-ui/core/styles` importado en `main.tsx`
+- [x] `TextEncoder` expuesto en `setupTests.ts` para jsdom + TanStack Router
+- [x] 7 tests (AddPackageModal + PackageCard) — `{ hidden: true }` en `getByRole` por `aria-hidden` del Dialog backdrop (50 total)
 
 ---
 
