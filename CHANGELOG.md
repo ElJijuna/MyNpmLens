@@ -1,3 +1,9 @@
+## [1.0.3](https://github.com/ElJijuna/MyNpmLens/compare/v1.0.2...v1.0.3) (2026-04-08)
+
+### Bug Fixes
+
+* set router basepath to BASE_URL for GitHub Pages sub-path routing ([10241f5](https://github.com/ElJijuna/MyNpmLens/commit/10241f529c2749ae66e312600d091944e50ee82b))
+
 ## [1.0.2](https://github.com/ElJijuna/MyNpmLens/compare/v1.0.1...v1.0.2) (2026-04-08)
 
 ### Bug Fixes
