@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/ElJijuna/MyNpmLens/compare/v1.0.1...v1.0.2) (2026-04-08)
+
+### Bug Fixes
+
+* declare CSS module types for [@gnome-ui](https://github.com/gnome-ui) to fix tsc build. ([abce86b](https://github.com/ElJijuna/MyNpmLens/commit/abce86bc84cf673dea9f1d9900f4a1cf2059d84b))
+
 ## [1.0.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.0.0...v1.0.1) (2026-04-08)
 
 ### Bug Fixes
