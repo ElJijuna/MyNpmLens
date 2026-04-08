@@ -17,7 +17,8 @@ Setup base del proyecto con todas las tecnologías.
   - `jest 30` + `@testing-library/react`
   - `typedoc`
 - [x] Definir estructura de carpetas:
-  ```
+
+  ```text
   src/
     routes/                        ← generación automática de rutas por archivo
       __root.tsx                   ← layout raíz (QueryClientProvider, Outlet)
@@ -41,6 +42,7 @@ Setup base del proyecto con todas las tecnologías.
     store/                         ← localStorage adapter (raw) + react-query hooks
     main.tsx
   ```
+
 - [x] Configurar `@tanstack/router-plugin` en `vite.config.ts`:
   - `routesDirectory: './src/routes'`
   - `generatedRouteTree: './src/routeTree.gen.ts'` (auto-generado, no editar)
@@ -87,11 +89,12 @@ Fetchers que consumen las APIs externas (`modules/*/proxy`).
 
 Capa de hooks que conectan los proxies con los componentes (`modules/*/hooks`).
 
-- [ ] `useNpmPackage(name)` → datos del registry
-- [ ] `useNpmDownloads(name)` → descargas
-- [ ] `useBundleSize(name)` → tamaño del bundle
-- [ ] `useGithubStats(owner, repo)` → métricas GitHub
-- [ ] Configurar `QueryClient` con stale time y cache apropiados
+- [x] `useNpmPackage(name)` — staleTime 5min, gcTime 30min
+- [x] `useNpmDownloads(name)` — staleTime 1h, gcTime 2h
+- [x] `useBundleSize(name)` — staleTime 24h (solo cambia en nuevas releases)
+- [x] `useGitHubStats(owner, repo)` — staleTime 1h; acepta `null` para deshabilitar cuando no hay repo GitHub
+- [x] Query key factories: `npmQueryKeys` y `githubQueryKeys`
+- [x] 6 tests con `renderHook` + `QueryClientProvider` (retry: false) (43 total)
 
 ---
 
@@ -172,7 +175,7 @@ Automatización de versiones, changelog y deploy.
 ## Stack Summary
 
 | Herramienta | Versión | Rol |
-|---|---|---|
+| --- | --- | --- |
 | Vite | 8.0.3 | Build tool |
 | React | 19 | UI framework |
 | TypeScript | latest | Tipado |
