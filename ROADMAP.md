@@ -118,14 +118,13 @@ Pantalla principal con lista de favoritos.
 
 Vista detallada de un paquete.
 
-- [ ] Toolbar: botón "Back" (izquierda), sin botón "Add"
-- [ ] Secciones:
-  - **Info general**: nombre, versión, descripción, autor, licencia, homepage
-  - **Descargas**: weekly, monthly (gráfico simple o badges)
-  - **Bundle size**: minified + gzipped, breakdown por exports si disponible
-  - **GitHub**: stars, forks, issues, último commit, link al repo
-- [ ] Loading skeletons mientras cargan los datos
-- [ ] Manejo de errores por sección
+- [x] Toolbar con `showBack` — `GoPrevious` en slot `start`, sin botón Add
+- [x] `SectionCard` — wrapper reutilizable: `Spinner` (loading) / `Banner error` / children
+- [x] `PackageInfoSection` — nombre, versión, descripción, autor, licencia (`Badge`), homepage (`Link`)
+- [x] `DownloadsSection` — weekly + monthly con `Text variant="numeric"` y `Badge`
+- [x] `BundleSizeSection` — minified + gzipped + badge side-effects (warning/success)
+- [x] `GitHubSection` — stars, forks, open issues, last pushed, link al repo; se oculta si no hay GitHub slug
+- [x] 10 tests (SectionCard + PackageDetailPage) — 60 total
 
 ---
 
