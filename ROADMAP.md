@@ -55,17 +55,17 @@ Setup base del proyecto con todas las tecnologías.
 
 Persistencia local y modelos de dominio.
 
-- [ ] Definir tipos de dominio (`modules/npm/domain`):
-  - `NpmPackage` (nombre, descripción, versión, autor, repositorio, licencia...)
-  - `NpmDownloads` (weekly, monthly downloads)
-  - `BundleSize` (minified, gzipped)
-  - `GitHubStats` (stars, forks, open issues, last commit)
-  - `FavoritePackage` (lo que se guarda en localStorage)
-- [ ] Implementar store en localStorage:
-  - `getFavorites(): FavoritePackage[]`
-  - `addFavorite(npmUrl: string): void`
-  - `removeFavorite(name: string): void`
-- [ ] Validar y parsear la URL de NPM pegada por el usuario para extraer el nombre del paquete
+- [x] Definir tipos de dominio (`modules/npm/domain`):
+  - `NpmPackage`, `NpmAuthor`, `NpmRepository`, `GitHubSlug`
+  - `NpmDownloads`, `BundleSize`, `FavoritePackage`
+  - `GitHubStats` en `modules/github/domain`
+- [x] Implementar store en localStorage (`src/store/favorites.ts` — capa raw):
+  - `favoritesStorage.getAll()`, `.add(name)`, `.remove(name)`
+- [x] Hooks React Query sobre el store (`modules/npm/hooks/useFavorites.ts`):
+  - `useFavorites()` → `useQuery` con `staleTime: Infinity`
+  - `useAddFavorite()` / `useRemoveFavorite()` → `useMutation` + `invalidateQueries`
+- [x] `parseNpmUrl(input)` — parsea URL de npmjs.com o nombre plano (scoped y unscoped)
+- [x] 24 unit tests — `favoritesStorage` (store) y `parseNpmUrl` (dominio)
 
 ---
 

@@ -3,12 +3,9 @@
  * Do not use directly from components — use the hooks in modules/npm/hooks instead.
  */
 
-const STORAGE_KEY = 'mynpmlens:favorites'
+import type { FavoritePackage } from '@/modules/npm/domain'
 
-export interface FavoritePackage {
-  name: string
-  addedAt: string
-}
+const STORAGE_KEY = 'mynpmlens:favorites'
 
 export const favoritesStorage = {
   getAll(): FavoritePackage[] {
