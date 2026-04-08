@@ -22,7 +22,7 @@ describe('DashboardPage', () => {
     jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
       data: [],
       isSuccess: true,
-    } as ReturnType<typeof npmHooks.useFavorites>)
+    } as unknown as ReturnType<typeof npmHooks.useFavorites>)
 
     render(<DashboardPage />, { wrapper })
     expect(screen.getByText('No packages yet')).toBeInTheDocument()
@@ -35,7 +35,7 @@ describe('DashboardPage', () => {
         { name: 'lodash', addedAt: '2024-01-02T00:00:00.000Z' },
       ],
       isSuccess: true,
-    } as ReturnType<typeof npmHooks.useFavorites>)
+    } as unknown as ReturnType<typeof npmHooks.useFavorites>)
     jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isLoading: true } as ReturnType<typeof npmHooks.useNpmPackage>)
     jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useNpmDownloads>)
     jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useBundleSize>)
@@ -48,7 +48,7 @@ describe('DashboardPage', () => {
     jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
       data: [],
       isSuccess: true,
-    } as ReturnType<typeof npmHooks.useFavorites>)
+    } as unknown as ReturnType<typeof npmHooks.useFavorites>)
 
     render(<DashboardPage />, { wrapper })
     // Toolbar "Add package" button contains text — find it directly

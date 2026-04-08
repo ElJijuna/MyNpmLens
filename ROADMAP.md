@@ -159,15 +159,18 @@ UX final y capacidades offline.
 
 Automatización de versiones, changelog y deploy.
 
-- [ ] Workflow **CI**: lint + tests en cada PR
-- [ ] Workflow **Release** (Semantic Release):
-  - Conventional Commits → bump de versión automático
-  - Generación de `CHANGELOG.md`
-  - Publicación de release en GitHub
-- [ ] Workflow **Deploy**:
-  - Build de producción
-  - Publicación en **GitHub Pages** (`gh-pages` branch)
-  - Solo se dispara en merge a `main`
+- [x] **CI** (`.github/workflows/ci.yml`) — lint + tsc --noEmit + test:coverage en push/PR a `main`
+- [x] **Release** (`.github/workflows/release.yml`) — `semantic-release` en push a `main`:
+  - `@semantic-release/commit-analyzer` con conventional commits
+  - `@semantic-release/changelog` genera `CHANGELOG.md`
+  - `@semantic-release/git` commitea `package.json` + `CHANGELOG.md` con `[skip ci]`
+  - `@semantic-release/github` publica GitHub Release
+- [x] **Deploy** (`.github/workflows/deploy.yml`) — build + GitHub Pages en push a `main`:
+  - `VITE_BASE_PATH` inyectado automáticamente desde `github.event.repository.name`
+  - `vite.config.ts` usa `process.env.VITE_BASE_PATH` en modo build
+  - `actions/configure-pages` + `upload-pages-artifact` + `deploy-pages`
+- [x] `eslint.config.js` — ESLint 10 + typescript-eslint, script `lint` en package.json
+- [x] `release.config.js` — Semantic Release con preset `conventionalcommits`
 
 ---
 

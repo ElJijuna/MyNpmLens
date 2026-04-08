@@ -2,7 +2,6 @@
  * @jest-environment node
  */
 import { fetchGitHubStats } from '../fetchGitHubStats'
-import { ProxyError } from '@/modules/npm/proxy/ProxyError'
 
 afterEach(() => jest.restoreAllMocks())
 

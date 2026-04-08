@@ -48,7 +48,7 @@ export function PackageCard({ name }: PackageCardProps) {
           </div>
 
           {pkg?.version && (
-            <Text variant="caption" color="secondary">
+            <Text variant="caption" color="dim">
               v{pkg.version}
             </Text>
           )}
@@ -68,17 +68,17 @@ export function PackageCard({ name }: PackageCardProps) {
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
             {downloads && (
-              <Text variant="caption" color="secondary">
+              <Text variant="caption" color="dim">
                 ↓ {formatNumber(downloads.weekly)}/wk
               </Text>
             )}
             {bundle && (
-              <Text variant="caption" color="secondary">
+              <Text variant="caption" color="dim">
                 ⬡ {formatBytes(bundle.gzip)} gz
               </Text>
             )}
             {github && (
-              <Text variant="caption" color="secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+              <Text variant="caption" color="dim" style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                 <Icon icon={Star} size="sm" />
                 {formatNumber(github.stars)}
               </Text>
