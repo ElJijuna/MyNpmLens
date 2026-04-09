@@ -18,18 +18,17 @@ export function Toolbar({ onAddClick, showBack = false }: ToolbarProps) {
         title="Npm Lens"
         start={
           showBack ? (
-            <>
-              <Button variant="flat" onClick={() => router.history.back()} aria-label="Go back">
-                <Icon icon={GoPrevious} />
-              </Button>
-              <Button variant="flat" onClick={() => navigate({ to: '/' })} aria-label="Go home">
-                <Icon icon={GoHome} />
-              </Button>
-            </>
+            <Button variant="flat" onClick={() => router.history.back()} aria-label="Go back">
+              <Icon icon={GoPrevious} />
+            </Button>
           ) : undefined
         }
         end={
-          !showBack && onAddClick ? (
+          showBack ? (
+            <Button variant="flat" onClick={() => navigate({ to: '/' })} aria-label="Go home">
+              <Icon icon={GoHome} />
+            </Button>
+          ) : onAddClick ? (
             <Button variant="suggested" onClick={onAddClick} leadingIcon={<Icon icon={Add} />}>
               Add
             </Button>
