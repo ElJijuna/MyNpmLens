@@ -11,8 +11,8 @@ interface RegistryResponse {
   homepage?: string
   author?: { name?: string; email?: string; url?: string } | string
   repository?: { type?: string; url?: string } | string
-  'dist-tags': { latest: string }
-  versions: Record<string, { version: string }>
+  'dist-tags': Record<string, string>
+  versions: Record<string, unknown>
 }
 
 function parseAuthor(raw: RegistryResponse['author']): NpmAuthor | null {
@@ -56,11 +56,15 @@ export async function fetchNpmPackage(name: string): Promise<NpmPackage> {
   }
 
   const data: RegistryResponse = await res.json()
-  const version = data['dist-tags']?.latest ?? ''
+  const distTags = data['dist-tags'] ?? {}
+  const version = distTags.latest ?? ''
+  const versions = Object.keys(data.versions ?? {}).reverse()
 
   return {
     name: data.name,
     version,
+    versions,
+    distTags,
     description: data.description ?? '',
     license: data.license ?? '',
     homepage: data.homepage ?? null,

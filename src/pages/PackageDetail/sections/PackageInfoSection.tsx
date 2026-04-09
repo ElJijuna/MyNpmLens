@@ -4,9 +4,10 @@ import { useNpmPackage } from '@/modules/npm/hooks'
 
 interface PackageInfoSectionProps {
   name: string
+  version: string
 }
 
-export function PackageInfoSection({ name }: PackageInfoSectionProps) {
+export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
   const { data, isLoading, error } = useNpmPackage(name)
 
   return (
@@ -15,7 +16,7 @@ export function PackageInfoSection({ name }: PackageInfoSectionProps) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
             <Text variant="title-2" as="h1">{data.name}</Text>
-            <Text variant="caption" color="dim">v{data.version}</Text>
+            <Text variant="caption" color="dim">v{version || data.version}</Text>
             {data.license && <Badge variant="neutral">{data.license}</Badge>}
           </div>
 

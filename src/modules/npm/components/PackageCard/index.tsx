@@ -52,6 +52,11 @@ export function PackageCard({ name }: PackageCardProps) {
           {pkg?.version && (
             <Text variant="caption" color="dim">
               v{pkg.version}
+              {pkg.versions.length > 0 && (
+                <span style={{ marginLeft: '0.4rem', opacity: 0.6 }}>
+                  · {pkg.versions.length} versions
+                </span>
+              )}
             </Text>
           )}
 

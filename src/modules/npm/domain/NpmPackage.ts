@@ -3,7 +3,12 @@
  */
 export interface NpmPackage {
   name: string
+  /** Latest version (dist-tags.latest) */
   version: string
+  /** All published versions, newest first */
+  versions: string[]
+  /** dist-tags map, e.g. { latest: '1.0.0', next: '2.0.0-beta.1' } */
+  distTags: Record<string, string>
   description: string
   license: string
   homepage: string | null
