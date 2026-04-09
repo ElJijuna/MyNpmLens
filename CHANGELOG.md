@@ -1,3 +1,12 @@
+## [1.2.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.1.0...v1.2.0) (2026-04-09)
+
+### Features
+
+* add button to delete packaged added, update tests. ([0a8af43](https://github.com/ElJijuna/MyNpmLens/commit/0a8af431d48bcde567fc09f64c9cc0b4174b4bb1))
+* add total versions published in dashboard and add support to change version package detail. ([b77bd73](https://github.com/ElJijuna/MyNpmLens/commit/b77bd73d9505c8e6ee3a7eb54b04c89fce4c5c9b))
+* add version and button check for updates in footer, fix page vertical distribution. ([28a7f6f](https://github.com/ElJijuna/MyNpmLens/commit/28a7f6f740765edafe8002d8863f90c4a5327da1))
+* change Go Home button to end slot and hide Add. ([d20decf](https://github.com/ElJijuna/MyNpmLens/commit/d20decf451ed57f1e77e0ab74b7ce063f05e956a))
+
 ## [1.1.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.0.3...v1.1.0) (2026-04-08)
 
 ### Features
