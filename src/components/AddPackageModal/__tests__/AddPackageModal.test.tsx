@@ -2,15 +2,20 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { AddPackageModal } from '../index'
+import * as proxy from '@/modules/npm/proxy'
 
-// @gnome-ui Dialog wraps content in aria-hidden backdrop.
-// getByRole needs { hidden: true }; getByText/getByPlaceholderText query the DOM directly.
 function wrapper({ children }: { children: ReactNode }) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>
 }
 
+const MOCK_PKG = {
+  name: 'react', version: '19.0.0', versions: ['19.0.0'], distTags: { latest: '19.0.0' },
+  description: '', license: 'MIT', homepage: null, author: null, repository: null,
+}
+
 beforeEach(() => localStorage.clear())
+afterEach(() => jest.restoreAllMocks())
 
 describe('AddPackageModal', () => {
   it('renders when open', () => {
@@ -32,11 +37,12 @@ describe('AddPackageModal', () => {
     fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }))
 
     await waitFor(() => {
-      expect(screen.getByText(/valid npm URL/i)).toBeInTheDocument()
+      expect(screen.getByText(/valid package name/i)).toBeInTheDocument()
     })
   })
 
   it('calls onClose after adding a valid package name', async () => {
+    jest.spyOn(proxy, 'fetchNpmPackage').mockResolvedValueOnce(MOCK_PKG)
     const onClose = jest.fn()
     render(<AddPackageModal open={true} onClose={onClose} />, { wrapper })
 
@@ -49,6 +55,7 @@ describe('AddPackageModal', () => {
   })
 
   it('accepts a full npmjs.com URL', async () => {
+    jest.spyOn(proxy, 'fetchNpmPackage').mockResolvedValueOnce(MOCK_PKG)
     const onClose = jest.fn()
     render(<AddPackageModal open={true} onClose={onClose} />, { wrapper })
 
