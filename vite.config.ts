@@ -15,11 +15,11 @@ export default defineConfig(({ command }) => {
       }),
       react(),
       VitePWA({
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
         manifest: {
           name: 'My Npm Lens',
-          short_name: 'NpmLens',
+          short_name: 'Npm Lens',
           description: 'Track and monitor your favorite NPM packages',
           theme_color: '#CB3837',
           background_color: '#CB3837',
