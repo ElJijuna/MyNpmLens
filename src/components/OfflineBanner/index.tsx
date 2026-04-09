@@ -7,25 +7,22 @@ export function OfflineBanner() {
     updateServiceWorker,
   } = useRegisterSW()
 
-  function handleResponse(id: string) {
-    if (id === 'update') {
-      updateServiceWorker(true)
-    } else {
-      setNeedRefresh(false)
-    }
-  }
-
   return (
     <Dialog
       open={needRefresh}
-      role="alertdialog"
       title="New version available"
-      responses={[
-        { id: 'update', label: 'Update', variant: 'suggested' },
-        { id: 'cancel', label: 'Cancel' },
-      ]}
-      onResponse={handleResponse}
       closeOnBackdrop={false}
+      buttons={[
+        { label: 'Cancel', variant: 'default', onClick: () => setNeedRefresh(false) },
+        {
+          label: 'Update',
+          variant: 'suggested',
+          onClick: () => {
+            setNeedRefresh(false)
+            updateServiceWorker(true)
+          },
+        },
+      ]}
     >
       A new version of Npm Lens is available. Update now to get the latest features and fixes.
     </Dialog>
