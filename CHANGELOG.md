@@ -1,3 +1,13 @@
+## [1.3.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.2.0...v1.3.0) (2026-04-09)
+
+### Features
+
+* update to input package name or url package and validate if exist before to add. ([ee08438](https://github.com/ElJijuna/MyNpmLens/commit/ee08438778461fdf5d7bf868533b5dc5ccc7070e))
+
+### Bug Fixes
+
+* update test. ([ac60756](https://github.com/ElJijuna/MyNpmLens/commit/ac60756ef0ae1544bbc01c3573e72c839c43da84))
+
 ## [1.2.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.1.0...v1.2.0) (2026-04-09)
 
 ### Features
