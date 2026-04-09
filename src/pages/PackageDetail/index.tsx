@@ -10,7 +10,7 @@ export function PackageDetailPage() {
   const { name } = Route.useParams()
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <Toolbar showBack />
 
       <main className="page-content detail-sections">

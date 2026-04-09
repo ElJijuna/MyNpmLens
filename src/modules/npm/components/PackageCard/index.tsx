@@ -37,7 +37,9 @@ export function PackageCard({ name }: PackageCardProps) {
       aria-label={`View details for ${name}`}
     >
       {pkgLoading ? (
-        <Spinner size="sm" />
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem' }}>
+          <Spinner size="md" />
+        </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
