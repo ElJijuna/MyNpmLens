@@ -27,7 +27,7 @@ export function OfflineBanner() {
       onResponse={handleResponse}
       closeOnBackdrop={false}
     >
-      A new version of My Npm Lens is available. Update now to get the latest features and fixes.
+      A new version of Npm Lens is available. Update now to get the latest features and fixes.
     </Dialog>
   )
 }

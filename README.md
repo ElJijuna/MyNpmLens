@@ -1,4 +1,4 @@
-# My Npm Lens
+# Npm Lens
 
 A PWA to track and monitor your favourite npm packages at a glance.
 

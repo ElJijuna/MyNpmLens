@@ -33,13 +33,15 @@ describe('PackageCard', () => {
       data: {
         name: 'react',
         version: '19.0.0',
+        versions: ['19.0.0', '18.3.1', '18.0.0'],
+        distTags: { latest: '19.0.0' },
         description: 'A JavaScript library.',
         license: 'MIT',
         homepage: null,
         author: null,
         repository: null,
       },
-    } as ReturnType<typeof npmHooks.useNpmPackage>)
+    } as unknown as ReturnType<typeof npmHooks.useNpmPackage>)
     jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({
       data: { packageName: 'react', weekly: 50_000_000, monthly: 200_000_000 },
     } as ReturnType<typeof npmHooks.useNpmDownloads>)

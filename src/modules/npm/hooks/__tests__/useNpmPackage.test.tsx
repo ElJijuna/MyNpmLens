@@ -8,6 +8,8 @@ import type { NpmPackage } from '@/modules/npm/domain'
 const MOCK_PACKAGE: NpmPackage = {
   name: 'react',
   version: '19.0.0',
+  versions: ['19.0.0', '18.3.1'],
+  distTags: { latest: '19.0.0' },
   description: 'A JavaScript library for building user interfaces.',
   license: 'MIT',
   homepage: 'https://reactjs.org/',

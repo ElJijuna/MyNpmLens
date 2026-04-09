@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
 
@@ -9,17 +9,17 @@ export default defineConfig(({ command }) => {
   return {
     base,
     plugins: [
-      TanStackRouterVite({
+      tanstackRouter({
         routesDirectory: './src/routes',
         generatedRouteTree: './src/routeTree.gen.ts',
       }),
       react(),
       VitePWA({
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
         manifest: {
-          name: 'My Npm Lens',
-          short_name: 'NpmLens',
+          name: 'Npm Lens',
+          short_name: 'Npm Lens',
           description: 'Track and monitor your favorite NPM packages',
           theme_color: '#CB3837',
           background_color: '#CB3837',

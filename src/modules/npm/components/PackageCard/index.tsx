@@ -33,11 +33,13 @@ export function PackageCard({ name }: PackageCardProps) {
     <Card
       interactive
       padding="md"
-      onClick={() => navigate({ to: '/package/$name', params: { name } })}
+      onClick={() => navigate({ to: '/package/$name', params: { name }, search: { version: undefined } })}
       aria-label={`View details for ${name}`}
     >
       {pkgLoading ? (
-        <Spinner size="sm" />
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem' }}>
+          <Spinner size="md" />
+        </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -50,6 +52,11 @@ export function PackageCard({ name }: PackageCardProps) {
           {pkg?.version && (
             <Text variant="caption" color="dim">
               v{pkg.version}
+              {pkg.versions.length > 0 && (
+                <span style={{ marginLeft: '0.4rem', opacity: 0.6 }}>
+                  · {pkg.versions.length} versions
+                </span>
+              )}
             </Text>
           )}
 

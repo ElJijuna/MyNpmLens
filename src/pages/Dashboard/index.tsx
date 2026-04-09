@@ -10,7 +10,7 @@ export function DashboardPage() {
   const { data: favorites = [] } = useFavorites()
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <Toolbar onAddClick={() => setModalOpen(true)} />
 
       <main className="page-content">
