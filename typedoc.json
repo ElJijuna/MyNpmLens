@@ -3,7 +3,7 @@
   "entryPoints": ["src/modules"],
   "entryPointStrategy": "expand",
   "out": "docs",
-  "name": "My Npm Lens",
+  "name": "Npm Lens",
   "includeVersion": true,
   "readme": "README.md",
   "exclude": [

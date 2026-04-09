@@ -1,8 +1,9 @@
 import { Toolbar } from '@/components/Toolbar';
 import { Route } from '@/routes/package.$name';
-import { useNpmPackage } from '@/modules/npm/hooks';
+import { useNpmPackage, useRemoveFavorite } from '@/modules/npm/hooks';
 import { useNavigate } from '@tanstack/react-router';
-import { Dropdown, Text } from '@gnome-ui/react';
+import { Dropdown, Text, Button, Icon } from '@gnome-ui/react';
+import { Delete } from '@gnome-ui/icons';
 import { PackageInfoSection } from './sections/PackageInfoSection';
 import { DownloadsSection } from './sections/DownloadsSection';
 import { BundleSizeSection } from './sections/BundleSizeSection';
@@ -22,8 +23,14 @@ export function PackageDetailPage() {
     return { value: v, label: tag ? `${v} (${tag})` : v }
   })
 
+  const removeFavorite = useRemoveFavorite()
+
   function handleVersionChange(v: string) {
     void navigate({ to: '/package/$name', params: { name }, search: { version: v } })
+  }
+
+  function handleRemove() {
+    removeFavorite.mutate(name, { onSuccess: () => navigate({ to: '/' }) })
   }
 
   return (
@@ -51,6 +58,10 @@ export function PackageDetailPage() {
         <BundleSizeSection name={name} />
         <GitHubSection packageName={name} />
         <VulnerabilitySection packageName={name} version={version} />
+
+        <Button variant="destructive" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
+          Remove package
+        </Button>
       </main>
     </div>
   )

@@ -2,15 +2,20 @@ import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import * as npmHooks from '@/modules/npm/hooks'
+import * as osvHooks from '@/modules/osv/hooks/useOsvVulnerabilities'
 import * as githubHooks from '@/modules/github/hooks'
 import { PackageDetailPage } from '../index'
 
 jest.mock('@tanstack/react-router', () => ({
   useRouter: () => ({ history: { back: jest.fn() } }),
+  useNavigate: () => jest.fn(),
 }))
 
 jest.mock('@/routes/package.$name', () => ({
-  Route: { useParams: () => ({ name: 'react' }) },
+  Route: {
+    useParams: () => ({ name: 'react' }),
+    useSearch: () => ({ version: undefined }),
+  },
 }))
 
 function wrapper({ children }: { children: ReactNode }) {
@@ -23,6 +28,8 @@ afterEach(() => jest.restoreAllMocks())
 const MOCK_PKG = {
   name: 'react',
   version: '19.0.0',
+  versions: ['19.0.0', '18.3.1'],
+  distTags: { latest: '19.0.0' },
   description: 'A JavaScript library for building user interfaces.',
   license: 'MIT',
   homepage: 'https://reactjs.org/',
@@ -32,10 +39,12 @@ const MOCK_PKG = {
 
 describe('PackageDetailPage', () => {
   beforeEach(() => {
-    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isLoading: false, data: MOCK_PKG, error: null } as ReturnType<typeof npmHooks.useNpmPackage>)
-    jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ isLoading: false, data: { packageName: 'react', weekly: 1_000_000, monthly: 4_000_000 }, error: null } as ReturnType<typeof npmHooks.useNpmDownloads>)
-    jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ isLoading: false, data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false }, error: null } as ReturnType<typeof npmHooks.useBundleSize>)
-    jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ isLoading: false, data: { owner: 'facebook', repo: 'react', stars: 230_000, forks: 47_000, openIssues: 850, lastPushedAt: '2024-12-01T10:00:00Z', htmlUrl: 'https://github.com/facebook/react' }, error: null } as ReturnType<typeof githubHooks.useGitHubStats>)
+    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isLoading: false, data: MOCK_PKG, error: null } as unknown as ReturnType<typeof npmHooks.useNpmPackage>)
+    jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ isLoading: false, data: { packageName: 'react', weekly: 1_000_000, monthly: 4_000_000 }, error: null } as unknown as ReturnType<typeof npmHooks.useNpmDownloads>)
+    jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ isLoading: false, data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false }, error: null } as unknown as ReturnType<typeof npmHooks.useBundleSize>)
+    jest.spyOn(npmHooks, 'useRemoveFavorite').mockReturnValue({ mutate: jest.fn() } as unknown as ReturnType<typeof npmHooks.useRemoveFavorite>)
+    jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ isLoading: false, data: { owner: 'facebook', repo: 'react', stars: 230_000, forks: 47_000, openIssues: 850, lastPushedAt: '2024-12-01T10:00:00Z', htmlUrl: 'https://github.com/facebook/react' }, error: null } as unknown as ReturnType<typeof githubHooks.useGitHubStats>)
+    jest.spyOn(osvHooks, 'useOsvVulnerabilities').mockReturnValue({ isLoading: false, data: [], error: null } as unknown as ReturnType<typeof osvHooks.useOsvVulnerabilities>)
   })
 
   it('renders all section headings', () => {
@@ -80,7 +89,7 @@ describe('PackageDetailPage', () => {
       isLoading: false,
       data: undefined,
       error: new Error('API unavailable'),
-    } as ReturnType<typeof npmHooks.useNpmDownloads>)
+    } as unknown as ReturnType<typeof npmHooks.useNpmDownloads>)
 
     render(<PackageDetailPage />, { wrapper })
 
