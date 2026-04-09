@@ -1,3 +1,9 @@
+## [1.3.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.3.0...v1.3.1) (2026-04-09)
+
+### Refactoring
+
+* change action to update app in new version available. ([57b1a70](https://github.com/ElJijuna/MyNpmLens/commit/57b1a703daacf95996ee418212bbe1084ffb548c))
+
 ## [1.3.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.2.0...v1.3.0) (2026-04-09)
 
 ### Features
