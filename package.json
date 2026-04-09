@@ -13,6 +13,10 @@
     "docs": "typedoc"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.0",
+    "@capacitor/cli": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
+    "@capacitor/ios": "^8.3.0",
     "@gnome-ui/core": "1.11.3",
     "@gnome-ui/icons": "1.9.3",
     "@gnome-ui/react": "^1.10.0",
