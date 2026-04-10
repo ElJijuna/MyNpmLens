@@ -21,7 +21,7 @@ function formatBytes(bytes: number): string {
 
 export function PackageCard({ name }: PackageCardProps) {
   const navigate = useNavigate()
-  const { data: pkg, isLoading: pkgLoading } = useNpmPackage(name)
+  const { data: pkg, isPending: pkgLoading } = useNpmPackage(name)
   const { data: downloads } = useNpmDownloads(name)
   const { data: bundle } = useBundleSize(name)
   const { data: github } = useGitHubStats(

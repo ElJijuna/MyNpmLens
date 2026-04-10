@@ -18,7 +18,7 @@ afterEach(() => jest.restoreAllMocks())
 
 describe('PackageCard', () => {
   it('shows a spinner while loading', () => {
-    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isLoading: true } as ReturnType<typeof npmHooks.useNpmPackage>)
+    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmHooks.useNpmPackage>)
     jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useNpmDownloads>)
     jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useBundleSize>)
     jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>)
@@ -29,7 +29,7 @@ describe('PackageCard', () => {
 
   it('renders package info when loaded', () => {
     jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({
-      isLoading: false,
+      isPending: false,
       data: {
         name: 'react',
         version: '19.0.0',

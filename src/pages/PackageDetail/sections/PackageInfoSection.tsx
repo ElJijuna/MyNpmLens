@@ -8,10 +8,10 @@ interface PackageInfoSectionProps {
 }
 
 export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
-  const { data, isLoading, error } = useNpmPackage(name)
+  const { data, isPending, error } = useNpmPackage(name)
 
   return (
-    <SectionCard title="Package info" isLoading={isLoading} error={error as Error | null}>
+    <SectionCard title="Package info" isLoading={isPending} error={error as Error | null}>
       {data && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
