@@ -30,4 +30,8 @@ export const favoritesStorage = {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
     return updated
   },
+
+  replace(favorites: FavoritePackage[]): void {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites))
+  },
 }
