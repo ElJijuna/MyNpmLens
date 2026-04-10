@@ -1,6 +1,7 @@
 import { HeaderBar, Button, Icon } from '@gnome-ui/react'
 import { Add, GoPrevious, GoHome } from '@gnome-ui/icons'
 import { useRouter, useNavigate } from '@tanstack/react-router'
+import { usePlatform } from '@gnome-ui/hooks'
 
 interface ToolbarProps {
   onAddClick?: () => void
@@ -10,6 +11,9 @@ interface ToolbarProps {
 export function Toolbar({ onAddClick, showBack = false }: ToolbarProps) {
   const router = useRouter()
   const navigate = useNavigate()
+  const { isGnomeWebView } = usePlatform()
+
+  if (isGnomeWebView) return null
 
   return (
     <div className="sticky-header">

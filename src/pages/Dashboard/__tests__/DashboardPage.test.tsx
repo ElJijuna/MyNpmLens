@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { DashboardPage } from '../index'
@@ -9,12 +9,24 @@ jest.mock('@tanstack/react-router', () => ({
   useNavigate: () => jest.fn(),
 }))
 
+const mockUsePlatform = jest.fn()
+const mockUseNativeEvent = jest.fn()
+
+jest.mock('@gnome-ui/hooks', () => ({
+  usePlatform: () => mockUsePlatform(),
+  useNativeEvent: (type: string, handler: () => void) => mockUseNativeEvent(type, handler),
+}))
+
 function wrapper({ children }: { children: ReactNode }) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>
 }
 
-beforeEach(() => localStorage.clear())
+beforeEach(() => {
+  localStorage.clear()
+  mockUsePlatform.mockReturnValue({ isGnomeWebView: false })
+  mockUseNativeEvent.mockImplementation(() => {})
+})
 afterEach(() => jest.restoreAllMocks())
 
 describe('DashboardPage', () => {
@@ -51,10 +63,41 @@ describe('DashboardPage', () => {
     } as unknown as ReturnType<typeof npmHooks.useFavorites>)
 
     render(<DashboardPage />, { wrapper })
-    // Toolbar "Add package" button contains text — find it directly
     const addBtn = screen.getAllByText(/add package/i)[0]
     fireEvent.click(addBtn.closest('button')!)
-    // Dialog title rendered (aria-hidden backdrop, use getAllByText)
+    expect(screen.getAllByText(/add package/i).length).toBeGreaterThan(1)
+  })
+
+  it('hides the Toolbar when isGnomeWebView is true', () => {
+    mockUsePlatform.mockReturnValue({ isGnomeWebView: true })
+    jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
+      data: [],
+      isSuccess: true,
+    } as unknown as ReturnType<typeof npmHooks.useFavorites>)
+
+    render(<DashboardPage />, { wrapper })
+    expect(screen.queryByRole('banner')).not.toBeInTheDocument()
+  })
+
+  it('opens the Add package modal when the open-dialog-addpackage native event fires', () => {
+    jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
+      data: [],
+      isSuccess: true,
+    } as unknown as ReturnType<typeof npmHooks.useFavorites>)
+
+    let capturedHandler: (() => void) | undefined
+    mockUseNativeEvent.mockImplementation((type: string, handler: () => void) => {
+      if (type === 'open-dialog-addpackage') {
+        capturedHandler = handler
+      }
+    })
+
+    render(<DashboardPage />, { wrapper })
+
+    act(() => {
+      capturedHandler?.()
+    })
+
     expect(screen.getAllByText(/add package/i).length).toBeGreaterThan(1)
   })
 })

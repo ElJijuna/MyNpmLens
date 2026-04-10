@@ -4,10 +4,13 @@ import { AddPackageModal } from '@/components/AddPackageModal'
 import { EmptyState } from '@/components/EmptyState'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { useFavorites } from '@/modules/npm/hooks'
+import { useNativeEvent } from '@gnome-ui/hooks'
 
 export function DashboardPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const { data: favorites = [] } = useFavorites()
+
+  useNativeEvent('open-dialog-addpackage', () => setModalOpen(true))
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>

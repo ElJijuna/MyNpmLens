@@ -17,6 +17,7 @@ A PWA to track and monitor your favourite npm packages at a glance.
   - GitHub stats (stars, forks, open issues, last push date)
 - Light / dark theme follows system preference (Adwaita / GNOME design tokens)
 - Installable as a PWA — works offline with cached data
+- GNOME WebView integration: hides the toolbar and footer when running inside a WebKitGTK WebView, and listens for the `open-dialog-addpackage` native event to open the Add Package dialog
 
 ## Tech stack
 
@@ -28,6 +29,7 @@ A PWA to track and monitor your favourite npm packages at a glance.
 | @tanstack/react-router | latest | File-based routing |
 | @tanstack/react-query | latest | Server state & caching |
 | @gnome-ui/react | 1.9.1 | UI components (Adwaita style) |
+| @gnome-ui/hooks | 1.0.x | Platform detection & native event hooks |
 | vite-plugin-pwa | 1.2.x | Service worker & manifest |
 | Jest | 30 | Unit testing |
 | TypeDoc | 0.28 | API documentation |
