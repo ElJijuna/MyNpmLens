@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
 import { FAVORITES_QUERY_KEY } from '@/modules/npm/hooks/useFavorites'
-import { fetchUserGist, createUserGist, updateUserGist } from '@/modules/gist/proxy'
+import { fetchUserGist, findUserGist, createUserGist, updateUserGist } from '@/modules/gist/proxy'
 import { getStoredGistId, setStoredGistId } from './usePushToGist'
 import type { GistDelta } from '@/modules/gist/domain'
 import type { FavoritePackage } from '@/modules/npm/domain'
@@ -53,6 +53,28 @@ export function useGistSync(): GistSyncState {
         const gistId = getStoredGistId(user.uid)
 
         if (!gistId) {
+          // New device: check if the user already has a MyNpmLens Gist on GitHub
+          const existing = await findUserGist(user.githubToken)
+
+          if (existing) {
+            // Found an existing Gist — persist the id and treat it as a normal sync
+            setStoredGistId(user.uid, existing.gistId)
+            const localFavs = favoritesStorage.getAll()
+            const computed = computeDelta(localFavs, existing.favorites)
+            const hasDiff = computed.addedInGist.length > 0 || computed.removedInGist.length > 0
+            if (!cancelled) {
+              if (hasDiff) {
+                setGistFavs(existing.favorites)
+                setDelta(computed)
+                setStatus('conflict')
+              } else {
+                setStatus('done')
+              }
+            }
+            return
+          }
+
+          // No Gist exists yet — create one from local favorites
           const favorites = favoritesStorage.getAll()
           const created = await createUserGist(favorites, user.githubToken)
           setStoredGistId(user.uid, created.gistId)
