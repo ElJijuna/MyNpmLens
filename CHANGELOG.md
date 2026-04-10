@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.3.1...v1.4.0) (2026-04-10)
+
+### Features
+
+* add interacion with @gnome-ui/hooks to communicate to OS platform, hide toolbar in gnome webview and  open dialog ADD PACKAGE when used click in native button Add in Gnome App. ([bfa8985](https://github.com/ElJijuna/MyNpmLens/commit/bfa898582a97c2d634c5f7dac9fac1e320e1dea5))
+
 ## [1.3.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.3.0...v1.3.1) (2026-04-09)
 
 ### Refactoring
