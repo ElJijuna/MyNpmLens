@@ -20,6 +20,7 @@
     "@gnome-ui/react": "^1.10.0",
     "@tanstack/react-query": "^5.0.0",
     "@tanstack/react-router": "^1.0.0",
+    "firebase": "^12.12.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

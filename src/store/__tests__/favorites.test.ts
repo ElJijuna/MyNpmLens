@@ -71,3 +71,26 @@ describe('favoritesStorage.remove', () => {
     expect(result).toHaveLength(1)
   })
 })
+
+describe('favoritesStorage.replace', () => {
+  it('replaces all favorites with the given list', () => {
+    favoritesStorage.add('react')
+    favoritesStorage.add('lodash')
+    const next = [{ name: 'axios', addedAt: '2025-01-01T00:00:00.000Z' }]
+    favoritesStorage.replace(next)
+    expect(favoritesStorage.getAll()).toEqual(next)
+  })
+
+  it('clears all favorites when called with an empty array', () => {
+    favoritesStorage.add('react')
+    favoritesStorage.replace([])
+    expect(favoritesStorage.getAll()).toEqual([])
+  })
+
+  it('persists the replacement to localStorage', () => {
+    const next = [{ name: 'vite', addedAt: '2025-01-01T00:00:00.000Z' }]
+    favoritesStorage.replace(next)
+    const raw = localStorage.getItem(STORAGE_KEY)
+    expect(JSON.parse(raw!)).toEqual(next)
+  })
+})
