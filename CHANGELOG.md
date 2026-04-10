@@ -1,3 +1,9 @@
+## [1.6.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.6.0...v1.6.1) (2026-04-10)
+
+### Bug Fixes
+
+* add gist scope and resolve github token race condition on sign-in ([1d1dbc4](https://github.com/ElJijuna/MyNpmLens/commit/1d1dbc495c01c9db1f8299a1884cff8ae4d8ba80))
+
 ## [1.6.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.5.0...v1.6.0) (2026-04-10)
 
 ### Features
