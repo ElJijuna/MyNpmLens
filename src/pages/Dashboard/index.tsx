@@ -4,6 +4,7 @@ import { AddPackageModal } from '@/components/AddPackageModal'
 import { EmptyState } from '@/components/EmptyState'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { DownloadsChart } from '@/modules/npm/components/DownloadsChart'
+import { AuthSection } from '@/modules/auth/components/AuthSection'
 import { useFavorites } from '@/modules/npm/hooks'
 import { useNativeEvent } from '@gnome-ui/hooks'
 
@@ -32,6 +33,7 @@ export function DashboardPage() {
             </div>
           </div>
         )}
+        <AuthSection />
       </main>
 
       <AddPackageModal open={modalOpen} onClose={() => setModalOpen(false)} />
