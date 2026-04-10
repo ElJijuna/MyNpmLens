@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.6.1...v1.7.0) (2026-04-10)
+
+### Features
+
+* find existing gist on new device instead of creating a duplicate. ([0cec828](https://github.com/ElJijuna/MyNpmLens/commit/0cec828867297d437dab533584f13523d00311e2))
+
 ## [1.6.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.6.0...v1.6.1) (2026-04-10)
 
 ### Bug Fixes
