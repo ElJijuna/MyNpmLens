@@ -13,10 +13,10 @@ function formatBytes(bytes: number): string {
 }
 
 export function BundleSizeSection({ name }: BundleSizeSectionProps) {
-  const { data, isLoading, error } = useBundleSize(name)
+  const { data, isPending, error } = useBundleSize(name)
 
   return (
-    <SectionCard title="Bundle size" isLoading={isLoading} error={error as Error | null}>
+    <SectionCard title="Bundle size" isLoading={isPending} error={error as Error | null}>
       {data && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>

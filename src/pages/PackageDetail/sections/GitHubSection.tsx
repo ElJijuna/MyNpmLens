@@ -24,12 +24,12 @@ function formatNumber(n: number): string {
 export function GitHubSection({ packageName }: GitHubSectionProps) {
   const { data: pkg } = useNpmPackage(packageName)
   const slug = pkg?.repository?.github ?? null
-  const { data, isLoading, error } = useGitHubStats(slug?.owner ?? null, slug?.repo ?? null)
+  const { data, isPending, error } = useGitHubStats(slug?.owner ?? null, slug?.repo ?? null)
 
-  if (!isLoading && !slug) return null
+  if (!isPending && !slug) return null
 
   return (
-    <SectionCard title="GitHub" isLoading={isLoading} error={error as Error | null}>
+    <SectionCard title="GitHub" isLoading={isPending} error={error as Error | null}>
       {data && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>

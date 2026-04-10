@@ -48,7 +48,7 @@ describe('DashboardPage', () => {
       ],
       isSuccess: true,
     } as unknown as ReturnType<typeof npmHooks.useFavorites>)
-    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isLoading: true } as ReturnType<typeof npmHooks.useNpmPackage>)
+    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmHooks.useNpmPackage>)
     jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useNpmDownloads>)
     jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useBundleSize>)
 
