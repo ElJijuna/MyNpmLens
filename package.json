@@ -13,6 +13,7 @@
     "docs": "typedoc"
   },
   "dependencies": {
+    "@gnome-ui/charts": "^1.1.0",
     "@gnome-ui/core": "1.11.3",
     "@gnome-ui/hooks": "^1.0.0",
     "@gnome-ui/icons": "1.9.3",
