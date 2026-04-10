@@ -3,6 +3,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { useAddFavorite, useRemoveFavorite, useFavorites } from '../useFavorites'
 
+jest.mock('@/modules/gist/hooks', () => ({
+  usePushToGist: () => ({ mutate: jest.fn() }),
+}))
+
 // Share one QueryClient per test so mutations invalidate the same cache
 function makeWrapper() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })

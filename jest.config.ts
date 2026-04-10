@@ -5,6 +5,10 @@ const config: Config = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   moduleNameMapper: {
+    '^firebase/app$': '<rootDir>/src/__mocks__/firebase-app.ts',
+    '^firebase/auth$': '<rootDir>/src/__mocks__/firebase-auth.ts',
+    '^@/modules/auth/AuthProvider$': '<rootDir>/src/__mocks__/auth-provider.ts',
+    '^@/modules/auth/hooks$': '<rootDir>/src/__mocks__/auth-hooks.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },

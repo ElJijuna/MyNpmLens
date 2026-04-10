@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Dialog, TextField } from '@gnome-ui/react'
 import { parseNpmUrl } from '@/modules/npm/domain'
-import { useAddFavorite } from '@/modules/npm/hooks'
+import { useAddFavorite, useFavorites } from '@/modules/npm/hooks'
 import { fetchNpmPackage, ProxyError } from '@/modules/npm/proxy'
 
 interface AddPackageModalProps {
@@ -14,6 +14,7 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
   const [error, setError] = useState<string | undefined>()
   const [isValidating, setIsValidating] = useState(false)
   const addFavorite = useAddFavorite()
+  const { data: favorites = [] } = useFavorites()
 
   async function handleConfirm() {
     const name = parseNpmUrl(input)
@@ -21,6 +22,11 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
       setError(
         'Enter a valid package name (e.g. react, @scope/package) or npm URL (e.g. https://www.npmjs.com/package/react).',
       )
+      return
+    }
+
+    if (favorites.some((f) => f.name === name)) {
+      setError(`"${name}" is already in your list.`)
       return
     }
 
