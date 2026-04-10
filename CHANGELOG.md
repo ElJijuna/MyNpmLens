@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.4.0...v1.5.0) (2026-04-10)
+
+### Features
+
+* add download chart in dasboard. ([ee4ab0b](https://github.com/ElJijuna/MyNpmLens/commit/ee4ab0b1b4da0b52c8b90e6829a7fcfe6ec0b8c4))
+
 ## [1.4.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.3.1...v1.4.0) (2026-04-10)
 
 ### Features
