@@ -3,6 +3,7 @@ import { Toolbar } from '@/components/Toolbar'
 import { AddPackageModal } from '@/components/AddPackageModal'
 import { EmptyState } from '@/components/EmptyState'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
+import { DownloadsChart } from '@/modules/npm/components/DownloadsChart'
 import { useFavorites } from '@/modules/npm/hooks'
 import { useNativeEvent } from '@gnome-ui/hooks'
 
@@ -12,6 +13,8 @@ export function DashboardPage() {
 
   useNativeEvent('open-dialog-addpackage', () => setModalOpen(true))
 
+  const packageNames = favorites.map((fav) => fav.name)
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <Toolbar onAddClick={() => setModalOpen(true)} />
@@ -20,10 +23,13 @@ export function DashboardPage() {
         {favorites.length === 0 ? (
           <EmptyState onAddClick={() => setModalOpen(true)} />
         ) : (
-          <div className="package-grid">
-            {favorites.map((fav) => (
-              <PackageCard key={fav.name} name={fav.name} />
-            ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <DownloadsChart packageNames={packageNames} />
+            <div className="package-grid">
+              {favorites.map((fav) => (
+                <PackageCard key={fav.name} name={fav.name} />
+              ))}
+            </div>
           </div>
         )}
       </main>
