@@ -1,3 +1,13 @@
+## [1.6.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.5.0...v1.6.0) (2026-04-10)
+
+### Features
+
+* add auth UI, duplicate guard, rate limit upgrade and deploy config. ([d4437bd](https://github.com/ElJijuna/MyNpmLens/commit/d4437bd39b1690ac00b0fa1368618b83d84f5588))
+* add component AuthSection, and integrate with dashboard. ([4b64b2c](https://github.com/ElJijuna/MyNpmLens/commit/4b64b2c6ad1ef298b8b8881f92cd270555e6bcf9))
+* add events to create and use gist, and refactor fetchs and hooks to use app authenticate and without authentication. ([0beafb8](https://github.com/ElJijuna/MyNpmLens/commit/0beafb8b8aaa935fcdeaa595a835bcac6ce63f57))
+* add integration with firebase authentication, add Auth providers an hooks and methods to sign in and sign out in github. ([d0eb6de](https://github.com/ElJijuna/MyNpmLens/commit/d0eb6def98bd99bae998a4d9d4ee3922ee6b4b14))
+* integrate gist sync into app shell and favorite mutations ([6b69e79](https://github.com/ElJijuna/MyNpmLens/commit/6b69e79b2a380550d6cb3d95b9580ca655c29401))
+
 ## [1.5.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.4.0...v1.5.0) (2026-04-10)
 
 ### Features
