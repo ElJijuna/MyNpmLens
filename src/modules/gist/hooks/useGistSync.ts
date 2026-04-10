@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
+import { FAVORITES_QUERY_KEY } from '@/modules/npm/hooks/useFavorites'
 import { fetchUserGist, createUserGist, updateUserGist } from '@/modules/gist/proxy'
 import { getStoredGistId, setStoredGistId } from './usePushToGist'
 import type { GistDelta } from '@/modules/gist/domain'
@@ -33,6 +35,7 @@ function computeDelta(
  */
 export function useGistSync(): GistSyncState {
   const { user } = useAuth()
+  const queryClient = useQueryClient()
   const [status, setStatus] = useState<SyncStatus>('idle')
   const [delta, setDelta] = useState<GistDelta>({ addedInGist: [], removedInGist: [] })
   const [gistFavs, setGistFavs] = useState<FavoritePackage[]>([])
@@ -90,6 +93,7 @@ export function useGistSync(): GistSyncState {
       ...gistFavs.filter((g) => !localFavs.find((l) => l.name === g.name)),
     ]
     favoritesStorage.replace(merged)
+    queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
     const gistId = getStoredGistId(user.uid)
     if (gistId) updateUserGist(gistId, merged, user.githubToken).catch(() => {})
     setStatus('done')

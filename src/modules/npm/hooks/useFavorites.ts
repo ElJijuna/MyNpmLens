@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { favoritesStorage } from '@/store/favorites'
+import { usePushToGist } from '@/modules/gist/hooks'
 import type { FavoritePackage } from '@/modules/npm/domain'
 
 export const FAVORITES_QUERY_KEY = ['favorites'] as const
@@ -18,10 +19,11 @@ export function useFavorites() {
 }
 
 /**
- * Adds a package to favorites and invalidates the favorites query.
+ * Adds a package to favorites, invalidates the favorites query, and pushes to Gist if authenticated.
  */
 export function useAddFavorite() {
   const queryClient = useQueryClient()
+  const pushToGist = usePushToGist()
   return useMutation({
     mutationFn: (name: string) => {
       favoritesStorage.add(name)
@@ -29,15 +31,17 @@ export function useAddFavorite() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
+      pushToGist.mutate()
     },
   })
 }
 
 /**
- * Removes a package from favorites and invalidates the favorites query.
+ * Removes a package from favorites, invalidates the favorites query, and pushes to Gist if authenticated.
  */
 export function useRemoveFavorite() {
   const queryClient = useQueryClient()
+  const pushToGist = usePushToGist()
   return useMutation({
     mutationFn: (name: string) => {
       favoritesStorage.remove(name)
@@ -45,6 +49,7 @@ export function useRemoveFavorite() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
+      pushToGist.mutate()
     },
   })
 }
