@@ -4,6 +4,7 @@ import { persistGithubToken } from '@/modules/auth/AuthProvider'
 import type { AuthUser } from '@/modules/auth/domain'
 
 const provider = new GithubAuthProvider()
+provider.addScope('gist')
 
 export async function signInWithGitHub(): Promise<AuthUser> {
   const result = await signInWithPopup(auth, provider)

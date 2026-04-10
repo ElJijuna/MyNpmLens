@@ -20,11 +20,13 @@ function readGithubToken(): string {
 interface AuthContextValue {
   user: AuthUser | null
   authLoading: boolean
+  setGithubToken: (token: string) => void
 }
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   authLoading: true,
+  setGithubToken: () => {},
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -51,8 +53,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return unsubscribe
   }, [])
 
+  function setGithubToken(token: string) {
+    persistGithubToken(token)
+    setUser((prev) => (prev ? { ...prev, githubToken: token } : null))
+  }
+
   return (
-    <AuthContext.Provider value={{ user, authLoading }}>
+    <AuthContext.Provider value={{ user, authLoading, setGithubToken }}>
       {children}
     </AuthContext.Provider>
   )
