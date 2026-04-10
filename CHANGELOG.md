@@ -1,3 +1,9 @@
+## [1.7.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.7.0...v1.7.1) (2026-04-10)
+
+### Refactoring
+
+* change to use isPending. ([ceeaeaa](https://github.com/ElJijuna/MyNpmLens/commit/ceeaeaa249d1faeea724548a56b05d8437e735f2))
+
 ## [1.7.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.6.1...v1.7.0) (2026-04-10)
 
 ### Features
