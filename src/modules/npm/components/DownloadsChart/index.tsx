@@ -24,8 +24,8 @@ export function DownloadsChart({ packageNames }: DownloadsChartProps) {
 
   const data = packageNames.map((name, i) => ({
     name,
-    Semanal: results[i].data?.weekly ?? 0,
-    Mensual: results[i].data?.monthly ?? 0,
+    weekly: results[i].data?.weekly ?? 0,
+    monthly: results[i].data?.monthly ?? 0,
   }))
 
   return (
@@ -37,8 +37,8 @@ export function DownloadsChart({ packageNames }: DownloadsChartProps) {
         data={data}
         xAxisKey="name"
         series={[
-          { dataKey: 'Semanal', name: 'Semanal' },
-          { dataKey: 'Mensual', name: 'Mensual' },
+          { dataKey: 'weekly', name: 'Weekly' },
+          { dataKey: 'monthly', name: 'Monthly' },
         ]}
         showGrid
         showLegend
