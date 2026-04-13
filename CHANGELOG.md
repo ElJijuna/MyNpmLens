@@ -1,3 +1,9 @@
+## [1.8.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.7.1...v1.8.0) (2026-04-13)
+
+### Features
+
+* update manifest and add screenshots. ([a99b878](https://github.com/ElJijuna/MyNpmLens/commit/a99b878b3fa0e97c3e433dfb67f50b4bf0be5f56))
+
 ## [1.7.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.7.0...v1.7.1) (2026-04-10)
 
 ### Refactoring
