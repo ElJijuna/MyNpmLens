@@ -18,14 +18,55 @@ export default defineConfig(({ command }) => {
         registerType: 'prompt',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
         manifest: {
+          id: base,
           name: 'Npm Lens',
           short_name: 'Npm Lens',
           description: 'Track and monitor your favorite NPM packages',
-          theme_color: '#CB3837',
-          background_color: '#CB3837',
+          theme_color: '#333333',
+          background_color: '#333333',
           display: 'standalone',
+          display_override: ['window-controls-overlay', 'standalone'],
           scope: base,
           start_url: base,
+          launch_handler: {
+            client_mode: 'navigate-existing',
+          },
+          categories: ['developer-tools', 'utilities', 'npm'],
+          shortcuts: [
+            {
+              name: 'Dashboard',
+              short_name: 'Dashboard',
+              description: 'Go to the main dashboard',
+              url: base,
+              icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }],
+            },
+          ],
+          screenshots: [
+            {
+              src: 'screenhoots/dashboard.png',
+              sizes: '2026x1324',
+              type: 'image/png',
+              form_factor: 'wide',
+              orientation: 'landscape',
+              label: 'Dashboard',
+            },
+            {
+              src: 'screenhoots/package-details.png',
+              sizes: '2016x1288',
+              type: 'image/png',
+              form_factor: 'wide',
+              orientation: 'landscape',
+              label: 'Package Details',
+            },
+            {
+              src: 'screenhoots/package-details-versions.png',
+              sizes: '2018x1294',
+              type: 'image/png',
+              form_factor: 'wide',
+              orientation: 'landscape',
+              label: 'Package Details - Versions',
+            },
+          ] as any[],
           icons: [
             {
               src: 'pwa-192x192.png',
