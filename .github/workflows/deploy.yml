@@ -41,8 +41,8 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # GitHub Pages serves from /<repo-name>/ — set base path accordingly
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          # Custom domain (npm-lens.app) serves from root
+          VITE_BASE_PATH: /
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
           VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
           VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
