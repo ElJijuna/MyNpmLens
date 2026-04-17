@@ -260,7 +260,70 @@ Componentes: `Avatar`, `Card`, `Text`, `Badge`, `Button`, `SectionCard`
 
 ---
 
-## Fase 7 — Migración a `@api-hooks/bp` (Bundlephobia)
+## Fase 7 — Migración a `@api-hooks/gh` (GitHub Gist)
+
+Eliminar el proxy layer de Gist y reemplazarlo con los hooks de la librería ya instalada.
+La lógica de negocio (`useGistSync`, `usePushToGist`) se conserva; solo se elimina la capa proxy que hace `fetch` directo.
+
+> **Prerequisito:** los hooks de `@api-hooks/gh` deben aceptar `token?: string` en sus opciones
+> para que `GitHubClient` pueda autenticar las peticiones. El repositorio fuente está en
+> `/api-hooks/packages/gh/src/hooks/`.
+
+### Archivos a eliminar
+
+| Archivo | Reemplazado por |
+| --- | --- |
+| `src/modules/gist/proxy/gistClient.ts` | `GitHubClient({ token })` de `gh-api-client` vía hooks |
+| `src/modules/gist/proxy/fetchUserGist.ts` | `useGhGist(gistId, { token })` de `@api-hooks/gh` |
+| `src/modules/gist/proxy/findUserGist.ts` | `GitHubClient({ token }).listGists()` (imperativo en efecto) |
+| `src/modules/gist/proxy/createUserGist.ts` | `useGhCreateGist({ token })` de `@api-hooks/gh` |
+| `src/modules/gist/proxy/updateUserGist.ts` | `useGhUpdateGist(gistId, { token })` de `@api-hooks/gh` |
+| `src/modules/gist/proxy/index.ts` | — |
+
+### Hooks a actualizar
+
+| Hook | Cambia de | A |
+| --- | --- | --- |
+| `usePushToGist.ts` | `createUserGist()` / `updateUserGist()` locales | `useGhCreateGist({ token })` / `useGhUpdateGist(gistId, { token })` |
+| `useGistSync.ts` | `fetchUserGist()` / `findUserGist()` / `createUserGist()` locales | `useGhGist(gistId, { token })` + `GitHubClient({ token }).listGists()` para la búsqueda paginada |
+
+### Notas de implementación
+
+- `findUserGist` (búsqueda paginada) no tiene hook equivalente en `@api-hooks/gh`; se reemplaza
+  con llamada imperativa a `new GitHubClient({ token }).listGists()` dentro del `useEffect` de `useGistSync`.
+- El formato del fichero en Gist (`mynpmlens.json`) y el modelo de dominio `GistSync` no cambian.
+- `GIST_FILENAME` puede moverse a `src/modules/gist/domain` o mantenerse como constante local.
+
+---
+
+## Fase 8 — Migración a `@api-hooks/osv`
+
+Eliminar el proxy y hook local de OSV y reemplazarlos con la librería ya instalada.
+
+### Archivos a eliminar
+
+| Archivo | Reemplazado por |
+| --- | --- |
+| `src/modules/osv/proxy/fetchOsvVulnerabilities.ts` | `useOsvQuery(params)` de `@api-hooks/osv` |
+| `src/modules/osv/hooks/useOsvVulnerabilities.ts` | `useOsvQuery(params)` de `@api-hooks/osv` |
+
+### Consumidores a actualizar
+
+| Componente | Cambia de | A |
+| --- | --- | --- |
+| `VulnerabilitySection.tsx` | `useOsvVulnerabilities(name, version)` | `useOsvQuery({ package: { name, ecosystem: 'npm' }, version })` de `@api-hooks/osv` |
+| `PackageDetailPage.test.tsx` | mock de `useOsvVulnerabilities` | mock de `useOsvQuery` |
+
+### Notas de implementación
+
+- `useOsvQuery` retorna `OsvQueryResult` (`{ vulns?: OsvVulnerability[] }`), no el array directo.
+  `VulnerabilitySection` debe acceder a `data?.vulns ?? []`.
+- El tipo `OsvVulnerability` de `osv-api-client` es compatible con la interfaz local actual;
+  verificar que `database_specific.severity` y `database_specific.cwe_ids` sigan presentes.
+
+---
+
+## Fase 9 — Migración a `@api-hooks/bp` (Bundlephobia)
 
 Eliminar el proxy y hook local de Bundlephobia y reemplazarlos con la librería ya instalada.
 
@@ -292,7 +355,7 @@ Eliminar el proxy y hook local de Bundlephobia y reemplazarlos con la librería 
 
 ---
 
-## Fase 8 — Migración a `@api-hooks/npm`
+## Fase 10 — Migración a `@api-hooks/npm`
 
 Eliminar los proxies y hooks locales de npm y reemplazarlos con los hooks de la librería ya instalada.
 
@@ -340,13 +403,16 @@ Eliminar los proxies y hooks locales de npm y reemplazarlos con los hooks de la 
 
 ## Convención: llamadas a APIs externas
 
-Todas las peticiones a npm o GitHub **deben usar las librerías ya instaladas**,
+Todas las peticiones a APIs externas **deben usar las librerías ya instaladas**,
 nunca `fetch` directo a esos endpoints:
 
 | API | Librería | Ejemplo de uso |
 | --- | --- | --- |
-| npm registry / downloads | `@api-hooks/npm` | `useNpmPackage(name)`, `useNpmDownloads(name)` |
-| GitHub repos / releases | `@api-hooks/gh` | `useGithubRepo(owner, repo)`, `useGithubReleases(...)` |
+| npm registry / downloads | `@api-hooks/npm` | `useNpmPackage(name)`, `useNpmPackageDownloads(name)` |
+| Bundlephobia | `@api-hooks/bp` | `useBpPackageSize(name)`, `useBpPackageVersionSize(name, version)` |
+| GitHub repos / releases | `@api-hooks/gh` | `useGhRepo(owner, repo)`, `useGhRepoReleases(...)` |
+| GitHub Gist | `@api-hooks/gh` | `useGhGist(id, { token })`, `useGhCreateGist({ token })`, `useGhUpdateGist(id, { token })` |
+| OSV vulnerabilities | `@api-hooks/osv` | `useOsvQuery({ package: { name, ecosystem }, version })` |
 
 Esto aplica a todas las fases — tanto en las páginas nuevas (`MaintainersPage`, `AboutPage`)
 como en cualquier ajuste a las páginas existentes (`Dashboard`, `PackageDetail`).
@@ -372,5 +438,8 @@ como en cualquier ajuste a las páginas existentes (`Dashboard`, `PackageDetail`
 | 4 | Toolbar | Toggle sidebar en mobile | `Toolbar/index.tsx` |
 | 5 | ProfilePage | Info de usuario + estado del Gist | `pages/Profile` |
 | 6 | Páginas | Contenido de Maintainers y About | `pages/Maintainers`, `pages/About` |
-| 7 | Migración npm | Eliminar proxies/hooks locales de npm | `modules/npm/proxy`, `modules/npm/hooks` |
-| 8 | Limpieza | Eliminar AppFooter, pulir estilos | `AppFooter/`, `global.css` |
+| 7 | Migración Gist | Eliminar proxy de Gist, usar `@api-hooks/gh` | `modules/gist/proxy/`, `hooks/usePushToGist`, `hooks/useGistSync` |
+| 8 | Migración OSV | Eliminar proxy/hook de OSV, usar `@api-hooks/osv` | `modules/osv/`, `VulnerabilitySection.tsx` |
+| 9 | Migración bp | Eliminar proxy/hook de Bundlephobia, usar `@api-hooks/bp` | `modules/npm/proxy/fetchBundleSize`, `hooks/useBundleSize` |
+| 10 | Migración npm | Eliminar proxies/hooks locales de npm | `modules/npm/proxy`, `modules/npm/hooks` |
+| 11 | Limpieza | Eliminar AppFooter, pulir estilos | `AppFooter/`, `global.css` |

@@ -193,13 +193,19 @@ graph LR
     useGitHubStats["useGitHubStats()\nfetchGitHubStats()"]
   end
 
-  subgraph osv-module ["modules/osv (unchanged)"]
-    useOsvVulnerabilities["useOsvVulnerabilities()"]
+  subgraph api-hooks-osv ["@api-hooks/osv ✦ replaces modules/osv/proxy + hook"]
+    useOsvQuery["useOsvQuery()"]
   end
 
-  subgraph gist-module ["modules/gist (unchanged)"]
-    useGistSync["useGistSync()"]
-    usePushToGist["usePushToGist()"]
+  subgraph api-hooks-gh ["@api-hooks/gh ✦ replaces modules/gist/proxy"]
+    useGhGist["useGhGist()"]
+    useGhCreateGist["useGhCreateGist()"]
+    useGhUpdateGist["useGhUpdateGist()"]
+  end
+
+  subgraph gist-module ["modules/gist (business logic layer)"]
+    useGistSync["useGistSync()\nwraps @api-hooks/gh"]
+    usePushToGist["usePushToGist()\nwraps @api-hooks/gh"]
   end
 
   subgraph auth-module ["modules/auth (unchanged)"]
@@ -230,7 +236,7 @@ graph LR
   PackageDetail --> useNpmPackageDownloads
   PackageDetail --> useBpPackageVersionSize
   PackageDetail --> useGitHubStats
-  PackageDetail --> useOsvVulnerabilities
+  PackageDetail --> useOsvQuery
 
   Maintainers --> useNpmPackageMaintainers
   Maintainers --> useNpmMaintainer
@@ -246,10 +252,15 @@ graph LR
   useBpPackageSize --> BP
   useBpPackageVersionSize --> BP
   useGitHubStats --> GH
-  useOsvVulnerabilities --> OSV
+  useOsvQuery --> OSV
 
-  useGistSync --> GH
-  usePushToGist --> GH
+  useGistSync --> useGhGist
+  useGistSync --> useGhCreateGist
+  usePushToGist --> useGhCreateGist
+  usePushToGist --> useGhUpdateGist
+  useGhGist --> GH
+  useGhCreateGist --> GH
+  useGhUpdateGist --> GH
   useSignIn --> Firebase
   AuthProvider --> Firebase
 ```
@@ -269,3 +280,5 @@ graph LR
 | npm proxy/hooks | `fetchNpmPackage`, `fetchNpmDownloads`, `useNpmPackage`, `useNpmDownloads` | `@api-hooks/npm` |
 | Bundlephobia proxy/hook | `fetchBundleSize`, `useBundleSize` | `@api-hooks/bp` |
 | Bundle size en detail | Siempre latest | `useBpPackageVersionSize` — versión seleccionada |
+| OSV proxy/hook | `fetchOsvVulnerabilities`, `useOsvVulnerabilities` | `useOsvQuery()` de `@api-hooks/osv` |
+| Gist proxy layer | `gistClient`, `fetchUserGist`, `findUserGist`, `createUserGist`, `updateUserGist` | `useGhGist`, `useGhCreateGist`, `useGhUpdateGist` de `@api-hooks/gh` |
