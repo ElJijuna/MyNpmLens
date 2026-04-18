@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Dialog, TextField } from '@gnome-ui/react'
 import { useAddMaintainer, useMaintainers } from '@/modules/npm/hooks'
+import { Analytics } from '@/lib/analytics'
 import { ProxyError } from '@/modules/npm/proxy'
 
 interface AddMaintainerDialogProps {
@@ -23,6 +24,7 @@ export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps)
       return
     }
 
+    Analytics.addMaintainer(username)
     addMaintainer.mutate(username, {
       onSuccess: () => {
         setInput('')

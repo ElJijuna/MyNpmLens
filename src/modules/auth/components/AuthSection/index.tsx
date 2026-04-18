@@ -1,6 +1,7 @@
 import { Avatar, Button, Text, Spinner } from '@gnome-ui/react'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSignIn, useSignOut } from '@/modules/auth/hooks'
+import { Analytics } from '@/lib/analytics'
 
 export function AuthSection() {
   const { user, authLoading } = useAuth()
@@ -33,7 +34,7 @@ export function AuthSection() {
           <Button
             variant="flat"
             size="sm"
-            onClick={() => signOut.mutate()}
+            onClick={() => { Analytics.signOut(); signOut.mutate() }}
             disabled={signOut.isPending}
           >
             Sign out
@@ -43,7 +44,7 @@ export function AuthSection() {
         <Button
           variant="default"
           shape="pill"
-          onClick={() => signIn.mutate()}
+          onClick={() => { Analytics.signIn(); signIn.mutate() }}
           disabled={signIn.isPending}
           leadingIcon={
             signIn.isPending ? (

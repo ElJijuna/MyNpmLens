@@ -1,8 +1,13 @@
+jest.mock('@/lib/analytics', () => ({
+  Analytics: { addPackage: jest.fn() },
+}))
+
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { AddPackageModal } from '../index'
 import * as npmjsClient from 'npmjs-api-client'
+import { Analytics } from '@/lib/analytics'
 
 function wrapper({ children }: { children: ReactNode }) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
@@ -60,6 +65,18 @@ describe('AddPackageModal', () => {
     fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }))
 
     await waitFor(() => expect(onClose).toHaveBeenCalled())
+  })
+
+  it('logs Analytics.addPackage with package name on success', async () => {
+    mockNpmClientGet(MOCK_PACKUMENT)
+    render(<AddPackageModal open={true} onClose={() => {}} />, { wrapper })
+
+    fireEvent.change(screen.getByPlaceholderText(/npmjs\.com\/package/i), {
+      target: { value: 'react' },
+    })
+    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }))
+
+    await waitFor(() => expect(Analytics.addPackage).toHaveBeenCalledWith('react'))
   })
 
   it('accepts a full npmjs.com URL', async () => {

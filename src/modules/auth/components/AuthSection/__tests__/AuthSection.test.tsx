@@ -3,6 +3,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { AuthSection } from '../index'
 
+jest.mock('@/lib/analytics', () => ({
+  Analytics: { signIn: jest.fn(), signOut: jest.fn() },
+}))
+
 jest.mock('@/modules/auth/AuthProvider', () => ({
   useAuth: jest.fn(),
   persistGithubToken: jest.fn(),
@@ -16,6 +20,7 @@ jest.mock('@/modules/auth/hooks', () => ({
 
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSignIn, useSignOut } from '@/modules/auth/hooks'
+import { Analytics } from '@/lib/analytics'
 
 const mockUseAuth = useAuth as jest.Mock
 const mockUseSignIn = useSignIn as jest.Mock
@@ -97,5 +102,24 @@ describe('AuthSection', () => {
     render(<AuthSection />, { wrapper })
     fireEvent.click(screen.getByText('Sign out'))
     expect(mutate).toHaveBeenCalledTimes(1)
+  })
+
+  it('logs Analytics.signIn when Sign in button is clicked', () => {
+    mockUseAuth.mockReturnValue({ user: null, authLoading: false })
+
+    render(<AuthSection />, { wrapper })
+    fireEvent.click(screen.getByText('Sign in with GitHub'))
+    expect(Analytics.signIn).toHaveBeenCalledTimes(1)
+  })
+
+  it('logs Analytics.signOut when Sign out button is clicked', () => {
+    mockUseAuth.mockReturnValue({
+      user: { uid: '1', displayName: 'User', email: null, photoURL: null, githubToken: 'tok' },
+      authLoading: false,
+    })
+
+    render(<AuthSection />, { wrapper })
+    fireEvent.click(screen.getByText('Sign out'))
+    expect(Analytics.signOut).toHaveBeenCalledTimes(1)
   })
 })

@@ -8,6 +8,7 @@ import { SidebarProvider } from '@/context/SidebarContext'
 import { useGistSync } from '@/modules/gist/hooks'
 import { MergeSyncDialog } from '@/modules/gist/components/MergeSyncDialog'
 import { useApplyTheme } from '@/hooks/useApplyTheme'
+import { usePageView } from '@/hooks/usePageView'
 import '@/app.css'
 
 interface RouterContext {
@@ -20,6 +21,7 @@ function RootLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const { isNarrow } = useBreakpoint()
   useApplyTheme()
+  usePageView()
 
   return (
     <SidebarProvider

@@ -4,6 +4,7 @@ import { Dialog, SearchBar, Banner } from '@gnome-ui/react'
 interface Suggestion { id: string; label: string }
 import { parseNpmUrl } from '@/modules/npm/domain'
 import { useAddFavorite, useFavorites } from '@/modules/npm/hooks'
+import { Analytics } from '@/lib/analytics'
 import { useNpmSearch } from '@api-hooks/npm'
 import { useDebouncedValue } from '@tanstack/react-pacer'
 import { NpmClient, NpmApiError } from 'npmjs-api-client'
@@ -60,6 +61,7 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
     }
     setIsValidating(false)
 
+    Analytics.addPackage(name)
     addFavorite.mutate(name, {
       onSuccess: () => {
         setInput('')

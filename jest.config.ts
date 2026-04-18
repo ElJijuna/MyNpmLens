@@ -7,6 +7,8 @@ const config: Config = {
   moduleNameMapper: {
     '^firebase/app$': '<rootDir>/src/__mocks__/firebase-app.ts',
     '^firebase/auth$': '<rootDir>/src/__mocks__/firebase-auth.ts',
+    '^firebase/analytics$': '<rootDir>/src/__mocks__/firebase-analytics.ts',
+    '^@/modules/auth/proxy/firebase$': '<rootDir>/src/__mocks__/auth-firebase.ts',
     '^@/modules/auth/AuthProvider$': '<rootDir>/src/__mocks__/auth-provider.ts',
     '^@/modules/auth/hooks$': '<rootDir>/src/__mocks__/auth-hooks.ts',
     '^@api-hooks/gh$': '<rootDir>/src/__mocks__/api-hooks-gh.ts',
@@ -14,6 +16,7 @@ const config: Config = {
     '^@api-hooks/bp$': '<rootDir>/src/__mocks__/api-hooks-bp.ts',
     '^@api-hooks/osv$': '<rootDir>/src/__mocks__/api-hooks-osv.ts',
     '^@gnome-ui/charts$': '<rootDir>/src/__mocks__/gnome-ui-charts.ts',
+    '^virtual:pwa-register/react$': '<rootDir>/src/__mocks__/pwa-register.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },

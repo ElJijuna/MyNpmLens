@@ -1,5 +1,6 @@
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { Dialog } from '@gnome-ui/react'
+import { Analytics } from '@/lib/analytics'
 
 export function OfflineBanner() {
   const {
@@ -18,6 +19,7 @@ export function OfflineBanner() {
           label: 'Update',
           variant: 'suggested',
           onClick: () => {
+            Analytics.appUpdate()
             setNeedRefresh(false)
             updateServiceWorker(true)
           },
