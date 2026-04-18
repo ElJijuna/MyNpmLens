@@ -72,10 +72,10 @@ describe('DownloadsChart', () => {
 
     render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
 
-    expect(screen.getByTestId('react-Semanal').textContent).toBe('5000')
-    expect(screen.getByTestId('react-Mensual').textContent).toBe('20000')
-    expect(screen.getByTestId('lodash-Semanal').textContent).toBe('3000')
-    expect(screen.getByTestId('lodash-Mensual').textContent).toBe('12000')
+    expect(screen.getByTestId('react-weekly').textContent).toBe('5000')
+    expect(screen.getByTestId('react-monthly').textContent).toBe('20000')
+    expect(screen.getByTestId('lodash-weekly').textContent).toBe('3000')
+    expect(screen.getByTestId('lodash-monthly').textContent).toBe('12000')
   })
 
   it('defaults missing data to 0 instead of crashing', () => {
@@ -86,7 +86,7 @@ describe('DownloadsChart', () => {
 
     render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
 
-    expect(screen.getByTestId('lodash-Semanal').textContent).toBe('0')
-    expect(screen.getByTestId('lodash-Mensual').textContent).toBe('0')
+    expect(screen.getByTestId('lodash-weekly').textContent).toBe('0')
+    expect(screen.getByTestId('lodash-monthly').textContent).toBe('0')
   })
 })
