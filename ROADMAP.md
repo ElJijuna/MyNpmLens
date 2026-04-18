@@ -14,7 +14,8 @@ de `@gnome-ui/react`.
 │                ├─────────────────────────────────────────┤
 │  ● Home        │  Contenido de la ruta activa            │
 │  ● Maintainers │                                         │
-│  ● About       │  (Dashboard / Maintainers / About)      │
+│  ● About       │  (Dashboard / Maintainers / About /     │
+│  ● Settings    │   Settings / Profile)                   │
 │                │                                         │
 │  ─────────     │                                         │
 │  [Avatar] User │  ← clickeable → /profile                │
@@ -38,15 +39,19 @@ Agregar dos rutas nuevas al árbol de TanStack Router:
 | Ruta | Archivo | Página |
 | --- | --- | --- |
 | `/` | `src/routes/index.tsx` | Dashboard (sin cambios) |
-| `/maintainers` | `src/routes/maintainers.tsx` | Página Maintainers (stub inicial) |
+| `/maintainers` | `src/routes/maintainers.tsx` | Lista de maintainers seguidos + botón Add |
+| `/maintainers/$username` | `src/routes/maintainers.$username.tsx` | `MaintainerPage` — detalle de maintainer + paquetes + Unfollow |
 | `/about` | `src/routes/about.tsx` | Página About (stub inicial) |
 | `/profile` | `src/routes/profile.tsx` | Perfil de usuario + info del Gist |
+| `/settings` | `src/routes/settings.tsx` | Preferencias de la app — guardadas en Gist |
 
 **Tareas:**
 
 - Crear `src/routes/maintainers.tsx` con componente `MaintainersPage` vacío
+- Crear `src/routes/maintainers.$username.tsx` con componente `MaintainerPage` vacío
 - Crear `src/routes/about.tsx` con componente `AboutPage` vacío
 - Crear `src/routes/profile.tsx` con componente `ProfilePage` (requiere sesión activa)
+- Crear `src/routes/settings.tsx` con componente `SettingsPage` vacío
 - Regenerar `src/routeTree.gen.ts` (`npm run dev` lo hace automáticamente)
 
 ---
@@ -86,6 +91,12 @@ export function AppSidebar() {
           icon={Info}
           active={!!matchRoute({ to: '/about' })}
           onClick={() => navigate({ to: '/about' })}
+        />
+        <SidebarItem
+          label="Settings"
+          icon={Settings}
+          active={!!matchRoute({ to: '/settings' })}
+          onClick={() => navigate({ to: '/settings' })}
         />
       </SidebarSection>
 
@@ -206,24 +217,49 @@ OverlaySplitView (mobile portrait)
 
 Con `NavigationSplitView`, el `HeaderBar` debe coexistir con el sidebar. Revisar:
 
-- En pantallas anchas: el sidebar siempre visible, el `HeaderBar` solo muestra el título de la página activa y los botones de acción (Add, back…)
+- En pantallas anchas: el sidebar siempre visible, el `HeaderBar` muestra `PathBar` para navegación
+  y los botones de acción (Add, back…)
 - En pantallas estrechas: agregar botón hamburguesa para abrir/cerrar el sidebar con `OverlaySplitView`
 
+### `PathBar` para navegación contextual
+
+Usar `PathBar` de `@gnome-ui/react` dentro del `HeaderBar` para mostrar la ubicación actual
+y permitir navegar hacia atrás clickeando segmentos anteriores.
+
 ```tsx
-// Toolbar.tsx — agregar prop para toggle del sidebar en mobile
+import { PathBar } from '@gnome-ui/react'
+
+// Toolbar.tsx — PathBar en lugar de title estático
 <HeaderBar
   flat
-  title={pageTitle}
+  title={<PathBar segments={segments} onNavigate={(path) => navigate({ to: path })} />}
   start={isNarrow ? <Button onClick={toggleSidebar}><Icon icon={SidebarShow} /></Button> : undefined}
   end={...acciones actuales}
 />
 ```
+
+#### Segmentos por ruta
+
+| Ruta | Segmentos |
+| --- | --- |
+| `/` | `Home` (no-interactivo) |
+| `/maintainers` | `Home → Maintainers` |
+| `/maintainers/$username` | `Home → Maintainers → {username}` |
+| `/profile` | `Home → Profile` |
+| `/settings` | `Home → Settings` |
+| `/about` | `Home → About` |
+| `PackageDetail` | `Home → {packageName}` |
+
+El hook `usePathSegments()` en `src/hooks/` construye el array de segmentos leyendo
+`useRouterState()` de TanStack Router y devuelve `PathBarSegment[]` listo para usar.
 
 **Tareas:**
 
 - Añadir estado `sidebarOpen` en `__root.tsx` (o un context ligero)
 - Pasar toggle al `Toolbar` para pantallas estrechas
 - Usar `OverlaySplitView` en lugar de `NavigationSplitView` cuando `isNarrow` sea `true` (hook `useBreakpoint` de gnome-ui)
+- Crear `src/hooks/usePathSegments.ts` que mapea la ruta activa a `PathBarSegment[]`
+- Reemplazar el `title` estático del `HeaderBar` por `<PathBar>` con los segmentos
 
 ---
 
@@ -231,11 +267,112 @@ Con `NavigationSplitView`, el `HeaderBar` debe coexistir con el sidebar. Revisar
 
 Implementar el contenido real de las dos páginas nuevas.
 
-### `MaintainersPage`
+### `MaintainersPage` (`/maintainers`)
 
-- Lista de paquetes favoritos agrupados por maintainer
-- Fuente: campo `maintainers` usando `@api-hooks/npm` (ya instalado)
-- Componentes: `SectionCard`, `Avatar` (foto del maintainer), `Text`, `Badge`
+Dashboard agradable de maintainers seguidos, construido con componentes de `@gnome-ui/layout`.
+
+#### Botón "Add maintainer" + Dialog
+
+- Botón prominente en la página (ej. `+ Add maintainer`).
+- Abre un `Dialog` de `@gnome-ui/react` con un `TextField` para escribir el username de npm
+  (ej. `pilmee`).
+- Al confirmar: valida que el maintainer existe vía `useNpmMaintainer(username)` de
+  `@api-hooks/npm`, agrega al listado y empuja al Gist.
+- Si el maintainer ya está en la lista muestra error inline.
+
+#### Layout del dashboard
+
+```text
+┌──────────────────────────────────────────────────┐
+│  PanelCard  "Maintainers"   [+ Add maintainer]   │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐          │
+│  │ UserCard │ │ UserCard │ │ UserCard │  …        │
+│  │ pilmee   │ │ sindresor│ │ tj       │           │
+│  └──────────┘ └──────────┘ └──────────┘          │
+└──────────────────────────────────────────────────┘
+```
+
+- Envolver la lista en un `PanelCard` (`@gnome-ui/layout`) con:
+  - `title="Following"`, `icon` opcional, `collapsible={false}`
+  - `headerActions`: botón `+ Add maintainer`
+- Cada maintainer: `UserCard` con `name=username`, `email` (si lo devuelve la API),
+  `avatarSrc` — el card completo es clickeable y navega a `/maintainers/$username`.
+
+---
+
+### `MaintainerPage` (`/maintainers/$username`)
+
+Dashboard de detalle construido con componentes de `@gnome-ui/layout`.
+
+#### Layout del detalle
+
+```text
+┌──────────────────────────────────────────────────┐
+│  UserCard  (lg)  username · email                │
+│            [Unfollow ↓ al final de la página]    │
+├──────────────────────────────────────────────────┤
+│  CounterCard  "Packages"  value={totalPackages}  │
+├──────────────────────────────────────────────────┤
+│  PanelCard  "Published packages"                 │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐          │
+│  │ Package  │ │ Package  │ │ Package  │  …        │
+│  │   Card   │ │   Card   │ │   Card   │           │
+│  └──────────┘ └──────────┘ └──────────┘          │
+│                                      [Unfollow]  │
+└──────────────────────────────────────────────────┘
+```
+
+- **`UserCard`** (`@gnome-ui/layout`, `avatarSize="lg"`): muestra username, email,
+  datos de `useNpmMaintainer(username)`.  Las `actions` del `UserCard` **no** incluyen
+  "Unfollow" aquí — el botón destructivo va al pie de la página.
+- **`CounterCard`** (`@gnome-ui/layout`, `accent`): número total de paquetes publicados,
+  animado al cargar.
+- **`PanelCard`** (`@gnome-ui/layout`) con `title="Published packages"`:
+  - Body: grid de `PackageCard` (el mismo componente que usa el Dashboard).
+  - Cada `PackageCard` es clickeable → navega a `PackageDetail`.
+  - `footerActions`: botón `Unfollow` (`variant="destructive"`) — llama
+    `useRemoveMaintainer(username)`, actualiza Gist y regresa a `/maintainers`.
+
+---
+
+#### Cambios de dominio requeridos
+
+**1. Nuevo tipo en `src/modules/npm/domain`:**
+
+```ts
+export interface FollowedMaintainer {
+  username: string
+}
+```
+
+**2. Ampliar `GistSync` en `src/modules/gist/domain/GistSync.ts`:**
+
+```ts
+export interface GistSync {
+  gistId: string
+  favorites: FavoritePackage[]
+  maintainers: FollowedMaintainer[]   // ← nuevo campo
+  updatedAt: string
+}
+```
+
+**3. Nuevo storage en `src/store/maintainers.ts`** (análogo a `favoritesStorage`):
+
+- `getAll(): FollowedMaintainer[]`
+- `add(username: string): void`
+- `remove(username: string): void`
+- `replace(items: FollowedMaintainer[]): void`
+
+**4. Nuevos hooks en `src/modules/npm/hooks/`:**
+
+| Hook | Responsabilidad |
+| --- | --- |
+| `useMaintainers()` | Lee `maintainersStorage`, `staleTime: Infinity` |
+| `useAddMaintainer()` | Agrega al storage, invalida query, llama `usePushToGist` |
+| `useRemoveMaintainer()` | Elimina del storage, invalida query, llama `usePushToGist` |
+
+**5. Actualizar `usePushToGist` y `useGistSync`** para incluir `maintainers` junto a
+`favorites` al serializar/deserializar el contenido del Gist.
 
 ### `ProfilePage` (`/profile`)
 
@@ -249,6 +386,104 @@ Secciones:
 - **Sesión**: botón "Sign out" (llama `useSignOut`)
 
 Componentes: `Avatar`, `Card`, `Text`, `Badge`, `Button`, `SectionCard`
+
+---
+
+### `SettingsPage` (`/settings`)
+
+Página de preferencias de la app construida con los componentes de preferencias de `@gnome-ui/react`.
+Los ajustes se sincronizan al Gist bajo la clave `settings` y se persisten localmente
+a través de `persistQueryClient` + IndexedDB (Fase 12).
+
+#### Layout
+
+El componente raíz de la ruta es `PreferencesPage` de `@gnome-ui/react`,
+con grupos de ajustes construidos con `PreferencesGroup`, `BoxedList` y `ComboRow`.
+
+```tsx
+import { PreferencesPage, PreferencesGroup, ComboRow, BoxedList } from '@gnome-ui/react'
+
+export function SettingsPage() {
+  const { settings, updateSettings } = useSettings()
+
+  return (
+    <PreferencesPage title="Settings">
+      <PreferencesGroup title="Appearance">
+        <BoxedList>
+          <ComboRow
+            title="Theme"
+            subtitle="Choose the color scheme"
+            options={[
+              { value: 'system', label: 'System default' },
+              { value: 'light',  label: 'Light' },
+              { value: 'dark',   label: 'Dark' },
+            ]}
+            value={settings.theme}
+            onValueChange={(theme) => updateSettings({ theme })}
+          />
+        </BoxedList>
+      </PreferencesGroup>
+
+      <PreferencesGroup title="Language">
+        <BoxedList>
+          <ComboRow
+            title="Language"
+            options={[{ value: 'en', label: 'English' }]}
+            value="en"
+            disabled
+          />
+        </BoxedList>
+      </PreferencesGroup>
+    </PreferencesPage>
+  )
+}
+```
+
+#### Modelo de datos
+
+```ts
+export interface AppSettings {
+  theme: 'light' | 'dark' | 'system'
+  language: 'en'
+}
+
+export const DEFAULT_SETTINGS: AppSettings = {
+  theme: 'system',
+  language: 'en',
+}
+```
+
+#### Aplicar el tema
+
+Al cambiar `theme`, escribir `data-theme="light|dark"` en `<html>` (o leer
+`prefers-color-scheme` cuando es `'system'`). Extraer esta lógica en un hook
+`useApplyTheme()` que se monta en el root layout.
+
+#### Cambios de dominio — Settings
+
+**1. Ampliar `GistSync`:**
+
+```ts
+export interface GistSync {
+  gistId: string
+  favorites: FavoritePackage[]
+  maintainers: FollowedMaintainer[]
+  settings: AppSettings            // ← nuevo campo
+  updatedAt: string
+}
+```
+
+**2. Nuevo hook `useSettings()`** en `src/modules/app/hooks/`:
+
+- Query con `staleTime: Infinity` — la persistencia la gestiona `persistQueryClient` + IndexedDB.
+- `updateSettings(partial)` — merge parcial, invalida query, llama `usePushToGist`.
+
+**3. Actualizar `usePushToGist` y `useGistSync`** para incluir `settings` en el payload del Gist.
+
+#### Idioma
+
+Solo `'en'` disponible — el `ComboRow` de idioma se muestra como informativo (`disabled`).
+Toda la app debe estar en inglés. No añadir ningún sistema de i18n.
 
 ---
 
@@ -275,7 +510,7 @@ La lógica de negocio (`useGistSync`, `usePushToGist`) se conserva; solo se elim
 | --- | --- |
 | `src/modules/gist/proxy/gistClient.ts` | `GitHubClient({ token })` de `gh-api-client` vía hooks |
 | `src/modules/gist/proxy/fetchUserGist.ts` | `useGhGist(gistId, { token })` de `@api-hooks/gh` |
-| `src/modules/gist/proxy/findUserGist.ts` | `GitHubClient({ token }).listGists()` (imperativo en efecto) |
+| `src/modules/gist/proxy/findUserGist.ts` | `GitHubClient({ token }).listGists()` — filtrar por `GIST_FILENAME` en la primera página, sin paginación completa |
 | `src/modules/gist/proxy/createUserGist.ts` | `useGhCreateGist({ token })` de `@api-hooks/gh` |
 | `src/modules/gist/proxy/updateUserGist.ts` | `useGhUpdateGist(gistId, { token })` de `@api-hooks/gh` |
 | `src/modules/gist/proxy/index.ts` | — |
@@ -285,12 +520,15 @@ La lógica de negocio (`useGistSync`, `usePushToGist`) se conserva; solo se elim
 | Hook | Cambia de | A |
 | --- | --- | --- |
 | `usePushToGist.ts` | `createUserGist()` / `updateUserGist()` locales | `useGhCreateGist({ token })` / `useGhUpdateGist(gistId, { token })` |
-| `useGistSync.ts` | `fetchUserGist()` / `findUserGist()` / `createUserGist()` locales | `useGhGist(gistId, { token })` + `GitHubClient({ token }).listGists()` para la búsqueda paginada |
+| `useGistSync.ts` | `fetchUserGist()` / `findUserGist()` / `createUserGist()` locales | `useGhGist(gistId, { token })` + `GitHubClient({ token }).listGists()` filtrando por `GIST_FILENAME` (sin paginar) |
 
 ### Notas de implementación
 
-- `findUserGist` (búsqueda paginada) no tiene hook equivalente en `@api-hooks/gh`; se reemplaza
-  con llamada imperativa a `new GitHubClient({ token }).listGists()` dentro del `useEffect` de `useGistSync`.
+- `findUserGist` no tiene hook equivalente en `@api-hooks/gh`; se reemplaza con llamada imperativa
+  a `new GitHubClient({ token }).listGists()` dentro del `useEffect` de `useGistSync`.
+  Dado que `GIST_FILENAME = 'mynpmlens.json'` es conocido, basta con filtrar la primera página
+  de resultados buscando el gist cuyas `files` contengan esa clave — no es necesario paginar
+  todos los gists del usuario.
 - El formato del fichero en Gist (`mynpmlens.json`) y el modelo de dominio `GistSync` no cambian.
 - `GIST_FILENAME` puede moverse a `src/modules/gist/domain` o mantenerse como constante local.
 
@@ -300,21 +538,21 @@ La lógica de negocio (`useGistSync`, `usePushToGist`) se conserva; solo se elim
 
 Eliminar el proxy y hook local de OSV y reemplazarlos con la librería ya instalada.
 
-### Archivos a eliminar
+### Archivos OSV a eliminar
 
 | Archivo | Reemplazado por |
 | --- | --- |
 | `src/modules/osv/proxy/fetchOsvVulnerabilities.ts` | `useOsvQuery(params)` de `@api-hooks/osv` |
 | `src/modules/osv/hooks/useOsvVulnerabilities.ts` | `useOsvQuery(params)` de `@api-hooks/osv` |
 
-### Consumidores a actualizar
+### Consumidores OSV a actualizar
 
 | Componente | Cambia de | A |
 | --- | --- | --- |
 | `VulnerabilitySection.tsx` | `useOsvVulnerabilities(name, version)` | `useOsvQuery({ package: { name, ecosystem: 'npm' }, version })` de `@api-hooks/osv` |
 | `PackageDetailPage.test.tsx` | mock de `useOsvVulnerabilities` | mock de `useOsvQuery` |
 
-### Notas de implementación
+### Notas OSV
 
 - `useOsvQuery` retorna `OsvQueryResult` (`{ vulns?: OsvVulnerability[] }`), no el array directo.
   `VulnerabilitySection` debe acceder a `data?.vulns ?? []`.
@@ -327,14 +565,14 @@ Eliminar el proxy y hook local de OSV y reemplazarlos con la librería ya instal
 
 Eliminar el proxy y hook local de Bundlephobia y reemplazarlos con la librería ya instalada.
 
-### Archivos a eliminar
+### Archivos bp a eliminar
 
 | Archivo | Reemplazado por |
 | --- | --- |
 | `src/modules/npm/proxy/fetchBundleSize.ts` | `useBpPackageSize(name)` de `@api-hooks/bp` |
 | `src/modules/npm/hooks/useBundleSize.ts` | `useBpPackageSize(name)` de `@api-hooks/bp` |
 
-### Consumidores a actualizar
+### Consumidores bp a actualizar
 
 | Componente | Cambia de | A |
 | --- | --- | --- |
@@ -345,7 +583,7 @@ Eliminar el proxy y hook local de Bundlephobia y reemplazarlos con la librería 
 > `useBpPackageVersionSize(name, version)` en `BundleSizeSection` para mostrar el
 > tamaño de la versión activa, no solo la latest.
 
-### Hooks nuevos disponibles para ampliar `BundleSizeSection`
+### Hooks bp nuevos disponibles para ampliar `BundleSizeSection`
 
 | Hook | Uso potencial |
 | --- | --- |
@@ -419,6 +657,92 @@ como en cualquier ajuste a las páginas existentes (`Dashboard`, `PackageDetail`
 
 ---
 
+## Fase 11 — Autocompletado async en `AddPackageModal`
+
+Reemplazar el `TextField` actual del dialog por un componente de búsqueda con autocompletado
+async de `@gnome-ui/react`, alimentado por `useNpmSearch(text)` de `@api-hooks/npm`.
+
+### Cambios en `src/components/AddPackageModal/index.tsx`
+
+- Sustituir `<TextField>` por el componente de autocompletado de `@gnome-ui/react`
+  (verificar nombre exacto: `Autocomplete`, `SearchEntry`, o equivalente).
+- La búsqueda se dispara de forma async con debounce mientras el usuario escribe.
+- Cada sugerencia muestra el nombre del paquete; al seleccionar uno se rellena el campo.
+- La validación actual (existencia en npm, duplicados en favoritos) se mantiene igual.
+- El hook `useNpmSearch(text)` ya está listado en Fase 10 como hook disponible en `@api-hooks/npm`.
+
+### Prerequisito
+
+- Fase 10 completada (migración a `@api-hooks/npm`) para que `useNpmSearch` esté disponible.
+
+---
+
+## Fase 12 — Persistencia del QueryClient con IndexedDB
+
+Configurar `persistQueryClient` para que el caché de TanStack Query sobreviva recargas de página,
+usando IndexedDB como storage a través de los paquetes oficiales de TanStack.
+
+### No hay paquete oficial de IndexedDB dedicado
+
+`@tanstack/query-indexeddb-persister` **no existe** en npm. La solución oficial para storage
+asíncrono es:
+
+- `@tanstack/react-query-persist-client` — wrapper de `PersistQueryClientProvider`
+- `@tanstack/query-async-storage-persister` — persister que acepta cualquier `AsyncStorage`
+
+`idb` v7 **ya está instalado** como dependencia transitiva de Firebase — se usa como driver
+sin instalar nada extra.
+
+### Paquetes a instalar
+
+```bash
+npm install @tanstack/react-query-persist-client @tanstack/query-async-storage-persister
+```
+
+### Implementación en `src/main.tsx` (o donde viva el `QueryClientProvider`)
+
+```tsx
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { openDB } from 'idb'
+
+const db = await openDB('mynpmlens', 1, {
+  upgrade(db) { db.createObjectStore('query-cache') },
+})
+
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: {
+    getItem: (key) => db.get('query-cache', key),
+    setItem: (key, value) => db.put('query-cache', value, key),
+    removeItem: (key) => db.delete('query-cache', key),
+  },
+})
+
+// Reemplazar <QueryClientProvider> por:
+<PersistQueryClientProvider
+  client={queryClient}
+  persistOptions={{ persister: asyncStoragePersister }}
+>
+  ...
+</PersistQueryClientProvider>
+```
+
+### Qué se persiste y qué no
+
+- Solo persisten queries con `staleTime > 0` (las que no son "siempre stale").
+- Queries sensibles (datos de usuario, auth) deben excluirse con `queryClient.setQueryDefaults`
+  o filtrando por `queryKey` en `dehydrate`.
+- El Gist sync (`useGistSync`) **no debe persistirse** — siempre debe refetchear al iniciar.
+
+### Archivos a tocar
+
+| Archivo | Cambio |
+| --- | --- |
+| `src/main.tsx` (o equivalente) | Reemplazar `QueryClientProvider` por `PersistQueryClientProvider` |
+| `src/lib/queryClient.ts` (o donde se cree el cliente) | Ajustar `staleTime` por defecto y exclusiones |
+
+---
+
 ## Fase 6 — Limpieza
 
 - Eliminar `src/components/AppFooter/` (ya no se usa)
@@ -432,14 +756,16 @@ como en cualquier ajuste a las páginas existentes (`Dashboard`, `PackageDetail`
 
 | # | Fase | Descripción | Archivos clave |
 | --- | --- | --- | --- |
-| 1 | Rutas | Crear rutas stub | `maintainers.tsx`, `about.tsx`, `profile.tsx` |
+| 1 | Rutas | Crear rutas stub | `maintainers.tsx`, `about.tsx`, `profile.tsx`, `settings.tsx` |
 | 2 | AppSidebar | Sidebar con nav + footer (user info / copyright) | `AppSidebar/index.tsx` |
 | 3 | Root layout | Integrar `NavigationSplitView` | `__root.tsx` |
 | 4 | Toolbar | Toggle sidebar en mobile | `Toolbar/index.tsx` |
 | 5 | ProfilePage | Info de usuario + estado del Gist | `pages/Profile` |
-| 6 | Páginas | Contenido de Maintainers y About | `pages/Maintainers`, `pages/About` |
+| 6 | Páginas | Contenido de Maintainers, About y Settings | `pages/Maintainers`, `pages/About`, `pages/Settings` |
 | 7 | Migración Gist | Eliminar proxy de Gist, usar `@api-hooks/gh` | `modules/gist/proxy/`, `hooks/usePushToGist`, `hooks/useGistSync` |
 | 8 | Migración OSV | Eliminar proxy/hook de OSV, usar `@api-hooks/osv` | `modules/osv/`, `VulnerabilitySection.tsx` |
 | 9 | Migración bp | Eliminar proxy/hook de Bundlephobia, usar `@api-hooks/bp` | `modules/npm/proxy/fetchBundleSize`, `hooks/useBundleSize` |
 | 10 | Migración npm | Eliminar proxies/hooks locales de npm | `modules/npm/proxy`, `modules/npm/hooks` |
-| 11 | Limpieza | Eliminar AppFooter, pulir estilos | `AppFooter/`, `global.css` |
+| 11 | Autocompletado | Searchbar async en `AddPackageModal` con `@gnome-ui/react` | `components/AddPackageModal/index.tsx` |
+| 12 | Persistencia | `persistQueryClient` con IndexedDB (`idb` ya instalado) | `src/main.tsx`, `src/lib/queryClient.ts` |
+| 13 | Limpieza | Eliminar AppFooter, pulir estilos | `AppFooter/`, `global.css` |
