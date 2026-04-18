@@ -9,9 +9,34 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MaintainersRouteImport } from './routes/maintainers'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PackageNameRouteImport } from './routes/package.$name'
+import { Route as MaintainersUsernameRouteImport } from './routes/maintainers.$username'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaintainersRoute = MaintainersRouteImport.update({
+  id: '/maintainers',
+  path: '/maintainers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -22,35 +47,109 @@ const PackageNameRoute = PackageNameRouteImport.update({
   path: '/package/$name',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MaintainersUsernameRoute = MaintainersUsernameRouteImport.update({
+  id: '/$username',
+  path: '/$username',
+  getParentRoute: () => MaintainersRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/maintainers': typeof MaintainersRouteWithChildren
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/maintainers/$username': typeof MaintainersUsernameRoute
   '/package/$name': typeof PackageNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/maintainers': typeof MaintainersRouteWithChildren
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/maintainers/$username': typeof MaintainersUsernameRoute
   '/package/$name': typeof PackageNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/maintainers': typeof MaintainersRouteWithChildren
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/maintainers/$username': typeof MaintainersUsernameRoute
   '/package/$name': typeof PackageNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/package/$name'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/maintainers'
+    | '/profile'
+    | '/settings'
+    | '/maintainers/$username'
+    | '/package/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/package/$name'
-  id: '__root__' | '/' | '/package/$name'
+  to:
+    | '/'
+    | '/about'
+    | '/maintainers'
+    | '/profile'
+    | '/settings'
+    | '/maintainers/$username'
+    | '/package/$name'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/maintainers'
+    | '/profile'
+    | '/settings'
+    | '/maintainers/$username'
+    | '/package/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  MaintainersRoute: typeof MaintainersRouteWithChildren
+  ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
   PackageNameRoute: typeof PackageNameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maintainers': {
+      id: '/maintainers'
+      path: '/maintainers'
+      fullPath: '/maintainers'
+      preLoaderRoute: typeof MaintainersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,11 +164,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PackageNameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/maintainers/$username': {
+      id: '/maintainers/$username'
+      path: '/$username'
+      fullPath: '/maintainers/$username'
+      preLoaderRoute: typeof MaintainersUsernameRouteImport
+      parentRoute: typeof MaintainersRoute
+    }
   }
 }
 
+interface MaintainersRouteChildren {
+  MaintainersUsernameRoute: typeof MaintainersUsernameRoute
+}
+
+const MaintainersRouteChildren: MaintainersRouteChildren = {
+  MaintainersUsernameRoute: MaintainersUsernameRoute,
+}
+
+const MaintainersRouteWithChildren = MaintainersRoute._addFileChildren(
+  MaintainersRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  MaintainersRoute: MaintainersRouteWithChildren,
+  ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
   PackageNameRoute: PackageNameRoute,
 }
 export const routeTree = rootRouteImport
