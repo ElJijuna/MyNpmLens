@@ -1,9 +1,10 @@
 import { Card, Text, Badge, Spinner, Icon } from '@gnome-ui/react'
 import { Star } from '@gnome-ui/icons'
 import { useNavigate } from '@tanstack/react-router'
-import { useNpmPackage, useNpmDownloads } from '@/modules/npm/hooks'
+import { useNpmPackage, useNpmPackageDownloads } from '@api-hooks/npm'
 import { useBpPackageSize } from '@api-hooks/bp'
 import { useGitHubStats } from '@/modules/github/hooks'
+import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug'
 
 interface PackageCardProps {
   name: string
@@ -23,12 +24,13 @@ function formatBytes(bytes: number): string {
 export function PackageCard({ name }: PackageCardProps) {
   const navigate = useNavigate()
   const { data: pkg, isPending: pkgLoading } = useNpmPackage(name)
-  const { data: downloads } = useNpmDownloads(name)
+  const { data: weekly } = useNpmPackageDownloads(name, { period: 'last-week' })
   const { data: bundle } = useBpPackageSize(name)
-  const { data: github } = useGitHubStats(
-    pkg?.repository?.github?.owner ?? null,
-    pkg?.repository?.github?.repo ?? null,
-  )
+  const slug = pkg?.repository?.url ? parseGitHubSlug(pkg.repository.url) : null
+  const { data: github } = useGitHubStats(slug?.owner ?? null, slug?.repo ?? null)
+
+  const version = pkg?.['dist-tags']?.latest
+  const versionCount = pkg ? Object.keys(pkg.versions).length : 0
 
   return (
     <Card
@@ -50,12 +52,12 @@ export function PackageCard({ name }: PackageCardProps) {
             )}
           </div>
 
-          {pkg?.version && (
+          {version && (
             <Text variant="caption" color="dim">
-              v{pkg.version}
-              {pkg.versions.length > 0 && (
+              v{version}
+              {versionCount > 0 && (
                 <span style={{ marginLeft: '0.4rem', opacity: 0.6 }}>
-                  · {pkg.versions.length} versions
+                  · {versionCount} versions
                 </span>
               )}
             </Text>
@@ -75,9 +77,9 @@ export function PackageCard({ name }: PackageCardProps) {
           )}
 
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
-            {downloads && (
+            {weekly && (
               <Text variant="caption" color="dim">
-                ↓ {formatNumber(downloads.weekly)}/wk
+                ↓ {formatNumber(weekly.downloads)}/wk
               </Text>
             )}
             {bundle && (

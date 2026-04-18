@@ -1,6 +1,6 @@
-import { Text, Badge, Link } from '@gnome-ui/react'
+import { Text, Badge, Link, Box, WrapBox } from '@gnome-ui/react'
 import { SectionCard } from '@/components/SectionCard'
-import { useNpmPackage } from '@/modules/npm/hooks'
+import { useNpmPackage } from '@api-hooks/npm'
 
 interface PackageInfoSectionProps {
   name: string
@@ -13,22 +13,15 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
   return (
     <SectionCard title="Package info" isLoading={isPending} error={error as Error | null}>
       {data && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <Box orientation="vertical" spacing={6}>
+          <WrapBox childSpacing={6} align="center">
             <Text variant="title-2" as="h1">{data.name}</Text>
-            <Text variant="caption" color="dim">v{version || data.version}</Text>
+            <Text variant="caption" color="dim">v{version || data['dist-tags']?.latest}</Text>
             {data.license && <Badge variant="neutral">{data.license}</Badge>}
-          </div>
+          </WrapBox>
 
           {data.description && (
             <Text color="dim">{data.description}</Text>
-          )}
-
-          {data.author?.name && (
-            <Text variant="caption" color="dim">
-              Author: {data.author.name}
-              {data.author.email && ` <${data.author.email}>`}
-            </Text>
           )}
 
           {data.homepage && (
@@ -38,7 +31,7 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
               </Link>
             </Text>
           )}
-        </div>
+        </Box>
       )}
     </SectionCard>
   )

@@ -1,6 +1,7 @@
 import { Toolbar } from '@/components/Toolbar';
 import { Route } from '@/routes/package.$name';
-import { useNpmPackage, useRemoveFavorite } from '@/modules/npm/hooks';
+import { useRemoveFavorite } from '@/modules/npm/hooks';
+import { useNpmPackage } from '@api-hooks/npm';
 import { useNavigate } from '@tanstack/react-router';
 import { Dropdown, Text, Button, Icon } from '@gnome-ui/react';
 import { Delete } from '@gnome-ui/icons';
@@ -16,10 +17,12 @@ export function PackageDetailPage() {
   const { data: pkg } = useNpmPackage(name)
   const navigate = useNavigate()
 
-  const version = searchVersion ?? pkg?.version ?? ''
+  const latestVersion = pkg?.['dist-tags']?.latest ?? ''
+  const version = searchVersion ?? latestVersion
 
-  const versionOptions = (pkg?.versions ?? []).map((v) => {
-    const tag = Object.entries(pkg?.distTags ?? {}).find(([, val]) => val === v)?.[0]
+  const versionList = pkg ? Object.keys(pkg.versions).reverse() : []
+  const versionOptions = versionList.map((v) => {
+    const tag = Object.entries(pkg?.['dist-tags'] ?? {}).find(([, val]) => val === v)?.[0]
     return { value: v, label: tag ? `${v} (${tag})` : v }
   })
 
@@ -44,11 +47,11 @@ export function PackageDetailPage() {
             <Dropdown
               aria-label="Select version"
               options={versionOptions}
-              value={version || pkg?.version}
+              value={version || latestVersion}
               onChange={handleVersionChange}
             />
             <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
-              {pkg?.versions.length} published
+              {versionList.length} published
             </Text>
           </div>
         )}
