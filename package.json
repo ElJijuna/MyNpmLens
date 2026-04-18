@@ -13,10 +13,10 @@
     "docs": "typedoc"
   },
   "dependencies": {
-    "@api-hooks/bp": "^1.2.0",
-    "@api-hooks/gh": "^1.7.0",
-    "@api-hooks/npm": "^1.7.0",
-    "@api-hooks/osv": "^1.0.0",
+    "@api-hooks/bp": "^1.2.2",
+    "@api-hooks/gh": "^1.7.2",
+    "@api-hooks/npm": "^1.7.2",
+    "@api-hooks/osv": "^1.0.2",
     "@gnome-ui/charts": "^1.1.0",
     "@gnome-ui/core": "1.11.3",
     "@gnome-ui/hooks": "^1.0.0",
