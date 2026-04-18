@@ -9,6 +9,7 @@ import * as bpHooks from '@api-hooks/bp'
 jest.mock('@tanstack/react-router', () => ({
   useRouter: () => ({ history: { back: jest.fn() } }),
   useNavigate: () => jest.fn(),
+  useLocation: () => ({ pathname: '/' }),
 }))
 
 const mockUsePlatform = jest.fn()

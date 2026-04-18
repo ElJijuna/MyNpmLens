@@ -1,5 +1,5 @@
 import { Toolbar } from '@/components/Toolbar';
-import { Route } from '@/routes/package.$name';
+import { Route } from '@/routes/packages.$name';
 import { useRemoveFavorite } from '@/modules/npm/hooks';
 import { useNpmPackage } from '@api-hooks/npm';
 import { useNavigate } from '@tanstack/react-router';
@@ -29,7 +29,7 @@ export function PackageDetailPage() {
   const removeFavorite = useRemoveFavorite()
 
   function handleVersionChange(v: string) {
-    void navigate({ to: '/package/$name', params: { name }, search: { version: v } })
+    void navigate({ to: '/packages/$name', params: { name }, search: { version: v } })
   }
 
   function handleRemove() {

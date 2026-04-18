@@ -11,9 +11,10 @@ import { PackageDetailPage } from '../index'
 jest.mock('@tanstack/react-router', () => ({
   useRouter: () => ({ history: { back: jest.fn() } }),
   useNavigate: () => jest.fn(),
+  useLocation: () => ({ pathname: '/packages/react' }),
 }))
 
-jest.mock('@/routes/package.$name', () => ({
+jest.mock('@/routes/packages.$name', () => ({
   Route: {
     useParams: () => ({ name: 'react' }),
     useSearch: () => ({ version: undefined }),
@@ -62,7 +63,7 @@ describe('PackageDetailPage', () => {
   it('renders package name and license', () => {
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('react')).toBeInTheDocument()
+    expect(screen.getAllByText('react').length).toBeGreaterThan(0)
     expect(screen.getByText('MIT')).toBeInTheDocument()
   })
 
@@ -88,14 +89,16 @@ describe('PackageDetailPage', () => {
   })
 
   it('shows error banner in a section when query fails', () => {
-    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({
-      isPending: false,
-      data: undefined,
-      error: new Error('API unavailable'),
-    } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
+    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads')
+      .mockReset()
+      .mockReturnValue({
+        isPending: false,
+        data: undefined,
+        error: new Error('API unavailable'),
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
 
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('API unavailable')).toBeInTheDocument()
+    expect(screen.getByText(/API unavailable/i)).toBeInTheDocument()
   })
 })

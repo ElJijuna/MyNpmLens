@@ -1,5 +1,5 @@
 import { HeaderBar, Button, Icon, PathBar, useBreakpoint } from '@gnome-ui/react'
-import { Add, ViewSidebar } from '@gnome-ui/icons'
+import { Add, OpenMenu } from '@gnome-ui/icons'
 import { useNavigate } from '@tanstack/react-router'
 import { usePlatform } from '@gnome-ui/hooks'
 import { useSidebar } from '@/context/SidebarContext'
@@ -12,7 +12,7 @@ interface ToolbarProps {
 export function Toolbar({ onAddClick }: ToolbarProps) {
   const navigate = useNavigate()
   const { isGnomeWebView } = usePlatform()
-  const { openSidebar } = useSidebar()
+  const { sidebarOpen, openSidebar, closeSidebar } = useSidebar()
   const { isNarrow } = useBreakpoint()
   const segments = usePathSegments()
 
@@ -30,9 +30,11 @@ export function Toolbar({ onAddClick }: ToolbarProps) {
         }
         start={
           isNarrow ? (
-            <Button variant="flat" onClick={openSidebar} aria-label="Open sidebar">
-              <Icon icon={ViewSidebar} />
-            </Button>
+            <>
+              <Button variant="flat" onClick={sidebarOpen ? closeSidebar : openSidebar} aria-label="Toggle sidebar">
+                <Icon icon={OpenMenu} />
+              </Button>
+            </>
           ) : undefined
         }
         end={

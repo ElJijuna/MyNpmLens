@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Dialog, SearchBar, Banner, type Suggestion } from '@gnome-ui/react'
+import { Dialog, SearchBar, Banner } from '@gnome-ui/react'
+
+interface Suggestion { id: string; label: string }
 import { parseNpmUrl } from '@/modules/npm/domain'
 import { useAddFavorite, useFavorites } from '@/modules/npm/hooks'
 import { useNpmSearch } from '@api-hooks/npm'

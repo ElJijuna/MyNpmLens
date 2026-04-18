@@ -8,11 +8,16 @@ import {
   ActionRow,
   Avatar,
   Button,
+  Icon,
   Spinner,
   Text,
+  useBreakpoint,
+  Box,
+  WrapBox,
 } from '@gnome-ui/react'
-import { GoHome, Star, Information, Settings } from '@gnome-ui/icons'
+import { GoHome, Star, Information, Settings, OpenMenu, Refresh } from '@gnome-ui/icons'
 import { useAuth } from '@/modules/auth/AuthProvider'
+import { useSidebar } from '@/context/SidebarContext'
 import { version } from '../../../package.json'
 import './index.css'
 
@@ -20,6 +25,21 @@ export function AppSidebar() {
   const navigate = useNavigate()
   const matchRoute = useMatchRoute()
   const { user } = useAuth()
+  const { closeSidebar, sidebarCollapsed, toggleCollapsed } = useSidebar()
+  const { isNarrow } = useBreakpoint()
+
+  function go(to: string) {
+    void navigate({ to })
+    closeSidebar()
+  }
+
+  function handleToggle() {
+    if (isNarrow) {
+      closeSidebar()
+    } else {
+      toggleCollapsed()
+    }
+  }
 
   const [checking, setChecking] = useState(false)
   const [upToDate, setUpToDate] = useState(false)
@@ -41,38 +61,48 @@ export function AppSidebar() {
   }
 
   const updateLabel = checking ? 'Checking…' : upToDate ? 'Up to date!' : 'Check for updates'
+  const isCollapsed = !isNarrow && sidebarCollapsed
 
   return (
-    <Sidebar>
+    <Sidebar collapsed={isCollapsed}>
+      <div className="sidebar-header" data-collapsed={isCollapsed}>
+        <Button variant="flat" size="sm" onClick={handleToggle} aria-label="Toggle sidebar">
+          <Icon icon={OpenMenu} />
+        </Button>
+        {(!sidebarCollapsed || isNarrow) && (
+          <Text variant="caption-heading">Npm Lens</Text>
+        )}
+      </div>
+
       <SidebarSection>
         <SidebarItem
           label="Home"
           icon={GoHome}
           active={!!matchRoute({ to: '/', fuzzy: false })}
-          onClick={() => navigate({ to: '/' })}
+          onClick={() => go('/')}
         />
         <SidebarItem
           label="Maintainers"
           icon={Star}
           active={!!matchRoute({ to: '/maintainers', fuzzy: true })}
-          onClick={() => navigate({ to: '/maintainers' })}
-        />
-        <SidebarItem
-          label="About"
-          icon={Information}
-          active={!!matchRoute({ to: '/about' })}
-          onClick={() => navigate({ to: '/about' })}
+          onClick={() => go('/maintainers')}
         />
         <SidebarItem
           label="Settings"
           icon={Settings}
           active={!!matchRoute({ to: '/settings' })}
-          onClick={() => navigate({ to: '/settings' })}
+          onClick={() => go('/settings')}
+        />
+        <SidebarItem
+          label="About"
+          icon={Information}
+          active={!!matchRoute({ to: '/about' })}
+          onClick={() => go('/about')}
         />
       </SidebarSection>
 
-      <div className="sidebar-footer">
-        {user ? (
+      <div className="sidebar-footer" data-collapsed={isCollapsed}>
+        {user && !isCollapsed && (
           <ActionRow
             title={user.displayName ?? user.email ?? 'Profile'}
             subtitle={user.email ?? undefined}
@@ -84,22 +114,51 @@ export function AppSidebar() {
               />
             }
             interactive
-            onClick={() => navigate({ to: '/profile' })}
+            onClick={() => go('/profile')}
           />
-        ) : (
-          <Text variant="caption" color="dim">
-            © {new Date().getFullYear()} Npm Lens · v{version}
-          </Text>
+        )}
+        {user && isCollapsed && (
+          <Button
+            variant="flat"
+            size="sm"
+            onClick={() => go('/profile')}
+          >
+            <Avatar
+              src={user.photoURL ?? undefined}
+              name={user.displayName ?? user.email ?? '?'}
+              size="sm"
+            />
+          </Button>
         )}
         <Button
           variant="flat"
           size="sm"
           disabled={checking}
           onClick={handleCheckUpdate}
+          leadingIcon={isCollapsed ? undefined : checking ? <Spinner size="sm" /> : <Icon icon={Refresh} />}
+          aria-label={isCollapsed ? updateLabel : undefined}
         >
-          {checking && <Spinner size="sm" />}
-          {updateLabel}
+          {isCollapsed ? (checking ? <Spinner size="sm" /> : <Icon icon={Refresh} />) : updateLabel}
         </Button>
+        <Box align="center">
+          <WrapBox justify="center" align="center">
+            <Text variant="caption" color="dim">
+              ©
+            </Text>
+            <Text variant="caption" color="dim">
+              {new Date().getFullYear()}
+            </Text>
+            <Text variant="caption" color="dim">
+              Npm
+            </Text>
+            <Text variant="caption" color="dim">
+              Lens
+            </Text>
+          </WrapBox>
+          <Text variant="caption" color="dim">
+            v{version}
+          </Text>
+        </Box>
       </div>
     </Sidebar>
   )

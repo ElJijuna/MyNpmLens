@@ -36,7 +36,7 @@ export function PackageCard({ name }: PackageCardProps) {
     <Card
       interactive
       padding="md"
-      onClick={() => navigate({ to: '/package/$name', params: { name }, search: { version: undefined } })}
+      onClick={() => navigate({ to: '/packages/$name', params: { name }, search: { version: undefined } })}
       aria-label={`View details for ${name}`}
     >
       {pkgLoading ? (

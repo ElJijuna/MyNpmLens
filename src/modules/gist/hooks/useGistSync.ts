@@ -105,7 +105,6 @@ export function useGistSync(): GistSyncState {
         onError: () => setStatus('error'),
       },
     )
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, gistId, user?.uid, user?.githubToken])
 
   // Process fetched remote gist

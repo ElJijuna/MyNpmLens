@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
-import { OverlaySplitView } from '@gnome-ui/react'
+import { OverlaySplitView, useBreakpoint } from '@gnome-ui/react'
 import { OfflineBanner } from '@/components/OfflineBanner'
 import { AppSidebar } from '@/components/AppSidebar'
 import { SidebarProvider } from '@/context/SidebarContext'
@@ -17,21 +17,39 @@ interface RouterContext {
 function RootLayout() {
   const { status, delta, resolveKeepAll, resolveReplaceWithLocal } = useGistSync()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const { isNarrow } = useBreakpoint()
   useApplyTheme()
 
   return (
-    <SidebarProvider openSidebar={() => setSidebarOpen(true)}>
-      <OverlaySplitView
-        sidebar={<AppSidebar />}
-        content={
-          <>
+    <SidebarProvider
+      sidebarOpen={sidebarOpen}
+      openSidebar={() => setSidebarOpen(true)}
+      closeSidebar={() => setSidebarOpen(false)}
+      sidebarCollapsed={sidebarCollapsed}
+      toggleCollapsed={() => setSidebarCollapsed((c) => !c)}
+    >
+      {isNarrow ? (
+        <OverlaySplitView
+          sidebar={<AppSidebar />}
+          content={
+            <>
+              <OfflineBanner />
+              <Outlet />
+            </>
+          }
+          showSidebar={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+      ) : (
+        <div className="wide-layout">
+          <AppSidebar />
+          <div className="wide-layout__content">
             <OfflineBanner />
             <Outlet />
-          </>
-        }
-        showSidebar={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
+          </div>
+        </div>
+      )}
       {status === 'conflict' && (
         <MergeSyncDialog
           delta={delta}

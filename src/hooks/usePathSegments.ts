@@ -16,9 +16,9 @@ export function usePathSegments(): PathBarSegment[] {
       }
       return [HOME, { label: 'Maintainers', path: '/maintainers' }]
 
-    case 'package':
+    case 'packages':
       if (parts[1]) {
-        return [HOME, { label: decodeURIComponent(parts[1]), path: `/package/${parts[1]}` }]
+        return [HOME, { label: decodeURIComponent(parts[1]), path: `/packages/${parts[1]}` }]
       }
       return [HOME]
 
