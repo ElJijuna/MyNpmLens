@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
+import { OverlaySplitView } from '@gnome-ui/react'
 import { OfflineBanner } from '@/components/OfflineBanner'
-import { AppFooter } from '@/components/AppFooter'
+import { AppSidebar } from '@/components/AppSidebar'
 import { useGistSync } from '@/modules/gist/hooks'
 import { MergeSyncDialog } from '@/modules/gist/components/MergeSyncDialog'
 import '@/app.css'
@@ -12,12 +14,21 @@ interface RouterContext {
 
 function RootLayout() {
   const { status, delta, resolveKeepAll, resolveReplaceWithLocal } = useGistSync()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <>
-      <OfflineBanner />
-      <Outlet />
-      <AppFooter />
+      <OverlaySplitView
+        sidebar={<AppSidebar />}
+        content={
+          <>
+            <OfflineBanner />
+            <Outlet />
+          </>
+        }
+        showSidebar={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
       {status === 'conflict' && (
         <MergeSyncDialog
           delta={delta}
