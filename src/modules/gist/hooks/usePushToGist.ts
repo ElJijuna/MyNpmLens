@@ -1,8 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
+import { useGhCreateGist, useGhUpdateGist } from '@api-hooks/gh'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
-import { createUserGist, updateUserGist } from '@/modules/gist/proxy'
+import { maintainersStorage } from '@/store/maintainers'
+import { settingsStorage } from '@/store/settings'
 
+export const GIST_FILENAME = 'mynpmlens.json'
 const GIST_ID_PREFIX = 'mynpmlens:gist:'
 
 export function getStoredGistId(uid: string): string | null {
@@ -13,26 +16,33 @@ export function setStoredGistId(uid: string, gistId: string): void {
   localStorage.setItem(`${GIST_ID_PREFIX}${uid}`, gistId)
 }
 
-/**
- * Pushes the current local favorites to the user's Gist.
- * Creates the Gist on first push if it doesn't exist yet.
- * Fails silently — local data is always the source of truth.
- */
 export function usePushToGist() {
   const { user } = useAuth()
+  const gistId = user ? getStoredGistId(user.uid) : null
+
+  const createGist = useGhCreateGist({ token: user?.githubToken })
+  const updateGist = useGhUpdateGist(gistId ?? '', { token: user?.githubToken })
 
   return useMutation({
     mutationFn: async () => {
       if (!user?.githubToken) return
 
       const favorites = favoritesStorage.getAll()
-      const gistId = getStoredGistId(user.uid)
+      const maintainers = maintainersStorage.getAll()
+      const settings = settingsStorage.get()
+      const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
+      const files = { [GIST_FILENAME]: { content } }
+      const currentGistId = getStoredGistId(user.uid)
 
-      if (!gistId) {
-        const created = await createUserGist(favorites, user.githubToken)
-        setStoredGistId(user.uid, created.gistId)
+      if (!currentGistId) {
+        const created = await createGist.mutateAsync({
+          description: 'MyNpmLens sync',
+          public: false,
+          files,
+        })
+        setStoredGistId(user.uid, created.id)
       } else {
-        await updateUserGist(gistId, favorites, user.githubToken)
+        await updateGist.mutateAsync({ files })
       }
     },
   })

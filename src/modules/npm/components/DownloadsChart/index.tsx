@@ -1,8 +1,10 @@
 import { useQueries } from '@tanstack/react-query'
+import { npmQueryKeys } from '@api-hooks/npm'
+import { NpmClient } from 'npmjs-api-client'
 import { BarChart } from '@gnome-ui/charts'
 import { Card, Text } from '@gnome-ui/react'
-import { fetchNpmDownloads } from '@/modules/npm/proxy'
-import { npmQueryKeys } from '@/modules/npm/hooks/queryKeys'
+
+const client = new NpmClient()
 
 interface DownloadsChartProps {
   packageNames: string[]
@@ -10,12 +12,18 @@ interface DownloadsChartProps {
 
 export function DownloadsChart({ packageNames }: DownloadsChartProps) {
   const results = useQueries({
-    queries: packageNames.map((name) => ({
-      queryKey: npmQueryKeys.downloads(name),
-      queryFn: () => fetchNpmDownloads(name),
-      staleTime: 1000 * 60 * 60,
-      gcTime: 1000 * 60 * 60 * 2,
-    })),
+    queries: packageNames.flatMap((name) => [
+      {
+        queryKey: npmQueryKeys.packageDownloads(name, 'last-week'),
+        queryFn: ({ signal }: { signal: AbortSignal }) => client.package(name).downloads('last-week', signal),
+        staleTime: 1000 * 60 * 60,
+      },
+      {
+        queryKey: npmQueryKeys.packageDownloads(name, 'last-month'),
+        queryFn: ({ signal }: { signal: AbortSignal }) => client.package(name).downloads('last-month', signal),
+        staleTime: 1000 * 60 * 60,
+      },
+    ]),
   })
 
   const hasData = results.some((r) => r.data != null)
@@ -24,8 +32,8 @@ export function DownloadsChart({ packageNames }: DownloadsChartProps) {
 
   const data = packageNames.map((name, i) => ({
     name,
-    weekly: results[i].data?.weekly ?? 0,
-    monthly: results[i].data?.monthly ?? 0,
+    weekly: results[i * 2].data?.downloads ?? 0,
+    monthly: results[i * 2 + 1].data?.downloads ?? 0,
   }))
 
   return (

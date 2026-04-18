@@ -9,48 +9,148 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MaintainersRouteImport } from './routes/maintainers'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PackageNameRouteImport } from './routes/package.$name'
+import { Route as PackagesNameRouteImport } from './routes/packages.$name'
+import { Route as MaintainersUsernameRouteImport } from './routes/maintainers_.$username'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaintainersRoute = MaintainersRouteImport.update({
+  id: '/maintainers',
+  path: '/maintainers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PackageNameRoute = PackageNameRouteImport.update({
-  id: '/package/$name',
-  path: '/package/$name',
+const PackagesNameRoute = PackagesNameRouteImport.update({
+  id: '/packages/$name',
+  path: '/packages/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaintainersUsernameRoute = MaintainersUsernameRouteImport.update({
+  id: '/maintainers_/$username',
+  path: '/maintainers/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/package/$name': typeof PackageNameRoute
+  '/about': typeof AboutRoute
+  '/maintainers': typeof MaintainersRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/maintainers/$username': typeof MaintainersUsernameRoute
+  '/packages/$name': typeof PackagesNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/package/$name': typeof PackageNameRoute
+  '/about': typeof AboutRoute
+  '/maintainers': typeof MaintainersRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/maintainers/$username': typeof MaintainersUsernameRoute
+  '/packages/$name': typeof PackagesNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/package/$name': typeof PackageNameRoute
+  '/about': typeof AboutRoute
+  '/maintainers': typeof MaintainersRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/maintainers_/$username': typeof MaintainersUsernameRoute
+  '/packages/$name': typeof PackagesNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/package/$name'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/maintainers'
+    | '/profile'
+    | '/settings'
+    | '/maintainers/$username'
+    | '/packages/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/package/$name'
-  id: '__root__' | '/' | '/package/$name'
+  to:
+    | '/'
+    | '/about'
+    | '/maintainers'
+    | '/profile'
+    | '/settings'
+    | '/maintainers/$username'
+    | '/packages/$name'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/maintainers'
+    | '/profile'
+    | '/settings'
+    | '/maintainers_/$username'
+    | '/packages/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PackageNameRoute: typeof PackageNameRoute
+  AboutRoute: typeof AboutRoute
+  MaintainersRoute: typeof MaintainersRoute
+  ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
+  MaintainersUsernameRoute: typeof MaintainersUsernameRoute
+  PackagesNameRoute: typeof PackagesNameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maintainers': {
+      id: '/maintainers'
+      path: '/maintainers'
+      fullPath: '/maintainers'
+      preLoaderRoute: typeof MaintainersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -58,11 +158,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/package/$name': {
-      id: '/package/$name'
-      path: '/package/$name'
-      fullPath: '/package/$name'
-      preLoaderRoute: typeof PackageNameRouteImport
+    '/packages/$name': {
+      id: '/packages/$name'
+      path: '/packages/$name'
+      fullPath: '/packages/$name'
+      preLoaderRoute: typeof PackagesNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maintainers_/$username': {
+      id: '/maintainers_/$username'
+      path: '/maintainers/$username'
+      fullPath: '/maintainers/$username'
+      preLoaderRoute: typeof MaintainersUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +177,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PackageNameRoute: PackageNameRoute,
+  AboutRoute: AboutRoute,
+  MaintainersRoute: MaintainersRoute,
+  ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
+  MaintainersUsernameRoute: MaintainersUsernameRoute,
+  PackagesNameRoute: PackagesNameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

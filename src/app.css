@@ -3,3 +3,17 @@
   top: 0;
   z-index: 100;
 }
+
+.wide-layout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.wide-layout__content {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}

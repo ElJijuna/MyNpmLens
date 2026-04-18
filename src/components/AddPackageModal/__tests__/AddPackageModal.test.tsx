@@ -2,20 +2,28 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { AddPackageModal } from '../index'
-import * as proxy from '@/modules/npm/proxy'
+import * as npmjsClient from 'npmjs-api-client'
 
 function wrapper({ children }: { children: ReactNode }) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>
 }
 
-const MOCK_PKG = {
-  name: 'react', version: '19.0.0', versions: ['19.0.0'], distTags: { latest: '19.0.0' },
-  description: '', license: 'MIT', homepage: null, author: null, repository: null,
+const MOCK_PACKUMENT = {
+  name: 'react',
+  'dist-tags': { latest: '19.0.0' },
+  versions: {},
+  time: {},
 }
 
 beforeEach(() => localStorage.clear())
 afterEach(() => jest.restoreAllMocks())
+
+function mockNpmClientGet(resolveValue: unknown) {
+  jest.spyOn(npmjsClient.NpmClient.prototype, 'package').mockReturnValue({
+    get: () => Promise.resolve(resolveValue),
+  } as unknown as ReturnType<typeof npmjsClient.NpmClient.prototype['package']>)
+}
 
 describe('AddPackageModal', () => {
   it('renders when open', () => {
@@ -42,7 +50,7 @@ describe('AddPackageModal', () => {
   })
 
   it('calls onClose after adding a valid package name', async () => {
-    jest.spyOn(proxy, 'fetchNpmPackage').mockResolvedValueOnce(MOCK_PKG)
+    mockNpmClientGet(MOCK_PACKUMENT)
     const onClose = jest.fn()
     render(<AddPackageModal open={true} onClose={onClose} />, { wrapper })
 
@@ -55,7 +63,7 @@ describe('AddPackageModal', () => {
   })
 
   it('accepts a full npmjs.com URL', async () => {
-    jest.spyOn(proxy, 'fetchNpmPackage').mockResolvedValueOnce(MOCK_PKG)
+    mockNpmClientGet(MOCK_PACKUMENT)
     const onClose = jest.fn()
     render(<AddPackageModal open={true} onClose={onClose} />, { wrapper })
 

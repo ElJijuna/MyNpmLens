@@ -3,10 +3,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { DashboardPage } from '../index'
 import * as npmHooks from '@/modules/npm/hooks'
+import * as npmApiHooks from '@api-hooks/npm'
+import * as bpHooks from '@api-hooks/bp'
 
 jest.mock('@tanstack/react-router', () => ({
   useRouter: () => ({ history: { back: jest.fn() } }),
   useNavigate: () => jest.fn(),
+  useLocation: () => ({ pathname: '/' }),
 }))
 
 const mockUsePlatform = jest.fn()
@@ -48,9 +51,9 @@ describe('DashboardPage', () => {
       ],
       isSuccess: true,
     } as unknown as ReturnType<typeof npmHooks.useFavorites>)
-    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmHooks.useNpmPackage>)
-    jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useNpmDownloads>)
-    jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useBundleSize>)
+    jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmApiHooks.useNpmPackage>)
+    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
+    jest.spyOn(bpHooks, 'useBpPackageSize').mockReturnValue({ data: undefined } as unknown as ReturnType<typeof bpHooks.useBpPackageSize>)
 
     render(<DashboardPage />, { wrapper })
     expect(screen.queryByText('No packages yet')).not.toBeInTheDocument()

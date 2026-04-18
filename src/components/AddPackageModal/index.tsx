@@ -1,8 +1,14 @@
 import { useState } from 'react'
-import { Dialog, TextField } from '@gnome-ui/react'
+import { Dialog, SearchBar, Banner } from '@gnome-ui/react'
+
+interface Suggestion { id: string; label: string }
 import { parseNpmUrl } from '@/modules/npm/domain'
 import { useAddFavorite, useFavorites } from '@/modules/npm/hooks'
-import { fetchNpmPackage, ProxyError } from '@/modules/npm/proxy'
+import { useNpmSearch } from '@api-hooks/npm'
+import { useDebouncedValue } from '@tanstack/react-pacer'
+import { NpmClient, NpmApiError } from 'npmjs-api-client'
+
+const npmClient = new NpmClient()
 
 interface AddPackageModalProps {
   open: boolean
@@ -15,6 +21,16 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
   const [isValidating, setIsValidating] = useState(false)
   const addFavorite = useAddFavorite()
   const { data: favorites = [] } = useFavorites()
+
+  const [debouncedInput] = useDebouncedValue(input, { wait: 300 })
+  const { data: searchResult, isPending: searchPending } = useNpmSearch(debouncedInput, {
+    enabled: debouncedInput.trim().length > 1,
+  })
+
+  const suggestions: Suggestion[] = (searchResult?.objects ?? []).map((o) => ({
+    id: o.package.name,
+    label: o.package.name,
+  }))
 
   async function handleConfirm() {
     const name = parseNpmUrl(input)
@@ -32,9 +48,9 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
 
     setIsValidating(true)
     try {
-      await fetchNpmPackage(name)
+      await npmClient.package(name).get()
     } catch (err) {
-      if (err instanceof ProxyError && err.status === 404) {
+      if (err instanceof NpmApiError && err.status === 404) {
         setError(`Package "${name}" was not found on npm.`)
       } else {
         setError('Could not reach the npm registry. Check your connection.')
@@ -76,20 +92,23 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
         },
       ]}
     >
-      <TextField
-        label="npm URL or package name"
-        placeholder="react · @scope/package · https://www.npmjs.com/package/react"
+      <SearchBar
+        open={true}
+        inline
         value={input}
+        placeholder="react · @scope/package · https://www.npmjs.com/package/react"
         onChange={(e) => {
           setInput(e.target.value)
           if (error) setError(undefined)
         }}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && input.trim().length > 0 && !isBusy) handleConfirm()
+          if (e.key === 'Enter' && input.trim().length > 0 && !isBusy) void handleConfirm()
         }}
-        error={error}
-        autoFocus
+        suggestions={suggestions}
+        onSuggestionSelect={(item) => setInput(item.id)}
+        loadingSuggestions={searchPending && debouncedInput.trim().length > 1}
       />
+      {error && <Banner variant="error">{error}</Banner>}
     </Dialog>
   )
 }

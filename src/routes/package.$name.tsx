@@ -1,9 +1,0 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { PackageDetailPage } from '@/pages/PackageDetail'
-
-export const Route = createFileRoute('/package/$name')({
-  validateSearch: (search: Record<string, unknown>) => ({
-    version: typeof search.version === 'string' ? search.version : undefined,
-  }),
-  component: PackageDetailPage,
-})

@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { PackageCard } from '../index'
-import * as npmHooks from '@/modules/npm/hooks'
+import * as npmApiHooks from '@api-hooks/npm'
+import * as bpHooks from '@api-hooks/bp'
 import * as githubHooks from '@/modules/github/hooks'
 
 jest.mock('@tanstack/react-router', () => ({
@@ -18,9 +19,9 @@ afterEach(() => jest.restoreAllMocks())
 
 describe('PackageCard', () => {
   it('shows a spinner while loading', () => {
-    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmHooks.useNpmPackage>)
-    jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useNpmDownloads>)
-    jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ data: undefined } as ReturnType<typeof npmHooks.useBundleSize>)
+    jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmApiHooks.useNpmPackage>)
+    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
+    jest.spyOn(bpHooks, 'useBpPackageSize').mockReturnValue({ data: undefined } as unknown as ReturnType<typeof bpHooks.useBpPackageSize>)
     jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>)
 
     const { container } = render(<PackageCard name="react" />, { wrapper })
@@ -28,26 +29,25 @@ describe('PackageCard', () => {
   })
 
   it('renders package info when loaded', () => {
-    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({
+    jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({
       isPending: false,
       data: {
         name: 'react',
-        version: '19.0.0',
-        versions: ['19.0.0', '18.3.1', '18.0.0'],
-        distTags: { latest: '19.0.0' },
+        'dist-tags': { latest: '19.0.0' },
+        versions: { '19.0.0': {}, '18.3.1': {}, '18.0.0': {} },
         description: 'A JavaScript library.',
         license: 'MIT',
         homepage: null,
-        author: null,
         repository: null,
+        time: {},
       },
-    } as unknown as ReturnType<typeof npmHooks.useNpmPackage>)
-    jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({
-      data: { packageName: 'react', weekly: 50_000_000, monthly: 200_000_000 },
-    } as ReturnType<typeof npmHooks.useNpmDownloads>)
-    jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmPackage>)
+    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({
+      data: { downloads: 50_000_000, start: '', end: '', package: 'react' },
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
+    jest.spyOn(bpHooks, 'useBpPackageSize').mockReturnValue({
       data: { packageName: 'react', version: '19.0.0', size: 11000, gzip: 4200, hasSideEffects: false },
-    } as ReturnType<typeof npmHooks.useBundleSize>)
+    } as unknown as ReturnType<typeof bpHooks.useBpPackageSize>)
     jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>)
 
     render(<PackageCard name="react" />, { wrapper })

@@ -30,9 +30,10 @@ body {
 }
 
 #root {
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* ─── Responsive layout helpers ─────────────────────────────────── */
@@ -70,6 +71,14 @@ body {
   .package-grid {
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   }
+}
+
+/* ─── Maintainer grid ────────────────────────────────────────────── */
+
+.maintainer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--gnome-space-3, 1rem);
 }
 
 /* ─── Detail sections stack ─────────────────────────────────────── */

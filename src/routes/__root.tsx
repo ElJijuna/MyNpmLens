@@ -1,9 +1,13 @@
+import { useState } from 'react'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
+import { OverlaySplitView, useBreakpoint } from '@gnome-ui/react'
 import { OfflineBanner } from '@/components/OfflineBanner'
-import { AppFooter } from '@/components/AppFooter'
+import { AppSidebar } from '@/components/AppSidebar'
+import { SidebarProvider } from '@/context/SidebarContext'
 import { useGistSync } from '@/modules/gist/hooks'
 import { MergeSyncDialog } from '@/modules/gist/components/MergeSyncDialog'
+import { useApplyTheme } from '@/hooks/useApplyTheme'
 import '@/app.css'
 
 interface RouterContext {
@@ -12,12 +16,40 @@ interface RouterContext {
 
 function RootLayout() {
   const { status, delta, resolveKeepAll, resolveReplaceWithLocal } = useGistSync()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const { isNarrow } = useBreakpoint()
+  useApplyTheme()
 
   return (
-    <>
-      <OfflineBanner />
-      <Outlet />
-      <AppFooter />
+    <SidebarProvider
+      sidebarOpen={sidebarOpen}
+      openSidebar={() => setSidebarOpen(true)}
+      closeSidebar={() => setSidebarOpen(false)}
+      sidebarCollapsed={sidebarCollapsed}
+      toggleCollapsed={() => setSidebarCollapsed((c) => !c)}
+    >
+      {isNarrow ? (
+        <OverlaySplitView
+          sidebar={<AppSidebar />}
+          content={
+            <>
+              <OfflineBanner />
+              <Outlet />
+            </>
+          }
+          showSidebar={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+      ) : (
+        <div className="wide-layout">
+          <AppSidebar />
+          <div className="wide-layout__content">
+            <OfflineBanner />
+            <Outlet />
+          </div>
+        </div>
+      )}
       {status === 'conflict' && (
         <MergeSyncDialog
           delta={delta}
@@ -25,7 +57,7 @@ function RootLayout() {
           onReplaceWithLocal={resolveReplaceWithLocal}
         />
       )}
-    </>
+    </SidebarProvider>
   )
 }
 

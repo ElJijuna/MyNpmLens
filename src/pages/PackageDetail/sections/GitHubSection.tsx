@@ -2,7 +2,8 @@ import { Text, Badge, Link, Icon } from '@gnome-ui/react'
 import { Star, Share } from '@gnome-ui/icons'
 import { SectionCard } from '@/components/SectionCard'
 import { useGitHubStats } from '@/modules/github/hooks'
-import { useNpmPackage } from '@/modules/npm/hooks'
+import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug'
+import { useNpmPackage } from '@api-hooks/npm'
 
 interface GitHubSectionProps {
   packageName: string
@@ -23,7 +24,7 @@ function formatNumber(n: number): string {
 
 export function GitHubSection({ packageName }: GitHubSectionProps) {
   const { data: pkg } = useNpmPackage(packageName)
-  const slug = pkg?.repository?.github ?? null
+  const slug = pkg?.repository?.url ? parseGitHubSlug(pkg.repository.url) : null
   const { data, isPending, error } = useGitHubStats(slug?.owner ?? null, slug?.repo ?? null)
 
   if (!isPending && !slug) return null

@@ -2,16 +2,19 @@ import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import * as npmHooks from '@/modules/npm/hooks'
-import * as osvHooks from '@/modules/osv/hooks/useOsvVulnerabilities'
+import * as npmApiHooks from '@api-hooks/npm'
+import * as osvHooks from '@api-hooks/osv'
+import * as bpHooks from '@api-hooks/bp'
 import * as githubHooks from '@/modules/github/hooks'
 import { PackageDetailPage } from '../index'
 
 jest.mock('@tanstack/react-router', () => ({
   useRouter: () => ({ history: { back: jest.fn() } }),
   useNavigate: () => jest.fn(),
+  useLocation: () => ({ pathname: '/packages/react' }),
 }))
 
-jest.mock('@/routes/package.$name', () => ({
+jest.mock('@/routes/packages.$name', () => ({
   Route: {
     useParams: () => ({ name: 'react' }),
     useSearch: () => ({ version: undefined }),
@@ -27,24 +30,25 @@ afterEach(() => jest.restoreAllMocks())
 
 const MOCK_PKG = {
   name: 'react',
-  version: '19.0.0',
-  versions: ['19.0.0', '18.3.1'],
-  distTags: { latest: '19.0.0' },
+  'dist-tags': { latest: '19.0.0' },
+  versions: { '19.0.0': {}, '18.3.1': {} },
   description: 'A JavaScript library for building user interfaces.',
   license: 'MIT',
   homepage: 'https://reactjs.org/',
-  author: { name: 'Meta', email: null, url: null },
-  repository: { type: 'git', url: 'https://github.com/facebook/react.git', github: { owner: 'facebook', repo: 'react' } },
+  repository: { type: 'git', url: 'https://github.com/facebook/react.git' },
+  time: {},
 }
 
 describe('PackageDetailPage', () => {
   beforeEach(() => {
-    jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isPending: false, data: MOCK_PKG, error: null } as unknown as ReturnType<typeof npmHooks.useNpmPackage>)
-    jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ isLisPendingoading: false, data: { packageName: 'react', weekly: 1_000_000, monthly: 4_000_000 }, error: null } as unknown as ReturnType<typeof npmHooks.useNpmDownloads>)
-    jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ isPending: false, data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false }, error: null } as unknown as ReturnType<typeof npmHooks.useBundleSize>)
+    jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({ isPending: false, data: MOCK_PKG, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackage>)
+    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads')
+      .mockReturnValueOnce({ isPending: false, data: { downloads: 1_000_000, start: '', end: '', package: 'react' }, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
+      .mockReturnValueOnce({ isPending: false, data: { downloads: 4_000_000, start: '', end: '', package: 'react' }, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
+    jest.spyOn(bpHooks, 'useBpPackageVersionSize').mockReturnValue({ isPending: false, data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false }, error: null } as unknown as ReturnType<typeof bpHooks.useBpPackageVersionSize>)
     jest.spyOn(npmHooks, 'useRemoveFavorite').mockReturnValue({ mutate: jest.fn() } as unknown as ReturnType<typeof npmHooks.useRemoveFavorite>)
     jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ isPending: false, data: { owner: 'facebook', repo: 'react', stars: 230_000, forks: 47_000, openIssues: 850, lastPushedAt: '2024-12-01T10:00:00Z', htmlUrl: 'https://github.com/facebook/react' }, error: null } as unknown as ReturnType<typeof githubHooks.useGitHubStats>)
-    jest.spyOn(osvHooks, 'useOsvVulnerabilities').mockReturnValue({ isPending: false, data: [], error: null } as unknown as ReturnType<typeof osvHooks.useOsvVulnerabilities>)
+    jest.spyOn(osvHooks, 'useOsvQuery').mockReturnValue({ isPending: false, data: { vulns: [] }, error: null } as unknown as ReturnType<typeof osvHooks.useOsvQuery>)
   })
 
   it('renders all section headings', () => {
@@ -59,7 +63,7 @@ describe('PackageDetailPage', () => {
   it('renders package name and license', () => {
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('react')).toBeInTheDocument()
+    expect(screen.getAllByText('react').length).toBeGreaterThan(0)
     expect(screen.getByText('MIT')).toBeInTheDocument()
   })
 
@@ -85,14 +89,16 @@ describe('PackageDetailPage', () => {
   })
 
   it('shows error banner in a section when query fails', () => {
-    jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({
-      isPending: false,
-      data: undefined,
-      error: new Error('API unavailable'),
-    } as unknown as ReturnType<typeof npmHooks.useNpmDownloads>)
+    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads')
+      .mockReset()
+      .mockReturnValue({
+        isPending: false,
+        data: undefined,
+        error: new Error('API unavailable'),
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
 
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('API unavailable')).toBeInTheDocument()
+    expect(screen.getByText(/API unavailable/i)).toBeInTheDocument()
   })
 })

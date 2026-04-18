@@ -39,6 +39,8 @@ describe('DownloadsChart', () => {
     mockUseQueries.mockReturnValue([
       { data: undefined },
       { data: undefined },
+      { data: undefined },
+      { data: undefined },
     ])
 
     const { container } = render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
@@ -47,7 +49,9 @@ describe('DownloadsChart', () => {
 
   it('renders the chart as soon as at least one package has data', () => {
     mockUseQueries.mockReturnValue([
-      { data: { packageName: 'react', weekly: 50_000_000, monthly: 200_000_000 } },
+      { data: { downloads: 50_000_000 } },
+      { data: { downloads: 200_000_000 } },
+      { data: undefined },
       { data: undefined },
     ])
 
@@ -57,7 +61,8 @@ describe('DownloadsChart', () => {
 
   it('shows the Downloads heading', () => {
     mockUseQueries.mockReturnValue([
-      { data: { packageName: 'react', weekly: 1000, monthly: 4000 } },
+      { data: { downloads: 1000 } },
+      { data: { downloads: 4000 } },
     ])
 
     render(<DownloadsChart packageNames={['react']} />, { wrapper })
@@ -66,8 +71,10 @@ describe('DownloadsChart', () => {
 
   it('passes correct weekly and monthly values to the chart', () => {
     mockUseQueries.mockReturnValue([
-      { data: { packageName: 'react', weekly: 5000, monthly: 20000 } },
-      { data: { packageName: 'lodash', weekly: 3000, monthly: 12000 } },
+      { data: { downloads: 5000 } },
+      { data: { downloads: 20000 } },
+      { data: { downloads: 3000 } },
+      { data: { downloads: 12000 } },
     ])
 
     render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
@@ -80,7 +87,9 @@ describe('DownloadsChart', () => {
 
   it('defaults missing data to 0 instead of crashing', () => {
     mockUseQueries.mockReturnValue([
-      { data: { packageName: 'react', weekly: 1000, monthly: 4000 } },
+      { data: { downloads: 1000 } },
+      { data: { downloads: 4000 } },
+      { data: undefined },
       { data: undefined },
     ])
 

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Box, Button, Icon, WrapBox, Text } from '@gnome-ui/react'
+import { Add } from '@gnome-ui/icons'
 import { Toolbar } from '@/components/Toolbar'
 import { AddPackageModal } from '@/components/AddPackageModal'
 import { EmptyState } from '@/components/EmptyState'
@@ -18,20 +20,34 @@ export function DashboardPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <Toolbar onAddClick={() => setModalOpen(true)} />
+      <Toolbar />
 
       <main className="page-content">
         {favorites.length === 0 ? (
           <EmptyState onAddClick={() => setModalOpen(true)} />
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <Box>
+            <WrapBox justify="space-between" align="center">
+              <Text variant="heading">
+                Favorite Packages
+              </Text>
+              <Button
+                variant="suggested"
+                size="sm"
+                onClick={() => setModalOpen(true)}
+                leadingIcon={<Icon icon={Add} />}
+              >
+                Add
+              </Button>
+            </WrapBox>
             <DownloadsChart packageNames={packageNames} />
+
             <div className="package-grid">
               {favorites.map((fav) => (
                 <PackageCard key={fav.name} name={fav.name} />
               ))}
             </div>
-          </div>
+          </Box>
         )}
         <AuthSection />
       </main>
