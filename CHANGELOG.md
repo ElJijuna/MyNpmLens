@@ -1,3 +1,24 @@
+## [1.9.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.8.1...v1.9.0) (2026-04-18)
+
+### Features
+
+* add AppSidebar component with navigation and footer (closes [#19](https://github.com/ElJijuna/MyNpmLens/issues/19)) ([4cac0c2](https://github.com/ElJijuna/MyNpmLens/commit/4cac0c2b0ce0ddc5fc96b59d5852850134703264))
+* add PathBar navigation and sidebar toggle to Toolbar (closes [#21](https://github.com/ElJijuna/MyNpmLens/issues/21)) ([1f5b774](https://github.com/ElJijuna/MyNpmLens/commit/1f5b774101d97fca4b246f6c7f1c5fd056b3d7e9))
+* add route stubs for v2.0.0 pages (closes [#18](https://github.com/ElJijuna/MyNpmLens/issues/18)) ([7423789](https://github.com/ElJijuna/MyNpmLens/commit/742378937cab3466242f6ad9e5a78160d136a572))
+* async autocomplete in AddPackageModal (closes [#32](https://github.com/ElJijuna/MyNpmLens/issues/32)) ([b8a5244](https://github.com/ElJijuna/MyNpmLens/commit/b8a524490b7b2661cd5328a487f0b040f4a27329))
+* closes all issues and update router and ui to fix responsive. ([703038d](https://github.com/ElJijuna/MyNpmLens/commit/703038dee13cf46279a3dbc9ce0bd4701f9b6e0d))
+* expand GistSync to include maintainers — storage, hooks, and conflict resolution (closes [#24](https://github.com/ElJijuna/MyNpmLens/issues/24)) ([c196e71](https://github.com/ElJijuna/MyNpmLens/commit/c196e7137e3b950906400fe33f9b4813062334cf))
+* implement AboutPage with version info and links (closes [#27](https://github.com/ElJijuna/MyNpmLens/issues/27)) ([94a1eff](https://github.com/ElJijuna/MyNpmLens/commit/94a1effc7cd5d57d87392d8ea875e2e8603a5c35))
+* implement MaintainerPage with profile, stats, and packages dashboard (closes [#23](https://github.com/ElJijuna/MyNpmLens/issues/23)) ([f8d138f](https://github.com/ElJijuna/MyNpmLens/commit/f8d138f138f80ce41bb512b3a7a8b74f93c0c0ce))
+* implement MaintainersPage with add maintainer dialog (closes [#22](https://github.com/ElJijuna/MyNpmLens/issues/22)) ([6598f4b](https://github.com/ElJijuna/MyNpmLens/commit/6598f4b5ba96893eb04fa3e4fbbad1d4343f1553))
+* implement SettingsPage with theme support and Gist sync (closes [#26](https://github.com/ElJijuna/MyNpmLens/issues/26)) ([9aecff6](https://github.com/ElJijuna/MyNpmLens/commit/9aecff6222e2a414d06092cf201208c21e1872a6))
+* migrate Bundlephobia proxy to @api-hooks/bp (closes [#30](https://github.com/ElJijuna/MyNpmLens/issues/30)) ([9e11b79](https://github.com/ElJijuna/MyNpmLens/commit/9e11b79fe74b97935b1f7a10287721cedb688bcb))
+* migrate npm proxy and hooks to @api-hooks/npm (closes [#31](https://github.com/ElJijuna/MyNpmLens/issues/31)) ([0f72398](https://github.com/ElJijuna/MyNpmLens/commit/0f7239823923d137bcd834576e4239e36d718804))
+* migrate OSV proxy to @api-hooks/osv (closes [#29](https://github.com/ElJijuna/MyNpmLens/issues/29)) ([f73f4ca](https://github.com/ElJijuna/MyNpmLens/commit/f73f4ca932e426044370aafe1cd931af5e9ee1df))
+* migrate root layout to OverlaySplitView with AppSidebar (closes [#20](https://github.com/ElJijuna/MyNpmLens/issues/20)) ([984875b](https://github.com/ElJijuna/MyNpmLens/commit/984875bd058be5e4b97fea8341e22c5487f10210))
+* persist QueryClient cache with IndexedDB (closes [#33](https://github.com/ElJijuna/MyNpmLens/issues/33)) ([7cfdd13](https://github.com/ElJijuna/MyNpmLens/commit/7cfdd130b1d4e01e7f52602b42ef6db63ccc4c7b))
+* replace Gist proxy layer with @api-hooks/gh hooks (closes [#28](https://github.com/ElJijuna/MyNpmLens/issues/28)) ([8b53206](https://github.com/ElJijuna/MyNpmLens/commit/8b53206ce9361f0d454b3a17d58bd2c14b8a0f5e))
+
 ## [1.8.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.8.0...v1.8.1) (2026-04-18)
 
 ### Bug Fixes
