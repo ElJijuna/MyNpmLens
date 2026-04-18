@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useGhGist, useGhCreateGist, useGhUpdateGist } from '@api-hooks/gh'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
 import { maintainersStorage } from '@/store/maintainers'
 import { FAVORITES_QUERY_KEY } from '@/modules/npm/hooks/useFavorites'
 import { MAINTAINERS_QUERY_KEY } from '@/modules/npm/hooks/useMaintainers'
-import { fetchUserGist, findUserGist, createUserGist, updateUserGist } from '@/modules/gist/proxy'
-import { getStoredGistId, setStoredGistId } from './usePushToGist'
+import { getStoredGistId, setStoredGistId, GIST_FILENAME } from './usePushToGist'
 import type { GistDelta } from '@/modules/gist/domain'
 import type { FavoritePackage } from '@/modules/npm/domain'
 import type { FollowedMaintainer } from '@/modules/npm/domain'
@@ -34,6 +34,15 @@ function computeDelta(
   }
 }
 
+function parseGistContent(content: string): { favorites: FavoritePackage[]; maintainers: FollowedMaintainer[] } {
+  try {
+    const parsed = JSON.parse(content) as { favorites?: FavoritePackage[]; maintainers?: FollowedMaintainer[] }
+    return { favorites: parsed.favorites ?? [], maintainers: parsed.maintainers ?? [] }
+  } catch {
+    return { favorites: [], maintainers: [] }
+  }
+}
+
 export function useGistSync(): GistSyncState {
   const { user } = useAuth()
   const queryClient = useQueryClient()
@@ -44,87 +53,83 @@ export function useGistSync(): GistSyncState {
     addedMaintainersInGist: [],
     removedMaintainersInGist: [],
   })
+  const [gistId, setGistId] = useState<string | null>(() => user ? getStoredGistId(user.uid) : null)
   const [gistFavs, setGistFavs] = useState<FavoritePackage[]>([])
   const [gistMaintainers, setGistMaintainers] = useState<FollowedMaintainer[]>([])
 
+  const createGist = useGhCreateGist({ token: user?.githubToken })
+  const updateGist = useGhUpdateGist(gistId ?? '', { token: user?.githubToken })
+
+  const { data: remoteGist, isSuccess: gistLoaded, isError: gistError } = useGhGist(gistId ?? '', {
+    enabled: !!gistId && !!user?.githubToken && status === 'syncing',
+    token: user?.githubToken,
+  })
+
+  // Trigger sync on login
   useEffect(() => {
-    if (!user?.githubToken) return
-
-    let cancelled = false
-
-    async function sync() {
-      if (!user?.githubToken) return
-      setStatus('syncing')
-
-      try {
-        const gistId = getStoredGistId(user.uid)
-
-        if (!gistId) {
-          const existing = await findUserGist(user.githubToken)
-
-          if (existing) {
-            setStoredGistId(user.uid, existing.gistId)
-            const localFavs = favoritesStorage.getAll()
-            const localMaintainers = maintainersStorage.getAll()
-            const computed = computeDelta(localFavs, existing.favorites, localMaintainers, existing.maintainers)
-            const hasDiff =
-              computed.addedInGist.length > 0 ||
-              computed.removedInGist.length > 0 ||
-              computed.addedMaintainersInGist.length > 0 ||
-              computed.removedMaintainersInGist.length > 0
-            if (!cancelled) {
-              if (hasDiff) {
-                setGistFavs(existing.favorites)
-                setGistMaintainers(existing.maintainers)
-                setDelta(computed)
-                setStatus('conflict')
-              } else {
-                setStatus('done')
-              }
-            }
-            return
-          }
-
-          const favorites = favoritesStorage.getAll()
-          const maintainers = maintainersStorage.getAll()
-          const created = await createUserGist(favorites, maintainers, user.githubToken)
-          setStoredGistId(user.uid, created.gistId)
-          if (!cancelled) setStatus('done')
-          return
-        }
-
-        const remote = await fetchUserGist(gistId, user.githubToken)
-        const localFavs = favoritesStorage.getAll()
-        const localMaintainers = maintainersStorage.getAll()
-        const computed = computeDelta(localFavs, remote.favorites, localMaintainers, remote.maintainers)
-
-        if (cancelled) return
-
-        const hasDiff =
-          computed.addedInGist.length > 0 ||
-          computed.removedInGist.length > 0 ||
-          computed.addedMaintainersInGist.length > 0 ||
-          computed.removedMaintainersInGist.length > 0
-
-        if (!hasDiff) {
-          setStatus('done')
-        } else {
-          setGistFavs(remote.favorites)
-          setGistMaintainers(remote.maintainers)
-          setDelta(computed)
-          setStatus('conflict')
-        }
-      } catch {
-        if (!cancelled) setStatus('error')
-      }
+    if (!user?.githubToken) {
+      setStatus('idle')
+      return
     }
-
-    sync()
-    return () => { cancelled = true }
+    const storedId = getStoredGistId(user.uid)
+    setGistId(storedId)
+    setStatus('syncing')
   }, [user?.uid, user?.githubToken])
 
+  // Create gist if none exists
+  useEffect(() => {
+    if (status !== 'syncing' || gistId || !user?.githubToken) return
+
+    const favorites = favoritesStorage.getAll()
+    const maintainers = maintainersStorage.getAll()
+    const content = JSON.stringify({ favorites, maintainers }, null, 2)
+
+    createGist.mutate(
+      { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
+      {
+        onSuccess: (created) => {
+          setStoredGistId(user.uid, created.id)
+          setGistId(created.id)
+          setStatus('done')
+        },
+        onError: () => setStatus('error'),
+      },
+    )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, gistId, user?.uid, user?.githubToken])
+
+  // Process fetched remote gist
+  useEffect(() => {
+    if (!gistLoaded || !remoteGist) return
+
+    const raw = remoteGist.files[GIST_FILENAME]?.content ?? '{}'
+    const { favorites: remoteFavs, maintainers: remoteMaintainers } = parseGistContent(raw)
+    const localFavs = favoritesStorage.getAll()
+    const localMaintainers = maintainersStorage.getAll()
+    const computed = computeDelta(localFavs, remoteFavs, localMaintainers, remoteMaintainers)
+
+    const hasDiff =
+      computed.addedInGist.length > 0 ||
+      computed.removedInGist.length > 0 ||
+      computed.addedMaintainersInGist.length > 0 ||
+      computed.removedMaintainersInGist.length > 0
+
+    if (!hasDiff) {
+      setStatus('done')
+    } else {
+      setGistFavs(remoteFavs)
+      setGistMaintainers(remoteMaintainers)
+      setDelta(computed)
+      setStatus('conflict')
+    }
+  }, [gistLoaded, remoteGist])
+
+  useEffect(() => {
+    if (gistError) setStatus('error')
+  }, [gistError])
+
   function resolveKeepAll() {
-    if (!user?.githubToken) return
+    if (!user?.githubToken || !gistId) return
 
     const localFavs = favoritesStorage.getAll()
     const mergedFavs = [
@@ -142,17 +147,17 @@ export function useGistSync(): GistSyncState {
     maintainersStorage.replace(mergedMaintainers)
     queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
 
-    const gistId = getStoredGistId(user.uid)
-    if (gistId) updateUserGist(gistId, mergedFavs, mergedMaintainers, user.githubToken).catch(() => {})
+    const content = JSON.stringify({ favorites: mergedFavs, maintainers: mergedMaintainers }, null, 2)
+    updateGist.mutate({ files: { [GIST_FILENAME]: { content } } })
     setStatus('done')
   }
 
   function resolveReplaceWithLocal() {
-    if (!user?.githubToken) return
-    const localFavs = favoritesStorage.getAll()
-    const localMaintainers = maintainersStorage.getAll()
-    const gistId = getStoredGistId(user.uid)
-    if (gistId) updateUserGist(gistId, localFavs, localMaintainers, user.githubToken).catch(() => {})
+    if (!user?.githubToken || !gistId) return
+    const favorites = favoritesStorage.getAll()
+    const maintainers = maintainersStorage.getAll()
+    const content = JSON.stringify({ favorites, maintainers }, null, 2)
+    updateGist.mutate({ files: { [GIST_FILENAME]: { content } } })
     setStatus('done')
   }
 
