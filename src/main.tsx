@@ -4,16 +4,24 @@ import './styles/global.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { openDB } from 'idb'
+import { queryClient } from '@/lib/queryClient'
 import { routeTree } from './routeTree.gen'
 import { AuthProvider } from '@/modules/auth/AuthProvider'
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-      retry: 2,
-    },
+const db = await openDB('mynpmlens', 1, {
+  upgrade(db) {
+    db.createObjectStore('query-cache')
+  },
+})
+
+const persister = createAsyncStoragePersister({
+  storage: {
+    getItem: (key) => db.get('query-cache', key),
+    setItem: (key, value) => db.put('query-cache', value, key),
+    removeItem: (key) => db.delete('query-cache', key),
   },
 })
 
@@ -33,10 +41,10 @@ const rootElement = document.getElementById('root')!
 
 createRoot(rootElement).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   </StrictMode>,
 )
