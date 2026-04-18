@@ -9,11 +9,12 @@ describe('MergeSyncDialog', () => {
   const removedInGist = [
     { name: 'moment', addedAt: '2025-01-03T00:00:00.000Z' },
   ]
+  const emptyMaintainers = { addedMaintainersInGist: [], removedMaintainersInGist: [] }
 
   it('shows packages added on another device', () => {
     render(
       <MergeSyncDialog
-        delta={{ addedInGist, removedInGist: [] }}
+        delta={{ addedInGist, removedInGist: [], ...emptyMaintainers }}
         onKeepAll={jest.fn()}
         onReplaceWithLocal={jest.fn()}
       />,
@@ -25,7 +26,7 @@ describe('MergeSyncDialog', () => {
   it('shows packages removed on another device', () => {
     render(
       <MergeSyncDialog
-        delta={{ addedInGist: [], removedInGist }}
+        delta={{ addedInGist: [], removedInGist, ...emptyMaintainers }}
         onKeepAll={jest.fn()}
         onReplaceWithLocal={jest.fn()}
       />,
@@ -37,7 +38,7 @@ describe('MergeSyncDialog', () => {
     const onKeepAll = jest.fn()
     render(
       <MergeSyncDialog
-        delta={{ addedInGist, removedInGist }}
+        delta={{ addedInGist, removedInGist, ...emptyMaintainers }}
         onKeepAll={onKeepAll}
         onReplaceWithLocal={jest.fn()}
       />,
@@ -50,7 +51,7 @@ describe('MergeSyncDialog', () => {
     const onReplaceWithLocal = jest.fn()
     render(
       <MergeSyncDialog
-        delta={{ addedInGist, removedInGist }}
+        delta={{ addedInGist, removedInGist, ...emptyMaintainers }}
         onKeepAll={jest.fn()}
         onReplaceWithLocal={onReplaceWithLocal}
       />,
@@ -62,12 +63,12 @@ describe('MergeSyncDialog', () => {
   it('shows both sections when there are additions and removals', () => {
     render(
       <MergeSyncDialog
-        delta={{ addedInGist, removedInGist }}
+        delta={{ addedInGist, removedInGist, ...emptyMaintainers }}
         onKeepAll={jest.fn()}
         onReplaceWithLocal={jest.fn()}
       />,
     )
-    expect(screen.getByText('Added on another device')).toBeInTheDocument()
-    expect(screen.getByText('Removed on another device')).toBeInTheDocument()
+    expect(screen.getByText('Packages added on another device')).toBeInTheDocument()
+    expect(screen.getByText('Packages removed on another device')).toBeInTheDocument()
   })
 })

@@ -1,4 +1,5 @@
 import type { FavoritePackage } from '@/modules/npm/domain'
+import type { FollowedMaintainer } from '@/modules/npm/domain'
 import type { GistSync } from '@/modules/gist/domain'
 import { ProxyError } from '@/modules/npm/proxy/ProxyError'
 import { gistFetch, SERVICE, GIST_FILENAME } from './gistClient'
@@ -8,13 +9,9 @@ interface GistResponse {
   updated_at: string
 }
 
-/**
- * Creates a new private Gist with the user's current favorites.
- * Called on first login when no gistId exists in localStorage.
- * @throws {ProxyError} on non-200 responses, timeout, or network errors.
- */
 export async function createUserGist(
   favorites: FavoritePackage[],
+  maintainers: FollowedMaintainer[],
   token: string,
 ): Promise<GistSync> {
   const res = await gistFetch('https://api.github.com/gists', token, {
@@ -24,7 +21,7 @@ export async function createUserGist(
       public: false,
       files: {
         [GIST_FILENAME]: {
-          content: JSON.stringify({ favorites }, null, 2),
+          content: JSON.stringify({ favorites, maintainers }, null, 2),
         },
       },
     }),
@@ -39,6 +36,7 @@ export async function createUserGist(
   return {
     gistId: data.id,
     favorites,
+    maintainers,
     updatedAt: data.updated_at,
   }
 }

@@ -1,5 +1,6 @@
 import type { GistSync } from '@/modules/gist/domain'
 import type { FavoritePackage } from '@/modules/npm/domain'
+import type { FollowedMaintainer } from '@/modules/npm/domain'
 import { gistFetch, SERVICE, GIST_FILENAME } from './gistClient'
 import { ProxyError } from '@/modules/npm/proxy/ProxyError'
 
@@ -51,10 +52,11 @@ export async function findUserGist(token: string): Promise<GistSync | null> {
       }
       const data: GistDetail = await detail.json()
       const raw = data.files[GIST_FILENAME]?.content ?? '{}'
-      const parsed = JSON.parse(raw) as { favorites?: FavoritePackage[] }
+      const parsed = JSON.parse(raw) as { favorites?: FavoritePackage[]; maintainers?: FollowedMaintainer[] }
       return {
         gistId: data.id,
         favorites: parsed.favorites ?? [],
+        maintainers: parsed.maintainers ?? [],
         updatedAt: data.updated_at,
       }
     }

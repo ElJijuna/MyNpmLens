@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { maintainersStorage } from '@/store/maintainers'
 import { fetchWithTimeout } from '@/modules/npm/proxy/fetchWithTimeout'
 import { ProxyError } from '@/modules/npm/proxy/ProxyError'
+import { usePushToGist } from '@/modules/gist/hooks'
 import type { FollowedMaintainer } from '@/modules/npm/domain'
 
 export const MAINTAINERS_QUERY_KEY = ['maintainers'] as const
@@ -24,6 +25,7 @@ async function validateMaintainer(username: string): Promise<void> {
 
 export function useAddMaintainer() {
   const queryClient = useQueryClient()
+  const pushToGist = usePushToGist()
 
   return useMutation({
     mutationFn: async (username: string) => {
@@ -32,12 +34,14 @@ export function useAddMaintainer() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
+      pushToGist.mutate()
     },
   })
 }
 
 export function useRemoveMaintainer() {
   const queryClient = useQueryClient()
+  const pushToGist = usePushToGist()
 
   return useMutation({
     mutationFn: async (username: string) => {
@@ -45,6 +49,7 @@ export function useRemoveMaintainer() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
+      pushToGist.mutate()
     },
   })
 }

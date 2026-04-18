@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
+import { maintainersStorage } from '@/store/maintainers'
 import { createUserGist, updateUserGist } from '@/modules/gist/proxy'
 
 const GIST_ID_PREFIX = 'mynpmlens:gist:'
@@ -26,13 +27,14 @@ export function usePushToGist() {
       if (!user?.githubToken) return
 
       const favorites = favoritesStorage.getAll()
+      const maintainers = maintainersStorage.getAll()
       const gistId = getStoredGistId(user.uid)
 
       if (!gistId) {
-        const created = await createUserGist(favorites, user.githubToken)
+        const created = await createUserGist(favorites, maintainers, user.githubToken)
         setStoredGistId(user.uid, created.gistId)
       } else {
-        await updateUserGist(gistId, favorites, user.githubToken)
+        await updateUserGist(gistId, favorites, maintainers, user.githubToken)
       }
     },
   })

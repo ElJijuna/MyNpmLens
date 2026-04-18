@@ -141,11 +141,12 @@ describe('findUserGist', () => {
 
 describe('createUserGist', () => {
   const favorites = [{ name: 'react', addedAt: '2025-01-01T00:00:00Z' }]
+  const maintainers: { username: string }[] = []
 
   it('returns GistSync with the created gist id', async () => {
     mockFetch([{ ok: true, body: { id: GIST_ID, updated_at: '2025-01-01T00:00:00Z' } }])
 
-    const result = await createUserGist(favorites, TOKEN)
+    const result = await createUserGist(favorites, maintainers, TOKEN)
     expect(result.gistId).toBe(GIST_ID)
     expect(result.favorites).toEqual(favorites)
   })
@@ -153,7 +154,7 @@ describe('createUserGist', () => {
   it('sends a POST request with the correct body', async () => {
     mockFetch([{ ok: true, body: { id: GIST_ID, updated_at: '2025-01-01T00:00:00Z' } }])
 
-    await createUserGist(favorites, TOKEN)
+    await createUserGist(favorites, maintainers, TOKEN)
 
     const call = (global.fetch as jest.Mock).mock.calls[0]
     expect(call[0]).toBe('https://api.github.com/gists')
@@ -165,7 +166,7 @@ describe('createUserGist', () => {
 
   it('throws ProxyError on non-ok response', async () => {
     mockFetch([{ ok: false, status: 422, body: {} }])
-    await expect(createUserGist(favorites, TOKEN)).rejects.toBeInstanceOf(ProxyError)
+    await expect(createUserGist(favorites, maintainers, TOKEN)).rejects.toBeInstanceOf(ProxyError)
   })
 })
 
@@ -173,16 +174,17 @@ describe('createUserGist', () => {
 
 describe('updateUserGist', () => {
   const favorites = [{ name: 'vue', addedAt: '2025-01-01T00:00:00Z' }]
+  const maintainers: { username: string }[] = []
 
   it('resolves without error on success', async () => {
     mockFetch([{ ok: true, body: {} }])
-    await expect(updateUserGist(GIST_ID, favorites, TOKEN)).resolves.toBeUndefined()
+    await expect(updateUserGist(GIST_ID, favorites, maintainers, TOKEN)).resolves.toBeUndefined()
   })
 
   it('sends a PATCH request to the correct URL', async () => {
     mockFetch([{ ok: true, body: {} }])
 
-    await updateUserGist(GIST_ID, favorites, TOKEN)
+    await updateUserGist(GIST_ID, favorites, maintainers, TOKEN)
 
     const call = (global.fetch as jest.Mock).mock.calls[0]
     expect(call[0]).toBe(`https://api.github.com/gists/${GIST_ID}`)
@@ -194,6 +196,6 @@ describe('updateUserGist', () => {
 
   it('throws ProxyError on non-ok response', async () => {
     mockFetch([{ ok: false, status: 404, body: {} }])
-    await expect(updateUserGist(GIST_ID, favorites, TOKEN)).rejects.toBeInstanceOf(ProxyError)
+    await expect(updateUserGist(GIST_ID, favorites, maintainers, TOKEN)).rejects.toBeInstanceOf(ProxyError)
   })
 })
