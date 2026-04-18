@@ -1,9 +1,10 @@
-import { Text, Badge } from '@gnome-ui/react'
+import { Text, Badge, Box, WrapBox } from '@gnome-ui/react'
 import { SectionCard } from '@/components/SectionCard'
-import { useBundleSize } from '@/modules/npm/hooks'
+import { useBpPackageVersionSize } from '@api-hooks/bp'
 
 interface BundleSizeSectionProps {
   name: string
+  version?: string
 }
 
 function formatBytes(bytes: number): string {
@@ -12,36 +13,38 @@ function formatBytes(bytes: number): string {
   return `${bytes} B`
 }
 
-export function BundleSizeSection({ name }: BundleSizeSectionProps) {
-  const { data, isPending, error } = useBundleSize(name)
+export function BundleSizeSection({ name, version = '' }: BundleSizeSectionProps) {
+  const { data, isPending, error } = useBpPackageVersionSize(name, version, {
+    enabled: name.length > 0 && version.length > 0,
+  })
 
   return (
     <SectionCard title="Bundle size" isLoading={isPending} error={error as Error | null}>
       {data && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+        <Box orientation="vertical" spacing={12}>
+          <WrapBox childSpacing={24}>
+            <Box orientation="vertical" spacing={3}>
               <Text variant="caption-heading" color="dim">Minified</Text>
               <Text variant="numeric" style={{ fontSize: '2rem' }}>
                 {formatBytes(data.size)}
               </Text>
-            </div>
+            </Box>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <Box orientation="vertical" spacing={3}>
               <Text variant="caption-heading" color="dim">Minified + gzipped</Text>
               <Text variant="numeric" style={{ fontSize: '2rem' }}>
                 {formatBytes(data.gzip)}
               </Text>
-            </div>
-          </div>
+            </Box>
+          </WrapBox>
 
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <WrapBox childSpacing={6} align="center">
             <Text variant="caption" color="dim">v{data.version}</Text>
             <Badge variant={data.hasSideEffects ? 'warning' : 'success'}>
               {data.hasSideEffects ? 'Has side effects' : 'Side-effect free'}
             </Badge>
-          </div>
-        </div>
+          </WrapBox>
+        </Box>
       )}
     </SectionCard>
   )

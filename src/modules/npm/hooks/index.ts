@@ -2,5 +2,4 @@ export { useFavorites, useAddFavorite, useRemoveFavorite, FAVORITES_QUERY_KEY } 
 export { useMaintainers, useAddMaintainer, useRemoveMaintainer, MAINTAINERS_QUERY_KEY } from './useMaintainers'
 export { useNpmPackage } from './useNpmPackage'
 export { useNpmDownloads } from './useNpmDownloads'
-export { useBundleSize } from './useBundleSize'
 export { npmQueryKeys } from './queryKeys'

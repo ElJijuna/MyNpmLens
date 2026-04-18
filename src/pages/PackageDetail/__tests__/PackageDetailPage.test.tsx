@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import * as npmHooks from '@/modules/npm/hooks'
 import * as osvHooks from '@api-hooks/osv'
+import * as bpHooks from '@api-hooks/bp'
 import * as githubHooks from '@/modules/github/hooks'
 import { PackageDetailPage } from '../index'
 
@@ -41,7 +42,7 @@ describe('PackageDetailPage', () => {
   beforeEach(() => {
     jest.spyOn(npmHooks, 'useNpmPackage').mockReturnValue({ isPending: false, data: MOCK_PKG, error: null } as unknown as ReturnType<typeof npmHooks.useNpmPackage>)
     jest.spyOn(npmHooks, 'useNpmDownloads').mockReturnValue({ isLisPendingoading: false, data: { packageName: 'react', weekly: 1_000_000, monthly: 4_000_000 }, error: null } as unknown as ReturnType<typeof npmHooks.useNpmDownloads>)
-    jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ isPending: false, data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false }, error: null } as unknown as ReturnType<typeof npmHooks.useBundleSize>)
+    jest.spyOn(bpHooks, 'useBpPackageVersionSize').mockReturnValue({ isPending: false, data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false }, error: null } as unknown as ReturnType<typeof bpHooks.useBpPackageVersionSize>)
     jest.spyOn(npmHooks, 'useRemoveFavorite').mockReturnValue({ mutate: jest.fn() } as unknown as ReturnType<typeof npmHooks.useRemoveFavorite>)
     jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ isPending: false, data: { owner: 'facebook', repo: 'react', stars: 230_000, forks: 47_000, openIssues: 850, lastPushedAt: '2024-12-01T10:00:00Z', htmlUrl: 'https://github.com/facebook/react' }, error: null } as unknown as ReturnType<typeof githubHooks.useGitHubStats>)
     jest.spyOn(osvHooks, 'useOsvQuery').mockReturnValue({ isPending: false, data: { vulns: [] }, error: null } as unknown as ReturnType<typeof osvHooks.useOsvQuery>)

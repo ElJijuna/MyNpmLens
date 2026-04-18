@@ -1,7 +1,8 @@
 import { Card, Text, Badge, Spinner, Icon } from '@gnome-ui/react'
 import { Star } from '@gnome-ui/icons'
 import { useNavigate } from '@tanstack/react-router'
-import { useNpmPackage, useNpmDownloads, useBundleSize } from '@/modules/npm/hooks'
+import { useNpmPackage, useNpmDownloads } from '@/modules/npm/hooks'
+import { useBpPackageSize } from '@api-hooks/bp'
 import { useGitHubStats } from '@/modules/github/hooks'
 
 interface PackageCardProps {
@@ -23,7 +24,7 @@ export function PackageCard({ name }: PackageCardProps) {
   const navigate = useNavigate()
   const { data: pkg, isPending: pkgLoading } = useNpmPackage(name)
   const { data: downloads } = useNpmDownloads(name)
-  const { data: bundle } = useBundleSize(name)
+  const { data: bundle } = useBpPackageSize(name)
   const { data: github } = useGitHubStats(
     pkg?.repository?.github?.owner ?? null,
     pkg?.repository?.github?.repo ?? null,
