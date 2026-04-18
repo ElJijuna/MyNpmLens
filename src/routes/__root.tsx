@@ -4,6 +4,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { OverlaySplitView } from '@gnome-ui/react'
 import { OfflineBanner } from '@/components/OfflineBanner'
 import { AppSidebar } from '@/components/AppSidebar'
+import { SidebarProvider } from '@/context/SidebarContext'
 import { useGistSync } from '@/modules/gist/hooks'
 import { MergeSyncDialog } from '@/modules/gist/components/MergeSyncDialog'
 import '@/app.css'
@@ -17,7 +18,7 @@ function RootLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <>
+    <SidebarProvider openSidebar={() => setSidebarOpen(true)}>
       <OverlaySplitView
         sidebar={<AppSidebar />}
         content={
@@ -36,7 +37,7 @@ function RootLayout() {
           onReplaceWithLocal={resolveReplaceWithLocal}
         />
       )}
-    </>
+    </SidebarProvider>
   )
 }
 

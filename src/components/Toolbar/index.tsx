@@ -1,17 +1,20 @@
-import { HeaderBar, Button, Icon } from '@gnome-ui/react'
-import { Add, GoPrevious, GoHome } from '@gnome-ui/icons'
-import { useRouter, useNavigate } from '@tanstack/react-router'
+import { HeaderBar, Button, Icon, PathBar, useBreakpoint } from '@gnome-ui/react'
+import { Add, ViewSidebar } from '@gnome-ui/icons'
+import { useNavigate } from '@tanstack/react-router'
 import { usePlatform } from '@gnome-ui/hooks'
+import { useSidebar } from '@/context/SidebarContext'
+import { usePathSegments } from '@/hooks/usePathSegments'
 
 interface ToolbarProps {
   onAddClick?: () => void
-  showBack?: boolean
 }
 
-export function Toolbar({ onAddClick, showBack = false }: ToolbarProps) {
-  const router = useRouter()
+export function Toolbar({ onAddClick }: ToolbarProps) {
   const navigate = useNavigate()
   const { isGnomeWebView } = usePlatform()
+  const { openSidebar } = useSidebar()
+  const { isNarrow } = useBreakpoint()
+  const segments = usePathSegments()
 
   if (isGnomeWebView) return null
 
@@ -19,20 +22,21 @@ export function Toolbar({ onAddClick, showBack = false }: ToolbarProps) {
     <div className="sticky-header">
       <HeaderBar
         flat
-        title="Npm Lens"
+        title={
+          <PathBar
+            segments={segments}
+            onNavigate={(path) => navigate({ to: path })}
+          />
+        }
         start={
-          showBack ? (
-            <Button variant="flat" onClick={() => router.history.back()} aria-label="Go back">
-              <Icon icon={GoPrevious} />
+          isNarrow ? (
+            <Button variant="flat" onClick={openSidebar} aria-label="Open sidebar">
+              <Icon icon={ViewSidebar} />
             </Button>
           ) : undefined
         }
         end={
-          showBack ? (
-            <Button variant="flat" onClick={() => navigate({ to: '/' })} aria-label="Go home">
-              <Icon icon={GoHome} />
-            </Button>
-          ) : onAddClick ? (
+          onAddClick ? (
             <Button variant="suggested" onClick={onAddClick} leadingIcon={<Icon icon={Add} />}>
               Add
             </Button>

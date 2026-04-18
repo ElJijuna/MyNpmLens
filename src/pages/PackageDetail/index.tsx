@@ -35,7 +35,7 @@ export function PackageDetailPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <Toolbar showBack />
+      <Toolbar />
 
       <main className="page-content detail-sections">
         {versionOptions.length > 0 && (
