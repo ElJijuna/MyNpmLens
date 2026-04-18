@@ -4,8 +4,12 @@ import { useGhGist, useGhCreateGist, useGhUpdateGist } from '@api-hooks/gh'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
 import { maintainersStorage } from '@/store/maintainers'
+import { settingsStorage } from '@/store/settings'
 import { FAVORITES_QUERY_KEY } from '@/modules/npm/hooks/useFavorites'
 import { MAINTAINERS_QUERY_KEY } from '@/modules/npm/hooks/useMaintainers'
+import { SETTINGS_QUERY_KEY } from '@/modules/settings/hooks'
+import type { AppSettings } from '@/modules/settings/domain'
+import { DEFAULT_SETTINGS } from '@/modules/settings/domain'
 import { getStoredGistId, setStoredGistId, GIST_FILENAME } from './usePushToGist'
 import type { GistDelta } from '@/modules/gist/domain'
 import type { FavoritePackage } from '@/modules/npm/domain'
@@ -34,12 +38,16 @@ function computeDelta(
   }
 }
 
-function parseGistContent(content: string): { favorites: FavoritePackage[]; maintainers: FollowedMaintainer[] } {
+function parseGistContent(content: string): { favorites: FavoritePackage[]; maintainers: FollowedMaintainer[]; settings: AppSettings } {
   try {
-    const parsed = JSON.parse(content) as { favorites?: FavoritePackage[]; maintainers?: FollowedMaintainer[] }
-    return { favorites: parsed.favorites ?? [], maintainers: parsed.maintainers ?? [] }
+    const parsed = JSON.parse(content) as { favorites?: FavoritePackage[]; maintainers?: FollowedMaintainer[]; settings?: AppSettings }
+    return {
+      favorites: parsed.favorites ?? [],
+      maintainers: parsed.maintainers ?? [],
+      settings: parsed.settings ? { ...DEFAULT_SETTINGS, ...parsed.settings } : DEFAULT_SETTINGS,
+    }
   } catch {
-    return { favorites: [], maintainers: [] }
+    return { favorites: [], maintainers: [], settings: DEFAULT_SETTINGS }
   }
 }
 
@@ -56,6 +64,7 @@ export function useGistSync(): GistSyncState {
   const [gistId, setGistId] = useState<string | null>(() => user ? getStoredGistId(user.uid) : null)
   const [gistFavs, setGistFavs] = useState<FavoritePackage[]>([])
   const [gistMaintainers, setGistMaintainers] = useState<FollowedMaintainer[]>([])
+  const [gistSettings, setGistSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
 
   const createGist = useGhCreateGist({ token: user?.githubToken })
   const updateGist = useGhUpdateGist(gistId ?? '', { token: user?.githubToken })
@@ -82,7 +91,8 @@ export function useGistSync(): GistSyncState {
 
     const favorites = favoritesStorage.getAll()
     const maintainers = maintainersStorage.getAll()
-    const content = JSON.stringify({ favorites, maintainers }, null, 2)
+    const settings = settingsStorage.get()
+    const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
 
     createGist.mutate(
       { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
@@ -103,7 +113,7 @@ export function useGistSync(): GistSyncState {
     if (!gistLoaded || !remoteGist) return
 
     const raw = remoteGist.files[GIST_FILENAME]?.content ?? '{}'
-    const { favorites: remoteFavs, maintainers: remoteMaintainers } = parseGistContent(raw)
+    const { favorites: remoteFavs, maintainers: remoteMaintainers, settings: remoteSettings } = parseGistContent(raw)
     const localFavs = favoritesStorage.getAll()
     const localMaintainers = maintainersStorage.getAll()
     const computed = computeDelta(localFavs, remoteFavs, localMaintainers, remoteMaintainers)
@@ -115,10 +125,14 @@ export function useGistSync(): GistSyncState {
       computed.removedMaintainersInGist.length > 0
 
     if (!hasDiff) {
+      // Apply remote settings silently (last writer wins)
+      settingsStorage.replace(remoteSettings)
+      queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
       setStatus('done')
     } else {
       setGistFavs(remoteFavs)
       setGistMaintainers(remoteMaintainers)
+      setGistSettings(remoteSettings)
       setDelta(computed)
       setStatus('conflict')
     }
@@ -147,7 +161,12 @@ export function useGistSync(): GistSyncState {
     maintainersStorage.replace(mergedMaintainers)
     queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
 
-    const content = JSON.stringify({ favorites: mergedFavs, maintainers: mergedMaintainers }, null, 2)
+    // Settings: remote wins on keep-all
+    settingsStorage.replace(gistSettings)
+    queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
+
+    const settings = gistSettings
+    const content = JSON.stringify({ favorites: mergedFavs, maintainers: mergedMaintainers, settings }, null, 2)
     updateGist.mutate({ files: { [GIST_FILENAME]: { content } } })
     setStatus('done')
   }
@@ -156,7 +175,8 @@ export function useGistSync(): GistSyncState {
     if (!user?.githubToken || !gistId) return
     const favorites = favoritesStorage.getAll()
     const maintainers = maintainersStorage.getAll()
-    const content = JSON.stringify({ favorites, maintainers }, null, 2)
+    const settings = settingsStorage.get()
+    const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
     updateGist.mutate({ files: { [GIST_FILENAME]: { content } } })
     setStatus('done')
   }

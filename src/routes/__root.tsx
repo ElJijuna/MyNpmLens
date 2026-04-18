@@ -7,6 +7,7 @@ import { AppSidebar } from '@/components/AppSidebar'
 import { SidebarProvider } from '@/context/SidebarContext'
 import { useGistSync } from '@/modules/gist/hooks'
 import { MergeSyncDialog } from '@/modules/gist/components/MergeSyncDialog'
+import { useApplyTheme } from '@/hooks/useApplyTheme'
 import '@/app.css'
 
 interface RouterContext {
@@ -16,6 +17,7 @@ interface RouterContext {
 function RootLayout() {
   const { status, delta, resolveKeepAll, resolveReplaceWithLocal } = useGistSync()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  useApplyTheme()
 
   return (
     <SidebarProvider openSidebar={() => setSidebarOpen(true)}>

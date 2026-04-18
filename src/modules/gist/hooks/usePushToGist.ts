@@ -3,6 +3,7 @@ import { useGhCreateGist, useGhUpdateGist } from '@api-hooks/gh'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
 import { maintainersStorage } from '@/store/maintainers'
+import { settingsStorage } from '@/store/settings'
 
 export const GIST_FILENAME = 'mynpmlens.json'
 const GIST_ID_PREFIX = 'mynpmlens:gist:'
@@ -28,7 +29,8 @@ export function usePushToGist() {
 
       const favorites = favoritesStorage.getAll()
       const maintainers = maintainersStorage.getAll()
-      const content = JSON.stringify({ favorites, maintainers }, null, 2)
+      const settings = settingsStorage.get()
+      const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
       const files = { [GIST_FILENAME]: { content } }
       const currentGistId = getStoredGistId(user.uid)
 
