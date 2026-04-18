@@ -1,3 +1,9 @@
+## [1.10.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.9.0...v1.10.0) (2026-04-18)
+
+### Features
+
+* update @api-hooks/gh to version 1.8.0 to use useGhGists to search in 100 firsts gists the config. ([f8b75ae](https://github.com/ElJijuna/MyNpmLens/commit/f8b75ae863d15fb988403c7553ea025bc177eee1))
+
 ## [1.9.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.8.1...v1.9.0) (2026-04-18)
 
 ### Features
