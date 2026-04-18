@@ -4,24 +4,15 @@ import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
 import { maintainersStorage } from '@/store/maintainers'
 import { settingsStorage } from '@/store/settings'
+import { getGistId, saveGistId } from '@/lib/db'
 
 export const GIST_FILENAME = 'mynpmlens.json'
-const GIST_ID_PREFIX = 'mynpmlens:gist:'
-
-export function getStoredGistId(uid: string): string | null {
-  return localStorage.getItem(`${GIST_ID_PREFIX}${uid}`)
-}
-
-export function setStoredGistId(uid: string, gistId: string): void {
-  localStorage.setItem(`${GIST_ID_PREFIX}${uid}`, gistId)
-}
 
 export function usePushToGist() {
   const { user } = useAuth()
-  const gistId = user ? getStoredGistId(user.uid) : null
 
   const createGist = useGhCreateGist({ token: user?.githubToken })
-  const updateGist = useGhUpdateGist(gistId ?? '', { token: user?.githubToken })
+  const updateGist = useGhUpdateGist('', { token: user?.githubToken })
 
   return useMutation({
     mutationFn: async () => {
@@ -32,17 +23,18 @@ export function usePushToGist() {
       const settings = settingsStorage.get()
       const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
       const files = { [GIST_FILENAME]: { content } }
-      const currentGistId = getStoredGistId(user.uid)
 
-      if (!currentGistId) {
+      const storedId = await getGistId(user.uid)
+
+      if (storedId) {
+        await updateGist.mutateAsync({ files })
+      } else {
         const created = await createGist.mutateAsync({
           description: 'MyNpmLens sync',
           public: false,
           files,
         })
-        setStoredGistId(user.uid, created.id)
-      } else {
-        await updateGist.mutateAsync({ files })
+        await saveGistId(user.uid, created.id)
       }
     },
   })

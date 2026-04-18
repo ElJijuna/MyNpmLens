@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useGhGist, useGhCreateGist, useGhUpdateGist } from '@api-hooks/gh'
+import { useGhGist, useGhGists, useGhCreateGist, useGhUpdateGist } from '@api-hooks/gh'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
 import { maintainersStorage } from '@/store/maintainers'
@@ -10,7 +10,8 @@ import { MAINTAINERS_QUERY_KEY } from '@/modules/npm/hooks/useMaintainers'
 import { SETTINGS_QUERY_KEY } from '@/modules/settings/hooks'
 import type { AppSettings } from '@/modules/settings/domain'
 import { DEFAULT_SETTINGS } from '@/modules/settings/domain'
-import { getStoredGistId, setStoredGistId, GIST_FILENAME } from './usePushToGist'
+import { getGistId, saveGistId } from '@/lib/db'
+import { GIST_FILENAME } from './usePushToGist'
 import type { GistDelta } from '@/modules/gist/domain'
 import type { FavoritePackage } from '@/modules/npm/domain'
 import type { FollowedMaintainer } from '@/modules/npm/domain'
@@ -54,6 +55,7 @@ function parseGistContent(content: string): { favorites: FavoritePackage[]; main
 export function useGistSync(): GistSyncState {
   const { user } = useAuth()
   const queryClient = useQueryClient()
+
   const [status, setStatus] = useState<SyncStatus>('idle')
   const [delta, setDelta] = useState<GistDelta>({
     addedInGist: [],
@@ -61,7 +63,9 @@ export function useGistSync(): GistSyncState {
     addedMaintainersInGist: [],
     removedMaintainersInGist: [],
   })
-  const [gistId, setGistId] = useState<string | null>(() => user ? getStoredGistId(user.uid) : null)
+  const [gistId, setGistId] = useState<string | null>(null)
+  // true once we've read IndexedDB (prevents acting before the stored id is known)
+  const [gistIdLoaded, setGistIdLoaded] = useState(false)
   const [gistFavs, setGistFavs] = useState<FavoritePackage[]>([])
   const [gistMaintainers, setGistMaintainers] = useState<FollowedMaintainer[]>([])
   const [gistSettings, setGistSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
@@ -69,45 +73,75 @@ export function useGistSync(): GistSyncState {
   const createGist = useGhCreateGist({ token: user?.githubToken })
   const updateGist = useGhUpdateGist(gistId ?? '', { token: user?.githubToken })
 
+  // Load stored gist id from IndexedDB whenever the logged-in user changes
+  useEffect(() => {
+    if (!user?.uid) {
+      setGistId(null)
+      setGistIdLoaded(false)
+      return
+    }
+    setGistIdLoaded(false)
+    getGistId(user.uid).then((id) => {
+      setGistId(id)
+      setGistIdLoaded(true)
+    })
+  }, [user?.uid])
+
+  // Trigger sync once after login (wait for IndexedDB read)
+  useEffect(() => {
+    if (!user?.githubToken || !gistIdLoaded) {
+      if (!user?.githubToken) setStatus('idle')
+      return
+    }
+    setStatus('syncing')
+  }, [user?.uid, user?.githubToken, gistIdLoaded])
+
+  // Search the user's gists only when no id is stored — runs at most once per login
+  const { data: gistsList, isSuccess: listsLoaded } = useGhGists(
+    { per_page: 100 },
+    {
+      enabled: gistIdLoaded && !gistId && status === 'syncing' && !!user?.githubToken,
+      token: user?.githubToken,
+    },
+  )
+
+  // When the gists list arrives, either reuse the existing gist or create a new one
+  useEffect(() => {
+    if (!listsLoaded || gistId || !user?.githubToken) return
+
+    const uid = user.uid
+    const found = gistsList?.values.find((g) => GIST_FILENAME in g.files)
+
+    if (found) {
+      saveGistId(uid, found.id)
+      setGistId(found.id)
+      // useGhGist picks up the new id and handles the rest
+    } else {
+      const favorites = favoritesStorage.getAll()
+      const maintainers = maintainersStorage.getAll()
+      const settings = settingsStorage.get()
+      const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
+      createGist.mutate(
+        { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
+        {
+          onSuccess: (created) => {
+            saveGistId(uid, created.id)
+            setGistId(created.id)
+            setStatus('done')
+          },
+          onError: () => setStatus('error'),
+        },
+      )
+    }
+  }, [listsLoaded, gistId, user?.uid, user?.githubToken])
+
+  // Fetch the remote gist content once we have an id
   const { data: remoteGist, isSuccess: gistLoaded, isError: gistError } = useGhGist(gistId ?? '', {
     enabled: !!gistId && !!user?.githubToken && status === 'syncing',
     token: user?.githubToken,
   })
 
-  // Trigger sync on login
-  useEffect(() => {
-    if (!user?.githubToken) {
-      setStatus('idle')
-      return
-    }
-    const storedId = getStoredGistId(user.uid)
-    setGistId(storedId)
-    setStatus('syncing')
-  }, [user?.uid, user?.githubToken])
-
-  // Create gist if none exists
-  useEffect(() => {
-    if (status !== 'syncing' || gistId || !user?.githubToken) return
-
-    const favorites = favoritesStorage.getAll()
-    const maintainers = maintainersStorage.getAll()
-    const settings = settingsStorage.get()
-    const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
-
-    createGist.mutate(
-      { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
-      {
-        onSuccess: (created) => {
-          setStoredGistId(user.uid, created.id)
-          setGistId(created.id)
-          setStatus('done')
-        },
-        onError: () => setStatus('error'),
-      },
-    )
-  }, [status, gistId, user?.uid, user?.githubToken])
-
-  // Process fetched remote gist
+  // Compare remote vs local and decide if there's a conflict
   useEffect(() => {
     if (!gistLoaded || !remoteGist) return
 
@@ -124,7 +158,6 @@ export function useGistSync(): GistSyncState {
       computed.removedMaintainersInGist.length > 0
 
     if (!hasDiff) {
-      // Apply remote settings silently (last writer wins)
       settingsStorage.replace(remoteSettings)
       queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
       setStatus('done')
@@ -160,12 +193,10 @@ export function useGistSync(): GistSyncState {
     maintainersStorage.replace(mergedMaintainers)
     queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
 
-    // Settings: remote wins on keep-all
     settingsStorage.replace(gistSettings)
     queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
 
-    const settings = gistSettings
-    const content = JSON.stringify({ favorites: mergedFavs, maintainers: mergedMaintainers, settings }, null, 2)
+    const content = JSON.stringify({ favorites: mergedFavs, maintainers: mergedMaintainers, settings: gistSettings }, null, 2)
     updateGist.mutate({ files: { [GIST_FILENAME]: { content } } })
     setStatus('done')
   }
