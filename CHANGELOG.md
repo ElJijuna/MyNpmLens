@@ -1,3 +1,9 @@
+## [1.11.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.10.0...v1.11.0) (2026-04-18)
+
+### Features
+
+* add firebase analytics events and update tests. ([a2b6d20](https://github.com/ElJijuna/MyNpmLens/commit/a2b6d20e6acd4a4c77ec668e707851a27560c392))
+
 ## [1.10.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.9.0...v1.10.0) (2026-04-18)
 
 ### Features
