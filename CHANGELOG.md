@@ -1,3 +1,9 @@
+## [1.8.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.8.0...v1.8.1) (2026-04-18)
+
+### Bug Fixes
+
+* change Chart lang to english. ([956bdbe](https://github.com/ElJijuna/MyNpmLens/commit/956bdbe00f0337b99091805439a05f7be8d0ccaa))
+
 ## [1.8.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.7.1...v1.8.0) (2026-04-13)
 
 ### Features
