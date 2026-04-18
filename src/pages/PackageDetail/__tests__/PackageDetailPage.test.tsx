@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import * as npmHooks from '@/modules/npm/hooks'
-import * as osvHooks from '@/modules/osv/hooks/useOsvVulnerabilities'
+import * as osvHooks from '@api-hooks/osv'
 import * as githubHooks from '@/modules/github/hooks'
 import { PackageDetailPage } from '../index'
 
@@ -44,7 +44,7 @@ describe('PackageDetailPage', () => {
     jest.spyOn(npmHooks, 'useBundleSize').mockReturnValue({ isPending: false, data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false }, error: null } as unknown as ReturnType<typeof npmHooks.useBundleSize>)
     jest.spyOn(npmHooks, 'useRemoveFavorite').mockReturnValue({ mutate: jest.fn() } as unknown as ReturnType<typeof npmHooks.useRemoveFavorite>)
     jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ isPending: false, data: { owner: 'facebook', repo: 'react', stars: 230_000, forks: 47_000, openIssues: 850, lastPushedAt: '2024-12-01T10:00:00Z', htmlUrl: 'https://github.com/facebook/react' }, error: null } as unknown as ReturnType<typeof githubHooks.useGitHubStats>)
-    jest.spyOn(osvHooks, 'useOsvVulnerabilities').mockReturnValue({ isPending: false, data: [], error: null } as unknown as ReturnType<typeof osvHooks.useOsvVulnerabilities>)
+    jest.spyOn(osvHooks, 'useOsvQuery').mockReturnValue({ isPending: false, data: { vulns: [] }, error: null } as unknown as ReturnType<typeof osvHooks.useOsvQuery>)
   })
 
   it('renders all section headings', () => {
