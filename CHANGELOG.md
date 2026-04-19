@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.11.0...v1.11.1) (2026-04-19)
+
+### Bug Fixes
+
+* close autocomplete list when user select suggesten option (closes [#36](https://github.com/ElJijuna/MyNpmLens/issues/36)) ([747f7e4](https://github.com/ElJijuna/MyNpmLens/commit/747f7e48533e45e4c51fc02db1fd05236d1c5ac8))
+* update sidebar to detect window inner width is mobile aprox to initialize value to closed sidebar. ([b977e8b](https://github.com/ElJijuna/MyNpmLens/commit/b977e8bb1239c524ca23c1fdf6485a87d8cc9a42))
+
 ## [1.11.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.10.0...v1.11.0) (2026-04-18)
 
 ### Features
