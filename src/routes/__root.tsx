@@ -18,8 +18,8 @@ interface RouterContext {
 function RootLayout() {
   const { status, delta, resolveKeepAll, resolveReplaceWithLocal } = useGistSync()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const { isNarrow } = useBreakpoint()
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => window.innerWidth <= 860)
   useApplyTheme()
   usePageView()
 
