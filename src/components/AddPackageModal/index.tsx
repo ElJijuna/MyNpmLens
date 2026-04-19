@@ -20,6 +20,7 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | undefined>()
   const [isValidating, setIsValidating] = useState(false)
+  const [suppressSuggestions, setSuppressSuggestions] = useState(false)
   const addFavorite = useAddFavorite()
   const { data: favorites = [] } = useFavorites()
 
@@ -74,6 +75,7 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
   function handleClose() {
     setInput('')
     setError(undefined)
+    setSuppressSuggestions(false)
     onClose()
   }
 
@@ -101,13 +103,18 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
         placeholder="react · @scope/package · https://www.npmjs.com/package/react"
         onChange={(e) => {
           setInput(e.target.value)
+          setSuppressSuggestions(false)
           if (error) setError(undefined)
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && input.trim().length > 0 && !isBusy) void handleConfirm()
         }}
-        suggestions={suggestions}
-        onSuggestionSelect={(item) => setInput(item.id)}
+        suggestions={suppressSuggestions ? [] : suggestions}
+        onSuggestionSelect={(item) => {
+          setInput(item.id)
+          setSuppressSuggestions(true)
+        }}
+        onClear={() => setInput('')}
         loadingSuggestions={searchPending && debouncedInput.trim().length > 1}
       />
       {error && <Banner variant="error">{error}</Banner>}
