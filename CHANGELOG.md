@@ -1,3 +1,9 @@
+## [1.11.2](https://github.com/ElJijuna/MyNpmLens/compare/v1.11.1...v1.11.2) (2026-04-20)
+
+### Bug Fixes
+
+* add autoCapitalize="none" in AddPackageModal and AddMaintanerDialog. ([c8e85c9](https://github.com/ElJijuna/MyNpmLens/commit/c8e85c9f76793c201cf3024fdc46a24e636a4a1c))
+
 ## [1.11.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.11.0...v1.11.1) (2026-04-19)
 
 ### Bug Fixes
