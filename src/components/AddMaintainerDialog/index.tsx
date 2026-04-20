@@ -77,6 +77,7 @@ export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps)
         }}
         error={error}
         autoFocus
+        autoCapitalize="none"
       />
     </Dialog>
   )

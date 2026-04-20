@@ -116,6 +116,7 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
         }}
         onClear={() => setInput('')}
         loadingSuggestions={searchPending && debouncedInput.trim().length > 1}
+        autoCapitalize="none"
       />
       {error && <Banner variant="error">{error}</Banner>}
     </Dialog>
