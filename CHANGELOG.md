@@ -1,3 +1,9 @@
+## [1.12.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.11.2...v1.12.0) (2026-04-23)
+
+### Features
+
+* update dependencies. ([8ca3cb4](https://github.com/ElJijuna/MyNpmLens/commit/8ca3cb41d50ec9dad7a86ff868a347f16a28af28))
+
 ## [1.11.2](https://github.com/ElJijuna/MyNpmLens/compare/v1.11.1...v1.11.2) (2026-04-20)
 
 ### Bug Fixes
