@@ -1,3 +1,9 @@
+## [1.12.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.12.0...v1.12.1) (2026-04-27)
+
+### Bug Fixes
+
+* set PWA theme-color to match app background for light and dark mode ([7f9d7e1](https://github.com/ElJijuna/MyNpmLens/commit/7f9d7e1854678dd296178f61589f5c21371d246b))
+
 ## [1.12.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.11.2...v1.12.0) (2026-04-23)
 
 ### Features
