@@ -1,3 +1,9 @@
+## [1.12.2](https://github.com/ElJijuna/MyNpmLens/compare/v1.12.1...v1.12.2) (2026-04-27)
+
+### Bug Fixes
+
+* sync PWA theme-color with --gnome-headerbar-bg-color token for light, dark and system modes ([2ff0bcc](https://github.com/ElJijuna/MyNpmLens/commit/2ff0bccb1a73746f4a352a52a4035c5e0bad22a8))
+
 ## [1.12.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.12.0...v1.12.1) (2026-04-27)
 
 ### Bug Fixes
