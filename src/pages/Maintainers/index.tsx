@@ -3,7 +3,6 @@ import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Avatar, Box, Button, Card, Icon, StatusPage, Text, WrapBox } from '@gnome-ui/react'
 import { Add, Star } from '@gnome-ui/icons'
-import { Toolbar } from '@/components/Toolbar'
 import { AddMaintainerDialog } from '@/components/AddMaintainerDialog'
 import { useMaintainers } from '@/modules/npm/hooks'
 
@@ -15,8 +14,6 @@ export function MaintainersPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <Toolbar />
-
       <main className="page-content">
         {maintainers.length === 0 ? (
           <StatusPage

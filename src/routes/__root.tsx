@@ -3,6 +3,7 @@ import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
 import { OverlaySplitView, useBreakpoint } from '@gnome-ui/react'
 import { OfflineBanner } from '@/components/OfflineBanner'
+import { Toolbar } from '@/components/Toolbar'
 import { AppSidebar } from '@/components/AppSidebar'
 import { SidebarProvider } from '@/context/SidebarContext'
 import { useGistSync } from '@/modules/gist/hooks'
@@ -39,6 +40,7 @@ function RootLayout() {
           content={
             <>
               <OfflineBanner />
+              <Toolbar />
               <Outlet />
             </>
           }
@@ -50,6 +52,7 @@ function RootLayout() {
           <AppSidebar />
           <div className="wide-layout__content">
             <OfflineBanner />
+            <Toolbar />
             <Outlet />
           </div>
         </div>

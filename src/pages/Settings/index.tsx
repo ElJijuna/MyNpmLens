@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { PreferencesGroup, BoxedList, ComboRow, Box } from '@gnome-ui/react'
-import { Toolbar } from '@/components/Toolbar'
 import { useSettings, useUpdateSettings } from '@/modules/settings/hooks'
 import { DEFAULT_SETTINGS } from '@/modules/settings/domain'
 
@@ -11,8 +10,6 @@ export function SettingsPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <Toolbar />
-
       <main className="page-content">
         <Box spacing={16}>
           <PreferencesGroup title={t('settings.appearanceGroup')}>

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, Button, Icon, WrapBox, Text } from '@gnome-ui/react'
 import { Add } from '@gnome-ui/icons'
-import { Toolbar } from '@/components/Toolbar'
 import { AddPackageModal } from '@/components/AddPackageModal'
 import { EmptyState } from '@/components/EmptyState'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
@@ -22,8 +21,6 @@ export function DashboardPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <Toolbar />
-
       <main className="page-content">
         {favorites.length === 0 ? (
           <EmptyState onAddClick={() => setModalOpen(true)} />

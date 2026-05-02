@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import { Toolbar } from '@/components/Toolbar';
 import { Route } from '@/routes/packages.$name';
 import { useRemoveFavorite } from '@/modules/npm/hooks';
 import { useNpmPackage } from '@api-hooks/npm';
@@ -40,8 +39,6 @@ export function PackageDetailPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <Toolbar />
-
       <main className="page-content detail-sections">
         {versionOptions.length > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
