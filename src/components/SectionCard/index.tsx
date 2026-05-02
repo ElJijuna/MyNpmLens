@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Card, Spinner, Banner, Text } from '@gnome-ui/react'
 
 interface SectionCardProps {
@@ -9,6 +10,8 @@ interface SectionCardProps {
 }
 
 export function SectionCard({ title, isLoading, error, children }: SectionCardProps) {
+  const { t } = useTranslation()
+
   return (
     <Card padding="lg">
       <Text variant="title-4" as="h2" style={{ marginBottom: '1rem' }}>
@@ -23,7 +26,7 @@ export function SectionCard({ title, isLoading, error, children }: SectionCardPr
 
       {!isLoading && error && (
         <Banner variant="error">
-          {error.message ?? 'Something went wrong loading this section.'}
+          {error.message ?? t('sectionCard.error')}
         </Banner>
       )}
 

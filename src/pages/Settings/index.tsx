@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import { PreferencesPage, PreferencesGroup, BoxedList, ComboRow } from '@gnome-ui/react'
 import { Toolbar } from '@/components/Toolbar'
 import { useSettings, useUpdateSettings } from '@/modules/settings/hooks'
 import { DEFAULT_SETTINGS } from '@/modules/settings/domain'
 
 export function SettingsPage() {
+  const { t } = useTranslation()
   const { data: settings = DEFAULT_SETTINGS } = useSettings()
   const updateSettings = useUpdateSettings()
 
@@ -12,16 +14,16 @@ export function SettingsPage() {
       <Toolbar />
 
       <main className="page-content">
-        <PreferencesPage title="Settings">
-          <PreferencesGroup title="Appearance">
+        <PreferencesPage title={t('settings.title')}>
+          <PreferencesGroup title={t('settings.appearanceGroup')}>
             <BoxedList>
               <ComboRow
-                title="Theme"
-                subtitle="Choose the color scheme"
+                title={t('settings.theme')}
+                subtitle={t('settings.themeSubtitle')}
                 options={[
-                  { value: 'system', label: 'System default' },
-                  { value: 'light', label: 'Light' },
-                  { value: 'dark', label: 'Dark' },
+                  { value: 'system', label: t('settings.themeSystem') },
+                  { value: 'light', label: t('settings.themeLight') },
+                  { value: 'dark', label: t('settings.themeDark') },
                 ]}
                 value={settings.theme}
                 onValueChange={(theme) => updateSettings.mutate({ theme })}
@@ -29,13 +31,17 @@ export function SettingsPage() {
             </BoxedList>
           </PreferencesGroup>
 
-          <PreferencesGroup title="Language">
+          <PreferencesGroup title={t('settings.languageGroup')}>
             <BoxedList>
               <ComboRow
-                title="Language"
-                options={[{ value: 'en', label: 'English' }]}
-                value="en"
-                disabled
+                title={t('settings.language')}
+                options={[
+                  { value: 'en', label: 'English' },
+                  { value: 'es', label: 'Español' },
+                  { value: 'es-PE', label: 'Español (Perú)' },
+                ]}
+                value={settings.language}
+                onValueChange={(language) => updateSettings.mutate({ language })}
               />
             </BoxedList>
           </PreferencesGroup>

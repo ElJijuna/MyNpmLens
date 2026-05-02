@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dialog, TextField } from '@gnome-ui/react'
 import { useAddMaintainer, useMaintainers } from '@/modules/npm/hooks'
 import { Analytics } from '@/lib/analytics'
@@ -10,6 +11,7 @@ interface AddMaintainerDialogProps {
 }
 
 export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps) {
+  const { t } = useTranslation()
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | undefined>()
   const { data: maintainers = [] } = useMaintainers()
@@ -20,7 +22,7 @@ export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps)
     if (!username) return
 
     if (maintainers.some((m) => m.username === username)) {
-      setError(`"${username}" is already in your list.`)
+      setError(t('addMaintainer.errorAlreadyAdded', { username }))
       return
     }
 
@@ -33,9 +35,9 @@ export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps)
       },
       onError: (err) => {
         if (err instanceof ProxyError && err.status === 404) {
-          setError(`Maintainer "${username}" was not found on npm.`)
+          setError(t('addMaintainer.errorNotFound', { username }))
         } else {
-          setError('Could not reach the npm registry. Check your connection.')
+          setError(t('addMaintainer.errorNetwork'))
         }
       },
     })
@@ -52,12 +54,12 @@ export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps)
   return (
     <Dialog
       open={open}
-      title="Add maintainer"
+      title={t('addMaintainer.title')}
       onClose={handleClose}
       buttons={[
-        { label: 'Cancel', variant: 'default', onClick: handleClose, disabled: isBusy },
+        { label: t('addMaintainer.cancel'), variant: 'default', onClick: handleClose, disabled: isBusy },
         {
-          label: isBusy ? 'Searching…' : 'Add',
+          label: isBusy ? t('addMaintainer.searching') : t('addMaintainer.add'),
           variant: 'suggested',
           onClick: handleConfirm,
           disabled: input.trim().length === 0 || isBusy,
@@ -65,15 +67,15 @@ export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps)
       ]}
     >
       <TextField
-        label="npm username"
-        placeholder="e.g. sindresorhus"
+        label={t('addMaintainer.usernameLabel')}
+        placeholder={t('addMaintainer.usernamePlaceholder')}
         value={input}
         onChange={(e) => {
           setInput(e.target.value)
           if (error) setError(undefined)
         }}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && input.trim().length > 0 && !isBusy) handleConfirm()
+          if (e.key === 'Enter' && input.trim().length > 0 && !isBusy) void handleConfirm()
         }}
         error={error}
         autoFocus

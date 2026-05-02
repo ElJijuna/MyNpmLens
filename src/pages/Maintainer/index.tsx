@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { Avatar, Box, Button, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Delete } from '@gnome-ui/icons'
 import { CounterCard } from '@gnome-ui/layout'
@@ -8,6 +9,7 @@ import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { useRemoveMaintainer } from '@/modules/npm/hooks'
 
 export function MaintainerPage() {
+  const { t } = useTranslation()
   const { username } = useParams({ from: '/maintainers_/$username' })
   const navigate = useNavigate()
   const { data: user } = useNpmMaintainer(username)
@@ -44,7 +46,7 @@ export function MaintainerPage() {
               onClick={handleUnfollow}
               disabled={removeMaintainer.isPending}
             >
-              Unfollow
+              {t('maintainer.unfollow')}
             </Button>
           </WrapBox>
 
@@ -55,10 +57,10 @@ export function MaintainerPage() {
               gap: 16,
             }}
           >
-            <CounterCard label="" value={total} accent animated suffix=" packages" duration={5000} />
+            <CounterCard label="" value={total} accent animated suffix={` ${t('maintainer.packages').toLowerCase()}`} duration={5000} />
           </div>
 
-          <Text variant="heading">Packages</Text>
+          <Text variant="heading">{t('maintainer.packages')}</Text>
 
           <div className="package-grid">
             {packageNames.map((name) => (

@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { Avatar, Box, Button, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Delete } from '@gnome-ui/icons'
 import { Toolbar } from '@/components/Toolbar'
@@ -6,6 +7,7 @@ import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSignOut } from '@/modules/auth/hooks'
 
 export function ProfilePage() {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const navigate = useNavigate()
   const signOut = useSignOut()
@@ -39,7 +41,7 @@ export function ProfilePage() {
               onClick={handleSignOut}
               disabled={signOut.isPending}
             >
-              Sign out
+              {t('profile.signOut')}
             </Button>
           </WrapBox>
         </Box>

@@ -8,6 +8,7 @@ import { SidebarProvider } from '@/context/SidebarContext'
 import { useGistSync } from '@/modules/gist/hooks'
 import { MergeSyncDialog } from '@/modules/gist/components/MergeSyncDialog'
 import { useApplyTheme } from '@/hooks/useApplyTheme'
+import { useApplyLanguage } from '@/hooks/useApplyLanguage'
 import { usePageView } from '@/hooks/usePageView'
 import '@/app.css'
 
@@ -21,6 +22,7 @@ function RootLayout() {
   const { isNarrow } = useBreakpoint()
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => window.innerWidth <= 860)
   useApplyTheme()
+  useApplyLanguage()
   usePageView()
 
   return (

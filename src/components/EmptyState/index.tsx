@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { StatusPage, Button, Icon } from '@gnome-ui/react'
 import { Add, StarOutline } from '@gnome-ui/icons'
 
@@ -6,14 +7,16 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ onAddClick }: EmptyStateProps) {
+  const { t } = useTranslation()
+
   return (
     <StatusPage
       icon={StarOutline}
-      title="No packages yet"
-      description="Add your favourite npm packages to track their metrics at a glance."
+      title={t('emptyState.title')}
+      description={t('emptyState.description')}
     >
       <Button variant="suggested" onClick={onAddClick} leadingIcon={<Icon icon={Add} />}>
-        Add package
+        {t('emptyState.addPackage')}
       </Button>
     </StatusPage>
   )

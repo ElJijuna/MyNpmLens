@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Text, Badge, Link, Box, WrapBox } from '@gnome-ui/react'
 import { SectionCard } from '@/components/SectionCard'
 import { useNpmPackage } from '@api-hooks/npm'
@@ -8,10 +9,11 @@ interface PackageInfoSectionProps {
 }
 
 export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
+  const { t } = useTranslation()
   const { data, isPending, error } = useNpmPackage(name)
 
   return (
-    <SectionCard title="Package info" isLoading={isPending} error={error as Error | null}>
+    <SectionCard title={t('packageDetail.packageInfo')} isLoading={isPending} error={error as Error | null}>
       {data && (
         <Box orientation="vertical" spacing={6}>
           <WrapBox childSpacing={6} align="center">

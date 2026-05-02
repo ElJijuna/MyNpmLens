@@ -1,6 +1,8 @@
+export type Language = 'en' | 'es' | 'es-PE'
+
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system'
-  language: 'en'
+  language: Language
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {

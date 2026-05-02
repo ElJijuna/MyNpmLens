@@ -5,6 +5,8 @@ const config: Config = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   moduleNameMapper: {
+    '^react-i18next$': '<rootDir>/src/__mocks__/react-i18next.ts',
+    '^i18next$': '<rootDir>/src/__mocks__/i18next.ts',
     '^firebase/app$': '<rootDir>/src/__mocks__/firebase-app.ts',
     '^firebase/auth$': '<rootDir>/src/__mocks__/firebase-auth.ts',
     '^firebase/analytics$': '<rootDir>/src/__mocks__/firebase-analytics.ts',

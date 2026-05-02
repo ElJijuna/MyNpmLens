@@ -1,0 +1,133 @@
+{
+  "sidebar": {
+    "title": "Npm Lens",
+    "home": "Inicio",
+    "maintainers": "Mantenedores",
+    "settings": "Ajustes",
+    "about": "Acerca de",
+    "toggleSidebar": "Alternar barra lateral",
+    "checkForUpdates": "Buscar actualizaciones",
+    "checking": "Verificando…",
+    "upToDate": "¡Al día!"
+  },
+  "toolbar": {
+    "toggleSidebar": "Alternar barra lateral",
+    "add": "Agregar"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "appearanceGroup": "Apariencia",
+    "theme": "Tema",
+    "themeSubtitle": "Elige el esquema de colores",
+    "themeSystem": "Predeterminado del sistema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "languageGroup": "Idioma",
+    "language": "Idioma"
+  },
+  "dashboard": {
+    "favoritePackages": "Paquetes favoritos",
+    "add": "Agregar"
+  },
+  "emptyState": {
+    "title": "Sin paquetes aún",
+    "description": "Agrega tus paquetes npm favoritos para ver sus métricas de un vistazo.",
+    "addPackage": "Agregar paquete"
+  },
+  "packageDetail": {
+    "version": "Versión",
+    "selectVersion": "Seleccionar versión",
+    "published": "publicadas",
+    "removePackage": "Eliminar paquete",
+    "packageInfo": "Info del paquete",
+    "downloads": "Descargas",
+    "lastWeek": "Última semana",
+    "lastMonth": "Último mes",
+    "downloadsLabel": "descargas",
+    "bundleSize": "Tamaño del bundle",
+    "minified": "Minificado",
+    "minifiedGzipped": "Minificado + gzip",
+    "hasSideEffects": "Tiene efectos secundarios",
+    "sideEffectFree": "Sin efectos secundarios",
+    "github": "GitHub",
+    "stars": "Estrellas",
+    "forks": "Forks",
+    "openIssues": "Issues abiertos",
+    "lastPushed": "Último push",
+    "vulnerabilities": "Vulnerabilidades",
+    "noVulnerabilities": "Sin vulnerabilidades conocidas",
+    "forVersion": "para v{{version}}"
+  },
+  "maintainers": {
+    "title": "Mantenedores",
+    "emptyTitle": "Sin mantenedores aún",
+    "emptyDescription": "Sigue a mantenedores de npm para rastrear sus paquetes publicados.",
+    "addMaintainer": "Agregar mantenedor",
+    "add": "Agregar"
+  },
+  "maintainer": {
+    "unfollow": "Dejar de seguir",
+    "packages": "Paquetes"
+  },
+  "profile": {
+    "signOut": "Cerrar sesión"
+  },
+  "about": {
+    "title": "MyNpmLens",
+    "description": "Versión {{version}} — Sigue paquetes de npm, mantén contacto con mantenedores y mantente actualizado con el ecosistema.",
+    "githubRepo": "Repositorio en GitHub",
+    "reportBug": "Reportar un error",
+    "changelog": "Historial de cambios"
+  },
+  "addPackage": {
+    "title": "Agregar paquete",
+    "cancel": "Cancelar",
+    "add": "Agregar",
+    "validating": "Validando…",
+    "placeholder": "react · @scope/paquete · https://www.npmjs.com/package/react",
+    "errorInvalid": "Ingresa un nombre de paquete válido (ej. react, @scope/paquete) o una URL de npm (ej. https://www.npmjs.com/package/react).",
+    "errorAlreadyAdded": "\"{{name}}\" ya está en tu lista.",
+    "errorNotFound": "El paquete \"{{name}}\" no se encontró en npm.",
+    "errorNetwork": "No se pudo conectar al registro de npm. Verifica tu conexión."
+  },
+  "addMaintainer": {
+    "title": "Agregar mantenedor",
+    "cancel": "Cancelar",
+    "add": "Agregar",
+    "searching": "Buscando…",
+    "usernameLabel": "Usuario de npm",
+    "usernamePlaceholder": "ej. sindresorhus",
+    "errorAlreadyAdded": "\"{{username}}\" ya está en tu lista.",
+    "errorNotFound": "El mantenedor \"{{username}}\" no se encontró en npm.",
+    "errorNetwork": "No se pudo conectar al registro de npm. Verifica tu conexión."
+  },
+  "offline": {
+    "title": "Nueva versión disponible",
+    "cancel": "Cancelar",
+    "update": "Actualizar",
+    "description": "Hay una nueva versión de Npm Lens disponible. Actualiza ahora para obtener las últimas funciones y correcciones."
+  },
+  "mergeSync": {
+    "title": "Cambios detectados desde otro dispositivo",
+    "replaceCurrent": "Reemplazar con el actual",
+    "keepAll": "Conservar todo",
+    "packagesAdded": "Paquetes agregados desde otro dispositivo",
+    "packagesRemoved": "Paquetes eliminados desde otro dispositivo",
+    "maintainersAdded": "Mantenedores agregados desde otro dispositivo",
+    "maintainersRemoved": "Mantenedores eliminados desde otro dispositivo"
+  },
+  "auth": {
+    "signInWithGitHub": "Iniciar sesión con GitHub",
+    "signOut": "Cerrar sesión"
+  },
+  "sectionCard": {
+    "error": "Algo salió mal al cargar esta sección."
+  },
+  "nav": {
+    "home": "Inicio",
+    "maintainers": "Mantenedores",
+    "about": "Acerca de",
+    "profile": "Perfil",
+    "settings": "Ajustes"
+  }
+}

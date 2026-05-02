@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dialog, SearchBar, Banner } from '@gnome-ui/react'
 
 interface Suggestion { id: string; label: string }
@@ -17,6 +18,7 @@ interface AddPackageModalProps {
 }
 
 export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
+  const { t } = useTranslation()
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | undefined>()
   const [isValidating, setIsValidating] = useState(false)
@@ -37,14 +39,12 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
   async function handleConfirm() {
     const name = parseNpmUrl(input)
     if (!name) {
-      setError(
-        'Enter a valid package name (e.g. react, @scope/package) or npm URL (e.g. https://www.npmjs.com/package/react).',
-      )
+      setError(t('addPackage.errorInvalid'))
       return
     }
 
     if (favorites.some((f) => f.name === name)) {
-      setError(`"${name}" is already in your list.`)
+      setError(t('addPackage.errorAlreadyAdded', { name }))
       return
     }
 
@@ -53,9 +53,9 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
       await npmClient.package(name).get()
     } catch (err) {
       if (err instanceof NpmApiError && err.status === 404) {
-        setError(`Package "${name}" was not found on npm.`)
+        setError(t('addPackage.errorNotFound', { name }))
       } else {
-        setError('Could not reach the npm registry. Check your connection.')
+        setError(t('addPackage.errorNetwork'))
       }
       setIsValidating(false)
       return
@@ -84,12 +84,12 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
   return (
     <Dialog
       open={open}
-      title="Add package"
+      title={t('addPackage.title')}
       onClose={handleClose}
       buttons={[
-        { label: 'Cancel', variant: 'default', onClick: handleClose, disabled: isBusy },
+        { label: t('addPackage.cancel'), variant: 'default', onClick: handleClose, disabled: isBusy },
         {
-          label: isValidating ? 'Validating…' : 'Add',
+          label: isValidating ? t('addPackage.validating') : t('addPackage.add'),
           variant: 'suggested',
           onClick: handleConfirm,
           disabled: input.trim().length === 0 || isBusy,
@@ -100,7 +100,7 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
         open={true}
         inline
         value={input}
-        placeholder="react · @scope/package · https://www.npmjs.com/package/react"
+        placeholder={t('addPackage.placeholder')}
         onChange={(e) => {
           setInput(e.target.value)
           setSuppressSuggestions(false)
