@@ -1,3 +1,9 @@
+## [1.13.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.13.0...v1.13.1) (2026-05-02)
+
+### Bug Fixes
+
+* remove PreferencesPage wrap. ([84e5525](https://github.com/ElJijuna/MyNpmLens/commit/84e5525d957da21e6cd594e67a0d43d52670bcdf))
+
 ## [1.13.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.12.2...v1.13.0) (2026-05-02)
 
 ### Features
