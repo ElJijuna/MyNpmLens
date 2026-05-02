@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Box, Button, Icon, WrapBox, Text } from '@gnome-ui/react'
 import { Add } from '@gnome-ui/icons'
 import { Toolbar } from '@/components/Toolbar'
@@ -11,6 +12,7 @@ import { useFavorites } from '@/modules/npm/hooks'
 import { useNativeEvent } from '@gnome-ui/hooks'
 
 export function DashboardPage() {
+  const { t } = useTranslation()
   const [modalOpen, setModalOpen] = useState(false)
   const { data: favorites = [] } = useFavorites()
 
@@ -29,7 +31,7 @@ export function DashboardPage() {
           <Box>
             <WrapBox justify="space-between" align="center">
               <Text variant="heading">
-                Favorite Packages
+                {t('dashboard.favoritePackages')}
               </Text>
               <Button
                 variant="suggested"
@@ -37,7 +39,7 @@ export function DashboardPage() {
                 onClick={() => setModalOpen(true)}
                 leadingIcon={<Icon icon={Add} />}
               >
-                Add
+                {t('dashboard.add')}
               </Button>
             </WrapBox>
             <DownloadsChart packageNames={packageNames} />

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { Avatar, Box, Button, Card, Icon, StatusPage, Text, WrapBox } from '@gnome-ui/react'
 import { Add, Star } from '@gnome-ui/icons'
 import { Toolbar } from '@/components/Toolbar'
@@ -7,6 +8,7 @@ import { AddMaintainerDialog } from '@/components/AddMaintainerDialog'
 import { useMaintainers } from '@/modules/npm/hooks'
 
 export function MaintainersPage() {
+  const { t } = useTranslation()
   const [dialogOpen, setDialogOpen] = useState(false)
   const { data: maintainers = [] } = useMaintainers()
   const navigate = useNavigate()
@@ -19,24 +21,24 @@ export function MaintainersPage() {
         {maintainers.length === 0 ? (
           <StatusPage
             icon={Star}
-            title="No maintainers yet"
-            description="Follow npm maintainers to track their published packages."
+            title={t('maintainers.emptyTitle')}
+            description={t('maintainers.emptyDescription')}
           >
             <Button variant="suggested" onClick={() => setDialogOpen(true)} leadingIcon={<Icon icon={Add} />}>
-              Add maintainer
+              {t('maintainers.addMaintainer')}
             </Button>
           </StatusPage>
         ) : (
           <Box>
             <WrapBox justify="space-between" align="center">
-              <Text variant="heading">Maintainers</Text>
+              <Text variant="heading">{t('maintainers.title')}</Text>
               <Button
                 variant="suggested"
                 size="sm"
                 onClick={() => setDialogOpen(true)}
                 leadingIcon={<Icon icon={Add} />}
               >
-                Add
+                {t('maintainers.add')}
               </Button>
             </WrapBox>
 

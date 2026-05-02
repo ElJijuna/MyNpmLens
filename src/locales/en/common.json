@@ -1,0 +1,133 @@
+{
+  "sidebar": {
+    "title": "Npm Lens",
+    "home": "Home",
+    "maintainers": "Maintainers",
+    "settings": "Settings",
+    "about": "About",
+    "toggleSidebar": "Toggle sidebar",
+    "checkForUpdates": "Check for updates",
+    "checking": "Checking…",
+    "upToDate": "Up to date!"
+  },
+  "toolbar": {
+    "toggleSidebar": "Toggle sidebar",
+    "add": "Add"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearanceGroup": "Appearance",
+    "theme": "Theme",
+    "themeSubtitle": "Choose the color scheme",
+    "themeSystem": "System default",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "languageGroup": "Language",
+    "language": "Language"
+  },
+  "dashboard": {
+    "favoritePackages": "Favorite Packages",
+    "add": "Add"
+  },
+  "emptyState": {
+    "title": "No packages yet",
+    "description": "Add your favourite npm packages to track their metrics at a glance.",
+    "addPackage": "Add package"
+  },
+  "packageDetail": {
+    "version": "Version",
+    "selectVersion": "Select version",
+    "published": "published",
+    "removePackage": "Remove package",
+    "packageInfo": "Package info",
+    "downloads": "Downloads",
+    "lastWeek": "Last week",
+    "lastMonth": "Last month",
+    "downloadsLabel": "downloads",
+    "bundleSize": "Bundle size",
+    "minified": "Minified",
+    "minifiedGzipped": "Minified + gzipped",
+    "hasSideEffects": "Has side effects",
+    "sideEffectFree": "Side-effect free",
+    "github": "GitHub",
+    "stars": "Stars",
+    "forks": "Forks",
+    "openIssues": "Open issues",
+    "lastPushed": "Last pushed",
+    "vulnerabilities": "Vulnerabilities",
+    "noVulnerabilities": "No known vulnerabilities",
+    "forVersion": "for v{{version}}"
+  },
+  "maintainers": {
+    "title": "Maintainers",
+    "emptyTitle": "No maintainers yet",
+    "emptyDescription": "Follow npm maintainers to track their published packages.",
+    "addMaintainer": "Add maintainer",
+    "add": "Add"
+  },
+  "maintainer": {
+    "unfollow": "Unfollow",
+    "packages": "Packages"
+  },
+  "profile": {
+    "signOut": "Sign out"
+  },
+  "about": {
+    "title": "MyNpmLens",
+    "description": "Version {{version}} — Track npm packages, follow maintainers, and stay up to date with the ecosystem.",
+    "githubRepo": "GitHub Repository",
+    "reportBug": "Report a bug",
+    "changelog": "Changelog"
+  },
+  "addPackage": {
+    "title": "Add package",
+    "cancel": "Cancel",
+    "add": "Add",
+    "validating": "Validating…",
+    "placeholder": "react · @scope/package · https://www.npmjs.com/package/react",
+    "errorInvalid": "Enter a valid package name (e.g. react, @scope/package) or npm URL (e.g. https://www.npmjs.com/package/react).",
+    "errorAlreadyAdded": "\"{{name}}\" is already in your list.",
+    "errorNotFound": "Package \"{{name}}\" was not found on npm.",
+    "errorNetwork": "Could not reach the npm registry. Check your connection."
+  },
+  "addMaintainer": {
+    "title": "Add maintainer",
+    "cancel": "Cancel",
+    "add": "Add",
+    "searching": "Searching…",
+    "usernameLabel": "npm username",
+    "usernamePlaceholder": "e.g. sindresorhus",
+    "errorAlreadyAdded": "\"{{username}}\" is already in your list.",
+    "errorNotFound": "Maintainer \"{{username}}\" was not found on npm.",
+    "errorNetwork": "Could not reach the npm registry. Check your connection."
+  },
+  "offline": {
+    "title": "New version available",
+    "cancel": "Cancel",
+    "update": "Update",
+    "description": "A new version of Npm Lens is available. Update now to get the latest features and fixes."
+  },
+  "mergeSync": {
+    "title": "Changes detected from another device",
+    "replaceCurrent": "Replace with current",
+    "keepAll": "Keep all",
+    "packagesAdded": "Packages added on another device",
+    "packagesRemoved": "Packages removed on another device",
+    "maintainersAdded": "Maintainers added on another device",
+    "maintainersRemoved": "Maintainers removed on another device"
+  },
+  "auth": {
+    "signInWithGitHub": "Sign in with GitHub",
+    "signOut": "Sign out"
+  },
+  "sectionCard": {
+    "error": "Something went wrong loading this section."
+  },
+  "nav": {
+    "home": "Home",
+    "maintainers": "Maintainers",
+    "about": "About",
+    "profile": "Profile",
+    "settings": "Settings"
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { HeaderBar, Button, Icon, PathBar, useBreakpoint } from '@gnome-ui/react'
 import { Add, OpenMenu } from '@gnome-ui/icons'
 import { useNavigate } from '@tanstack/react-router'
@@ -10,6 +11,7 @@ interface ToolbarProps {
 }
 
 export function Toolbar({ onAddClick }: ToolbarProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { isGnomeWebView } = usePlatform()
   const { sidebarOpen, openSidebar, closeSidebar } = useSidebar()
@@ -31,7 +33,7 @@ export function Toolbar({ onAddClick }: ToolbarProps) {
         start={
           isNarrow ? (
             <>
-              <Button variant="flat" onClick={sidebarOpen ? closeSidebar : openSidebar} aria-label="Toggle sidebar">
+              <Button variant="flat" onClick={sidebarOpen ? closeSidebar : openSidebar} aria-label={t('toolbar.toggleSidebar')}>
                 <Icon icon={OpenMenu} />
               </Button>
             </>
@@ -40,7 +42,7 @@ export function Toolbar({ onAddClick }: ToolbarProps) {
         end={
           onAddClick ? (
             <Button variant="suggested" onClick={onAddClick} leadingIcon={<Icon icon={Add} />}>
-              Add
+              {t('toolbar.add')}
             </Button>
           ) : undefined
         }

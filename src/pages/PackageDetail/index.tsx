@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Toolbar } from '@/components/Toolbar';
 import { Route } from '@/routes/packages.$name';
 import { useRemoveFavorite } from '@/modules/npm/hooks';
@@ -12,6 +13,7 @@ import { GitHubSection } from './sections/GitHubSection';
 import { VulnerabilitySection } from './sections/VulnerabilitySection';
 
 export function PackageDetailPage() {
+  const { t } = useTranslation()
   const { name } = Route.useParams()
   const { version: searchVersion } = Route.useSearch()
   const { data: pkg } = useNpmPackage(name)
@@ -43,15 +45,15 @@ export function PackageDetailPage() {
       <main className="page-content detail-sections">
         {versionOptions.length > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>Version</Text>
+            <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>{t('packageDetail.version')}</Text>
             <Dropdown
-              aria-label="Select version"
+              aria-label={t('packageDetail.selectVersion')}
               options={versionOptions}
               value={version || latestVersion}
               onChange={handleVersionChange}
             />
             <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
-              {versionList.length} published
+              {versionList.length} {t('packageDetail.published')}
             </Text>
           </div>
         )}
@@ -63,7 +65,7 @@ export function PackageDetailPage() {
         <VulnerabilitySection packageName={name} version={version} />
 
         <Button variant="destructive" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
-          Remove package
+          {t('packageDetail.removePackage')}
         </Button>
       </main>
     </div>

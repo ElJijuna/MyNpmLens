@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Text, Badge, Box, WrapBox } from '@gnome-ui/react'
 import { SectionCard } from '@/components/SectionCard'
 import { useNpmPackageDownloads } from '@api-hooks/npm'
@@ -13,6 +14,7 @@ function formatNumber(n: number): string {
 }
 
 export function DownloadsSection({ name }: DownloadsSectionProps) {
+  const { t, i18n } = useTranslation()
   const { data: weekly, isPending: weeklyPending, error: weeklyError } = useNpmPackageDownloads(name, { period: 'last-week' })
   const { data: monthly, isPending: monthlyPending, error: monthlyError } = useNpmPackageDownloads(name, { period: 'last-month' })
 
@@ -20,26 +22,26 @@ export function DownloadsSection({ name }: DownloadsSectionProps) {
   const error = weeklyError ?? monthlyError
 
   return (
-    <SectionCard title="Downloads" isLoading={isPending} error={error as Error | null}>
+    <SectionCard title={t('packageDetail.downloads')} isLoading={isPending} error={error as Error | null}>
       {(weekly || monthly) && (
         <WrapBox childSpacing={24}>
           {weekly && (
             <Box orientation="vertical" spacing={3}>
-              <Text variant="caption-heading" color="dim">Last week</Text>
+              <Text variant="caption-heading" color="dim">{t('packageDetail.lastWeek')}</Text>
               <Text variant="numeric" style={{ fontSize: '2rem' }}>
                 {formatNumber(weekly.downloads)}
               </Text>
-              <Badge variant="accent">{weekly.downloads.toLocaleString()} downloads</Badge>
+              <Badge variant="accent">{weekly.downloads.toLocaleString(i18n.language)} {t('packageDetail.downloadsLabel')}</Badge>
             </Box>
           )}
 
           {monthly && (
             <Box orientation="vertical" spacing={3}>
-              <Text variant="caption-heading" color="dim">Last month</Text>
+              <Text variant="caption-heading" color="dim">{t('packageDetail.lastMonth')}</Text>
               <Text variant="numeric" style={{ fontSize: '2rem' }}>
                 {formatNumber(monthly.downloads)}
               </Text>
-              <Badge variant="neutral">{monthly.downloads.toLocaleString()} downloads</Badge>
+              <Badge variant="neutral">{monthly.downloads.toLocaleString(i18n.language)} {t('packageDetail.downloadsLabel')}</Badge>
             </Box>
           )}
         </WrapBox>

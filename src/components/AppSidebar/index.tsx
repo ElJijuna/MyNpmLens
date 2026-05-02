@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useMatchRoute } from '@tanstack/react-router'
 import { useRegisterSW } from 'virtual:pwa-register/react'
+import { useTranslation } from 'react-i18next'
 import {
   Sidebar,
   SidebarSection,
@@ -22,6 +23,7 @@ import { version } from '../../../package.json'
 import './index.css'
 
 export function AppSidebar() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const matchRoute = useMatchRoute()
   const { user } = useAuth()
@@ -60,41 +62,45 @@ export function AppSidebar() {
     }
   }
 
-  const updateLabel = checking ? 'Checking…' : upToDate ? 'Up to date!' : 'Check for updates'
+  const updateLabel = checking
+    ? t('sidebar.checking')
+    : upToDate
+      ? t('sidebar.upToDate')
+      : t('sidebar.checkForUpdates')
   const isCollapsed = !isNarrow && sidebarCollapsed
 
   return (
     <Sidebar collapsed={isCollapsed}>
       <div className="sidebar-header" data-collapsed={isCollapsed}>
-        <Button variant="flat" size="sm" onClick={handleToggle} aria-label="Toggle sidebar">
+        <Button variant="flat" size="sm" onClick={handleToggle} aria-label={t('sidebar.toggleSidebar')}>
           <Icon icon={OpenMenu} />
         </Button>
         {(!sidebarCollapsed || isNarrow) && (
-          <Text variant="caption-heading">Npm Lens</Text>
+          <Text variant="caption-heading">{t('sidebar.title')}</Text>
         )}
       </div>
 
       <SidebarSection>
         <SidebarItem
-          label="Home"
+          label={t('sidebar.home')}
           icon={GoHome}
           active={!!matchRoute({ to: '/', fuzzy: false })}
           onClick={() => go('/')}
         />
         <SidebarItem
-          label="Maintainers"
+          label={t('sidebar.maintainers')}
           icon={Star}
           active={!!matchRoute({ to: '/maintainers', fuzzy: true })}
           onClick={() => go('/maintainers')}
         />
         <SidebarItem
-          label="Settings"
+          label={t('sidebar.settings')}
           icon={Settings}
           active={!!matchRoute({ to: '/settings' })}
           onClick={() => go('/settings')}
         />
         <SidebarItem
-          label="About"
+          label={t('sidebar.about')}
           icon={Information}
           active={!!matchRoute({ to: '/about' })}
           onClick={() => go('/about')}
@@ -149,10 +155,7 @@ export function AppSidebar() {
               {new Date().getFullYear()}
             </Text>
             <Text variant="caption" color="dim">
-              Npm
-            </Text>
-            <Text variant="caption" color="dim">
-              Lens
+              {t('sidebar.title')}
             </Text>
           </WrapBox>
           <Text variant="caption" color="dim">

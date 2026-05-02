@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { Dialog } from '@gnome-ui/react'
 import { Analytics } from '@/lib/analytics'
 
 export function OfflineBanner() {
+  const { t } = useTranslation()
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
@@ -11,12 +13,12 @@ export function OfflineBanner() {
   return (
     <Dialog
       open={needRefresh}
-      title="New version available"
+      title={t('offline.title')}
       closeOnBackdrop={false}
       buttons={[
-        { label: 'Cancel', variant: 'default', onClick: () => setNeedRefresh(false) },
+        { label: t('offline.cancel'), variant: 'default', onClick: () => setNeedRefresh(false) },
         {
-          label: 'Update',
+          label: t('offline.update'),
           variant: 'suggested',
           onClick: () => {
             Analytics.appUpdate()
@@ -26,7 +28,7 @@ export function OfflineBanner() {
         },
       ]}
     >
-      A new version of Npm Lens is available. Update now to get the latest features and fixes.
+      {t('offline.description')}
     </Dialog>
   )
 }

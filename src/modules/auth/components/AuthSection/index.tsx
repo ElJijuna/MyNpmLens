@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import { Avatar, Button, Text, Spinner } from '@gnome-ui/react'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSignIn, useSignOut } from '@/modules/auth/hooks'
 import { Analytics } from '@/lib/analytics'
 
 export function AuthSection() {
+  const { t } = useTranslation()
   const { user, authLoading } = useAuth()
   const signIn = useSignIn()
   const signOut = useSignOut()
@@ -37,7 +39,7 @@ export function AuthSection() {
             onClick={() => { Analytics.signOut(); signOut.mutate() }}
             disabled={signOut.isPending}
           >
-            Sign out
+            {t('auth.signOut')}
           </Button>
         </div>
       ) : (
@@ -62,7 +64,7 @@ export function AuthSection() {
             )
           }
         >
-          Sign in with GitHub
+          {t('auth.signInWithGitHub')}
         </Button>
       )}
     </div>

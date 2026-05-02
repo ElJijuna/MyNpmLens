@@ -1,3 +1,4 @@
+import '@/lib/i18n'
 import '@gnome-ui/core/styles'
 import '@gnome-ui/react/styles'
 import './styles/global.css'
