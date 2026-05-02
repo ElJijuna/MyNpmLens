@@ -1,3 +1,9 @@
+## [1.13.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.12.2...v1.13.0) (2026-05-02)
+
+### Features
+
+* add multi-language support (en, es, es-PE) ([4b94371](https://github.com/ElJijuna/MyNpmLens/commit/4b94371af9f179eb265914f0ae2ff90b80bf151b)), closes [#40](https://github.com/ElJijuna/MyNpmLens/issues/40)
+
 ## [1.12.2](https://github.com/ElJijuna/MyNpmLens/compare/v1.12.1...v1.12.2) (2026-04-27)
 
 ### Bug Fixes
