@@ -14,6 +14,24 @@ export function getDb(): Promise<IDBPDatabase> {
   return _db
 }
 
+const LS_KEYS = ['favorites', 'maintainers', 'settings'] as const
+
+export async function migrateFromLocalStorage(db: IDBPDatabase): Promise<void> {
+  for (const key of LS_KEYS) {
+    const raw = localStorage.getItem(`mynpmlens:${key}`)
+    if (raw === null) continue
+    try {
+      const existing = await db.get('user-data', key)
+      if (existing === undefined) {
+        await db.put('user-data', JSON.parse(raw), key)
+      }
+    } catch {
+      // skip malformed entries
+    }
+    localStorage.removeItem(`mynpmlens:${key}`)
+  }
+}
+
 export async function getGistId(uid: string): Promise<string | null> {
   const db = await getDb()
   return (await db.get('user-data', `gist:${uid}`)) ?? null

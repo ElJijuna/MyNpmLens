@@ -27,8 +27,6 @@ export function MaintainerPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <Toolbar />
-
       <main className="page-content">
         <Box spacing={16}>
           <WrapBox justify="space-between" align="center">

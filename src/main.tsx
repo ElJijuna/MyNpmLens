@@ -8,11 +8,12 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { queryClient } from '@/lib/queryClient'
-import { getDb } from '@/lib/db'
+import { getDb, migrateFromLocalStorage } from '@/lib/db'
 import { routeTree } from './routeTree.gen'
 import { AuthProvider } from '@/modules/auth/AuthProvider'
 
 const db = await getDb()
+await migrateFromLocalStorage(db)
 
 const persister = createAsyncStoragePersister({
   storage: {
@@ -38,7 +39,7 @@ const rootElement = document.getElementById('root')!
 
 createRoot(rootElement).render(
   <StrictMode>
-    <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
+    <PersistQueryClientProvider client={queryClient} persistOptions={{ persister, maxAge: 1000 * 60 * 60 * 24 * 7 }}>
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
