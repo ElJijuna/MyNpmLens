@@ -4,7 +4,6 @@ import { Avatar, Box, Button, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Delete } from '@gnome-ui/icons'
 import { CounterCard } from '@gnome-ui/layout'
 import { useNpmMaintainer, useNpmMaintainerPackages } from '@api-hooks/npm'
-import { Toolbar } from '@/components/Toolbar'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { useRemoveMaintainer } from '@/modules/npm/hooks'
 
