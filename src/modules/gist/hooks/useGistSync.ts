@@ -21,6 +21,8 @@ type SyncStatus = 'idle' | 'syncing' | 'conflict' | 'done' | 'error'
 interface GistSyncState {
   status: SyncStatus
   delta: GistDelta
+  gistFavorites: FavoritePackage[]
+  gistMaintainers: FollowedMaintainer[]
   resolveKeepAll: () => void
   resolveReplaceWithLocal: () => void
 }
@@ -149,6 +151,20 @@ export function useGistSync(): GistSyncState {
     const { favorites: remoteFavs, maintainers: remoteMaintainers, settings: remoteSettings } = parseGistContent(raw)
     const localFavs = favoritesStorage.getAll()
     const localMaintainers = maintainersStorage.getAll()
+
+    if (localFavs.length === 0 && localMaintainers.length === 0 && (remoteFavs.length > 0 || remoteMaintainers.length > 0)) {
+      favoritesStorage.replace(remoteFavs)
+      maintainersStorage.replace(remoteMaintainers)
+      settingsStorage.replace(remoteSettings)
+      queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
+      setGistFavs(remoteFavs)
+      setGistMaintainers(remoteMaintainers)
+      setStatus('done')
+      return
+    }
+
     const computed = computeDelta(localFavs, remoteFavs, localMaintainers, remoteMaintainers)
 
     const hasDiff =
@@ -211,5 +227,5 @@ export function useGistSync(): GistSyncState {
     setStatus('done')
   }
 
-  return { status, delta, resolveKeepAll, resolveReplaceWithLocal }
+  return { status, delta, gistFavorites: gistFavs, gistMaintainers, resolveKeepAll, resolveReplaceWithLocal }
 }

@@ -8,7 +8,14 @@
     "toggleSidebar": "Alternar barra lateral",
     "checkForUpdates": "Buscar actualizaciones",
     "checking": "Verificando…",
-    "upToDate": "¡Al día!"
+    "upToDate": "¡Al día!",
+    "sync": "Sincronización"
+  },
+  "sync": {
+    "packagesGroup": "Paquetes",
+    "maintainersGroup": "Mantenedores",
+    "badgeNew": "Nuevo",
+    "saveToGist": "Guardar en Gist"
   },
   "toolbar": {
     "toggleSidebar": "Alternar barra lateral",

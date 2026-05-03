@@ -7,6 +7,7 @@ const provider = new GithubAuthProvider()
 provider.addScope('gist')
 
 export async function signInWithGitHub(): Promise<AuthUser> {
+  if (!auth) throw new Error('Firebase is not configured')
   const result = await signInWithPopup(auth, provider)
   const credential = GithubAuthProvider.credentialFromResult(result)
 

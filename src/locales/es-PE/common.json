@@ -3,6 +3,13 @@
     "reportBug": "Reportar un bug"
   },
   "sidebar": {
-    "checkForUpdates": "Ver actualizaciones"
+    "checkForUpdates": "Ver actualizaciones",
+    "sync": "Sincronización"
+  },
+  "sync": {
+    "packagesGroup": "Paquetes",
+    "maintainersGroup": "Mantenedores",
+    "badgeNew": "Nuevo",
+    "saveToGist": "Guardar en Gist"
   }
 }

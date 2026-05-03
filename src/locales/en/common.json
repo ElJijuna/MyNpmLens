@@ -8,7 +8,14 @@
     "toggleSidebar": "Toggle sidebar",
     "checkForUpdates": "Check for updates",
     "checking": "Checking…",
-    "upToDate": "Up to date!"
+    "upToDate": "Up to date!",
+    "sync": "Sync"
+  },
+  "sync": {
+    "packagesGroup": "Packages",
+    "maintainersGroup": "Maintainers",
+    "badgeNew": "New",
+    "saveToGist": "Save to Gist"
   },
   "toolbar": {
     "toggleSidebar": "Toggle sidebar",

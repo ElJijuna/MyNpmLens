@@ -8,12 +8,11 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { queryClient } from '@/lib/queryClient'
-import { getDb, migrateFromLocalStorage } from '@/lib/db'
+import { getDb } from '@/lib/db'
 import { routeTree } from './routeTree.gen'
 import { AuthProvider } from '@/modules/auth/AuthProvider'
 
 const db = await getDb()
-await migrateFromLocalStorage(db)
 
 const persister = createAsyncStoragePersister({
   storage: {

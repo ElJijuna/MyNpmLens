@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SyncRouteImport } from './routes/sync'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MaintainersRouteImport } from './routes/maintainers'
@@ -17,6 +18,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PackagesNameRouteImport } from './routes/packages.$name'
 import { Route as MaintainersUsernameRouteImport } from './routes/maintainers_.$username'
 
+const SyncRoute = SyncRouteImport.update({
+  id: '/sync',
+  path: '/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
   '/maintainers/$username': typeof MaintainersUsernameRoute
   '/packages/$name': typeof PackagesNameRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
   '/maintainers/$username': typeof MaintainersUsernameRoute
   '/packages/$name': typeof PackagesNameRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
   '/maintainers_/$username': typeof MaintainersUsernameRoute
   '/packages/$name': typeof PackagesNameRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/maintainers'
     | '/profile'
     | '/settings'
+    | '/sync'
     | '/maintainers/$username'
     | '/packages/$name'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/maintainers'
     | '/profile'
     | '/settings'
+    | '/sync'
     | '/maintainers/$username'
     | '/packages/$name'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/maintainers'
     | '/profile'
     | '/settings'
+    | '/sync'
     | '/maintainers_/$username'
     | '/packages/$name'
   fileRoutesById: FileRoutesById
@@ -117,12 +129,20 @@ export interface RootRouteChildren {
   MaintainersRoute: typeof MaintainersRoute
   ProfileRoute: typeof ProfileRoute
   SettingsRoute: typeof SettingsRoute
+  SyncRoute: typeof SyncRoute
   MaintainersUsernameRoute: typeof MaintainersUsernameRoute
   PackagesNameRoute: typeof PackagesNameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sync': {
+      id: '/sync'
+      path: '/sync'
+      fullPath: '/sync'
+      preLoaderRoute: typeof SyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   MaintainersRoute: MaintainersRoute,
   ProfileRoute: ProfileRoute,
   SettingsRoute: SettingsRoute,
+  SyncRoute: SyncRoute,
   MaintainersUsernameRoute: MaintainersUsernameRoute,
   PackagesNameRoute: PackagesNameRoute,
 }
