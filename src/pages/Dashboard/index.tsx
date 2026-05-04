@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, Button, Icon, WrapBox, Text } from '@gnome-ui/react'
-import { Add } from '@gnome-ui/icons'
+import { Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, WrapBox, Text } from '@gnome-ui/react'
+import { Add, Applications, ViewSidebar } from '@gnome-ui/icons'
+import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
 import { AddPackageModal } from '@/components/AddPackageModal'
 import { EmptyState } from '@/components/EmptyState'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
@@ -13,6 +14,7 @@ import { useNativeEvent } from '@gnome-ui/hooks'
 export function DashboardPage() {
   const { t } = useTranslation()
   const [modalOpen, setModalOpen] = useState(false)
+  const [packagesLayout, setPackagesLayout] = useState<DashboardGridLayout>('grid')
   const { data: favorites = [] } = useFavorites()
 
   useNativeEvent('open-dialog-addpackage', () => setModalOpen(true))
@@ -30,22 +32,35 @@ export function DashboardPage() {
               <Text variant="heading">
                 {t('dashboard.favoritePackages')}
               </Text>
-              <Button
-                variant="suggested"
-                size="sm"
-                onClick={() => setModalOpen(true)}
-                leadingIcon={<Icon icon={Add} />}
-              >
-                {t('dashboard.add')}
-              </Button>
+              <WrapBox childSpacing={8} align="center">
+                <InlineViewSwitcher
+                  value={packagesLayout}
+                  onValueChange={(value) => setPackagesLayout(value as DashboardGridLayout)}
+                  variant="pill"
+                  aria-label={t('dashboard.packageLayout')}
+                >
+                  <InlineViewSwitcherItem name="grid" label={t('dashboard.gridView')} icon={Applications} />
+                  <InlineViewSwitcherItem name="column" label={t('dashboard.columnView')} icon={ViewSidebar} />
+                </InlineViewSwitcher>
+                <Button
+                  variant="suggested"
+                  size="sm"
+                  onClick={() => setModalOpen(true)}
+                  leadingIcon={<Icon icon={Add} />}
+                >
+                  {t('dashboard.add')}
+                </Button>
+              </WrapBox>
             </WrapBox>
             <DownloadsChart packageNames={packageNames} />
 
-            <div className="package-grid">
+            <DashboardGrid layout={packagesLayout} columns={{ sm: 1, md: 2 }} gap="md">
               {favorites.map((fav) => (
-                <PackageCard key={fav.name} name={fav.name} />
+                <DashboardGrid.Item key={fav.name}>
+                  <PackageCard name={fav.name} />
+                </DashboardGrid.Item>
               ))}
-            </div>
+            </DashboardGrid>
           </Box>
         )}
         <AuthSection />

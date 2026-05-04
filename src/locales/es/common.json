@@ -34,7 +34,10 @@
   },
   "dashboard": {
     "favoritePackages": "Paquetes favoritos",
-    "add": "Agregar"
+    "add": "Agregar",
+    "packageLayout": "Vista de paquetes",
+    "gridView": "Grid",
+    "columnView": "Columna"
   },
   "emptyState": {
     "title": "Sin paquetes aún",

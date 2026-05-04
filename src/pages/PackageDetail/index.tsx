@@ -56,7 +56,7 @@ export function PackageDetailPage() {
         )}
 
         <PackageInfoSection name={name} version={version} />
-        <DownloadsSection name={name} />
+        <DownloadsSection name={name} version={version} />
         <BundleSizeSection name={name} version={version} />
         <GitHubSection packageName={name} />
         <VulnerabilitySection packageName={name} version={version} />

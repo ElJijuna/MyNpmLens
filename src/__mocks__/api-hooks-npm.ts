@@ -7,6 +7,7 @@ export const useNpmPackageVersions = jest.fn(() => defaultQuery)
 export const useNpmPackageDistTags = jest.fn(() => defaultQuery)
 export const useNpmPackageMaintainers = jest.fn(() => defaultQuery)
 export const useNpmPackageDownloads = jest.fn(() => defaultQuery)
+export const useNpmPackageVersionDownloads = jest.fn(() => defaultQuery)
 export const useNpmPackageDownloadRange = jest.fn(() => defaultQuery)
 export const useNpmMaintainer = jest.fn(() => defaultQuery)
 export const useNpmMaintainerPackages = jest.fn(() => defaultQuery)
@@ -18,6 +19,7 @@ export const npmQueryKeys = {
   packageDistTags: (name: string) => ['npm', 'package', name, 'dist-tags'] as const,
   packageMaintainers: (name: string) => ['npm', 'package', name, 'maintainers'] as const,
   packageDownloads: (name: string, period: string) => ['npm', 'package', name, 'downloads', period] as const,
+  packageVersionDownloads: (name: string, version: string, period: string) => ['npm', 'package', name, 'version', version, 'downloads', period] as const,
   packageDownloadRange: (name: string, period: string) => ['npm', 'package', name, 'download-range', period] as const,
   maintainer: (username: string) => ['npm', 'maintainer', username] as const,
   maintainerPackages: (username: string, params?: object) => ['npm', 'maintainer', username, 'packages', params] as const,

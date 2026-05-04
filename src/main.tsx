@@ -1,6 +1,7 @@
 import '@/lib/i18n'
 import '@gnome-ui/core/styles'
 import '@gnome-ui/react/styles'
+import '../node_modules/@gnome-ui/layout/dist/style.css'
 import './styles/global.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

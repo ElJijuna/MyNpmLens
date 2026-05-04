@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { PackageCard } from '../index'
 import * as npmApiHooks from '@api-hooks/npm'
-import * as bpHooks from '@api-hooks/bp'
 import * as githubHooks from '@/modules/github/hooks'
 
 jest.mock('@tanstack/react-router', () => ({
@@ -21,7 +20,6 @@ describe('PackageCard', () => {
   it('shows a spinner while loading', () => {
     jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmApiHooks.useNpmPackage>)
     jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
-    jest.spyOn(bpHooks, 'useBpPackageSize').mockReturnValue({ data: undefined } as unknown as ReturnType<typeof bpHooks.useBpPackageSize>)
     jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>)
 
     const { container } = render(<PackageCard name="react" />, { wrapper })
@@ -45,18 +43,14 @@ describe('PackageCard', () => {
     jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({
       data: { downloads: 50_000_000, start: '', end: '', package: 'react' },
     } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
-    jest.spyOn(bpHooks, 'useBpPackageSize').mockReturnValue({
-      data: { packageName: 'react', version: '19.0.0', size: 11000, gzip: 4200, hasSideEffects: false },
-    } as unknown as ReturnType<typeof bpHooks.useBpPackageSize>)
     jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>)
 
     render(<PackageCard name="react" />, { wrapper })
 
     expect(screen.getByText('react')).toBeInTheDocument()
     expect(screen.getByText('MIT')).toBeInTheDocument()
-    expect(screen.getByText('v19.0.0')).toBeInTheDocument()
+    expect(screen.getByText('v19.0.0 · 3 versions')).toBeInTheDocument()
     expect(screen.getByText('A JavaScript library.')).toBeInTheDocument()
     expect(screen.getByText('↓ 50.0M/wk')).toBeInTheDocument()
-    expect(screen.getByText('⬡ 4.1 kB gz')).toBeInTheDocument()
   })
 })

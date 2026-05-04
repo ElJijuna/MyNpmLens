@@ -34,7 +34,10 @@
   },
   "dashboard": {
     "favoritePackages": "Favorite Packages",
-    "add": "Add"
+    "add": "Add",
+    "packageLayout": "Package layout",
+    "gridView": "Grid",
+    "columnView": "Column"
   },
   "emptyState": {
     "title": "No packages yet",

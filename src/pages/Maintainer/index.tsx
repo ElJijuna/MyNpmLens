@@ -2,7 +2,8 @@ import { useNavigate, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Avatar, Box, Button, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Delete } from '@gnome-ui/icons'
-import { CounterCard } from '@gnome-ui/layout'
+import { CounterCard } from '@gnome-ui/layout/components/CounterCard'
+import { DashboardGrid } from '@gnome-ui/layout/components/DashboardGrid'
 import { useNpmMaintainer, useNpmMaintainerPackages } from '@api-hooks/npm'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { useRemoveMaintainer } from '@/modules/npm/hooks'
@@ -59,11 +60,13 @@ export function MaintainerPage() {
 
           <Text variant="heading">{t('maintainer.packages')}</Text>
 
-          <div className="package-grid">
+          <DashboardGrid columns={{ sm: 1, md: 2 }} gap="md">
             {packageNames.map((name) => (
-              <PackageCard key={name} name={name} />
+              <DashboardGrid.Item key={name}>
+                <PackageCard name={name} />
+              </DashboardGrid.Item>
             ))}
-          </div>
+          </DashboardGrid>
         </Box>
       </main>
     </div>
