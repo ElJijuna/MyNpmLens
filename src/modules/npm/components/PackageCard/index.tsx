@@ -9,6 +9,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useNpmPackage, useNpmPackageDownloads } from '@api-hooks/npm'
 import { useGitHubStats } from '@/modules/github/hooks'
 import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug'
+import { getIcon } from 'very-simple-icons';
 
 interface PackageCardProps {
   name: string
@@ -22,6 +23,7 @@ function formatNumber(n: number): string {
 
 export function PackageCard({ name }: PackageCardProps) {
   const navigate = useNavigate()
+  const iconData = getIcon(name)
   const { data: pkg } = useNpmPackage(name)
   const { data: weekly } = useNpmPackageDownloads(name, { period: 'last-week' })
   const slug = pkg?.repository?.url ? parseGitHubSlug(pkg.repository.url) : null
@@ -35,8 +37,8 @@ export function PackageCard({ name }: PackageCardProps) {
   return (
     <EntityCard
       avatar={
-        <IconBadge color="blue" size="lg">
-          <Icon icon={Npm} />
+        <IconBadge color={iconData?.hex ? `#${iconData.hex}` : 'blue'} size="lg">
+          <Icon icon={iconData ? { path: iconData.path } : Npm} />
         </IconBadge>
       }
       title={name}
