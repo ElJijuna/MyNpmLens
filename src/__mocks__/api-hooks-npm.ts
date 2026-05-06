@@ -11,6 +11,8 @@ export const useNpmPackageVersionDownloads = jest.fn(() => defaultQuery)
 export const useNpmPackageDownloadRange = jest.fn(() => defaultQuery)
 export const useNpmMaintainer = jest.fn(() => defaultQuery)
 export const useNpmMaintainerPackages = jest.fn(() => defaultQuery)
+export const useNpmMaintainerAvatar = jest.fn(() => 'https://www.npmjs.com/npm-avatar/test')
+export const useNpmPackageScore = jest.fn(() => defaultQuery)
 export const useNpmSearch = jest.fn(() => defaultQuery)
 export const npmQueryKeys = {
   package: (name: string) => ['npm', 'package', name] as const,

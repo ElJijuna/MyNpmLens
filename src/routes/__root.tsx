@@ -10,6 +10,7 @@ import { useGistSync } from '@/modules/gist/hooks'
 import { MergeSyncDialog } from '@/modules/gist/components/MergeSyncDialog'
 import { useApplyTheme } from '@/hooks/useApplyTheme'
 import { useApplyLanguage } from '@/hooks/useApplyLanguage'
+import { useApplyAccentColor } from '@/hooks/useApplyAccentColor'
 import { usePageView } from '@/hooks/usePageView'
 import '@/app.css'
 
@@ -24,6 +25,7 @@ function RootLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => window.innerWidth <= 860)
   useApplyTheme()
   useApplyLanguage()
+  useApplyAccentColor()
   usePageView()
 
   return (

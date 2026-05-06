@@ -13,6 +13,7 @@ import { getIcon } from 'very-simple-icons';
 
 interface PackageCardProps {
   name: string
+  fromMaintainer?: string
 }
 
 function formatNumber(n: number): string {
@@ -21,7 +22,7 @@ function formatNumber(n: number): string {
   return String(n)
 }
 
-export function PackageCard({ name }: PackageCardProps) {
+export function PackageCard({ name, fromMaintainer }: PackageCardProps) {
   const navigate = useNavigate()
   const iconData = getIcon(name)
   const { data: pkg } = useNpmPackage(name)
@@ -53,7 +54,7 @@ export function PackageCard({ name }: PackageCardProps) {
           </Text>
         ) : undefined
       }
-      onClick={() => navigate({ to: '/packages/$name', params: { name }, search: { version: undefined } })}
+      onClick={() => navigate({ to: '/packages/$name', params: { name }, search: { version: undefined, fromMaintainer } })}
       aria-label={`View details for ${name}`}
     />
   )

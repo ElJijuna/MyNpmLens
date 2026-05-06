@@ -30,7 +30,9 @@
     "themeLight": "Light",
     "themeDark": "Dark",
     "languageGroup": "Language",
-    "language": "Language"
+    "language": "Language",
+    "accentColor": "Accent color",
+    "accentColorSubtitle": "Choose a highlight color for the interface"
   },
   "dashboard": {
     "favoritePackages": "Favorite Packages",
@@ -66,7 +68,12 @@
     "lastPushed": "Last pushed",
     "vulnerabilities": "Vulnerabilities",
     "noVulnerabilities": "No known vulnerabilities",
-    "forVersion": "for v{{version}}"
+    "forVersion": "for v{{version}}",
+    "score": "Package Score",
+    "scoreQuality": "Quality",
+    "scorePopularity": "Popularity",
+    "scoreMaintenance": "Maintenance",
+    "scoreFinal": "Overall"
   },
   "maintainers": {
     "title": "Maintainers",

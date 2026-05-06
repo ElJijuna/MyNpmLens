@@ -4,7 +4,7 @@ import { Avatar, Box, Button, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Delete } from '@gnome-ui/icons'
 import { CounterCard } from '@gnome-ui/layout/components/CounterCard'
 import { DashboardGrid } from '@gnome-ui/layout/components/DashboardGrid'
-import { useNpmMaintainer, useNpmMaintainerPackages } from '@api-hooks/npm'
+import { useNpmMaintainer, useNpmMaintainerPackages, useNpmMaintainerAvatar } from '@api-hooks/npm'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { useRemoveMaintainer } from '@/modules/npm/hooks'
 
@@ -14,6 +14,7 @@ export function MaintainerPage() {
   const navigate = useNavigate()
   const { data: user } = useNpmMaintainer(username)
   const { data: result } = useNpmMaintainerPackages(username)
+  const avatarSrc = useNpmMaintainerAvatar(username)
   const removeMaintainer = useRemoveMaintainer()
 
   const packageNames = result?.objects.map((o) => o.package.name) ?? []
@@ -31,7 +32,7 @@ export function MaintainerPage() {
         <Box spacing={16}>
           <WrapBox justify="space-between" align="center">
             <Box orientation="horizontal" spacing={12} style={{ alignItems: 'center' }}>
-              <Avatar name={user?.name ?? username} size="lg" />
+              <Avatar name={user?.name ?? username} src={avatarSrc} size="lg" />
               <Box orientation="vertical" spacing={2}>
                 <Text variant="heading">{user?.name ?? username}</Text>
                 {user?.email && <Text variant="caption" color="dim">{user.email}</Text>}
@@ -48,22 +49,18 @@ export function MaintainerPage() {
             </Button>
           </WrapBox>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 180px)",
-              gap: 16,
-            }}
-          >
-            <CounterCard label="" value={total} accent animated suffix={` ${t('maintainer.packages').toLowerCase()}`} duration={5000} />
-          </div>
+          <DashboardGrid columns={{ sm: 1, md: 2 }} gap="sm" style={{ maxWidth: '400px' }}>
+            <DashboardGrid.Item span={1}>
+              <CounterCard label="" value={total} accent animated suffix={` ${t('maintainer.packages').toLowerCase()}`} duration={5000} />
+            </DashboardGrid.Item>
+          </DashboardGrid>
 
           <Text variant="heading">{t('maintainer.packages')}</Text>
 
           <DashboardGrid columns={{ sm: 1, md: 2 }} gap="md">
             {packageNames.map((name) => (
               <DashboardGrid.Item key={name}>
-                <PackageCard name={name} />
+                <PackageCard name={name} fromMaintainer={username} />
               </DashboardGrid.Item>
             ))}
           </DashboardGrid>
