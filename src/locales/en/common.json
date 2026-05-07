@@ -15,7 +15,8 @@
     "packagesGroup": "Packages",
     "maintainersGroup": "Maintainers",
     "badgeNew": "New",
-    "saveToGist": "Save to Gist"
+    "saveToGist": "Save to Gist",
+    "addedAt": "Added {{date}}"
   },
   "toolbar": {
     "toggleSidebar": "Toggle sidebar",

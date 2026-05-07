@@ -153,8 +153,9 @@ export function useGistSync(): GistSyncState {
     const localMaintainers = maintainersStorage.getAll()
 
     if (localFavs.length === 0 && localMaintainers.length === 0 && (remoteFavs.length > 0 || remoteMaintainers.length > 0)) {
-      favoritesStorage.replace(remoteFavs)
-      maintainersStorage.replace(remoteMaintainers)
+      const now = new Date().toISOString()
+      favoritesStorage.replace(remoteFavs.map(f => ({ ...f, addedAt: f.addedAt ?? now })))
+      maintainersStorage.replace(remoteMaintainers.map(m => ({ ...m, addedAt: m.addedAt ?? now })))
       settingsStorage.replace(remoteSettings)
       queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
       queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
@@ -194,9 +195,12 @@ export function useGistSync(): GistSyncState {
     if (!user?.githubToken || !gistId) return
 
     const localFavs = favoritesStorage.getAll()
+    const now = new Date().toISOString()
     const mergedFavs = [
       ...localFavs,
-      ...gistFavs.filter((g) => !localFavs.find((l) => l.name === g.name)),
+      ...gistFavs
+        .filter((g) => !localFavs.find((l) => l.name === g.name))
+        .map((g) => ({ ...g, addedAt: g.addedAt ?? now })),
     ]
     favoritesStorage.replace(mergedFavs)
     queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
@@ -204,7 +208,9 @@ export function useGistSync(): GistSyncState {
     const localMaintainers = maintainersStorage.getAll()
     const mergedMaintainers = [
       ...localMaintainers,
-      ...gistMaintainers.filter((g) => !localMaintainers.find((l) => l.username === g.username)),
+      ...gistMaintainers
+        .filter((g) => !localMaintainers.find((l) => l.username === g.username))
+        .map((g) => ({ ...g, addedAt: g.addedAt ?? now })),
     ]
     maintainersStorage.replace(mergedMaintainers)
     queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })

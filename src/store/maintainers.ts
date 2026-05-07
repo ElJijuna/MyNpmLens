@@ -13,7 +13,7 @@ export const maintainersStorage = {
     const db = await getDb()
     const all = await this.getAll()
     if (all.some((m) => m.username === username)) return
-    await db.put('user-data', [...all, { username }], KEY)
+    await db.put('user-data', [...all, { username, addedAt: new Date().toISOString() }], KEY)
   },
 
   async remove(username: string): Promise<void> {

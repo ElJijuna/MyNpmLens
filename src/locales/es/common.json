@@ -15,7 +15,8 @@
     "packagesGroup": "Paquetes",
     "maintainersGroup": "Mantenedores",
     "badgeNew": "Nuevo",
-    "saveToGist": "Guardar en Gist"
+    "saveToGist": "Guardar en Gist",
+    "addedAt": "Agregado el {{date}}"
   },
   "toolbar": {
     "toggleSidebar": "Alternar barra lateral",
