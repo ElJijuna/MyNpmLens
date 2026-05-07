@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { Avatar, Box, Button, Card, Icon, InlineViewSwitcher, InlineViewSwitcherItem, StatusPage, Text, WrapBox } from '@gnome-ui/react'
+import { Avatar, Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, StatusPage, Text, WrapBox } from '@gnome-ui/react'
 import { Add, Applications, Star, ViewSidebar } from '@gnome-ui/icons'
 import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
+import { EntityCard } from '@gnome-ui/layout/components/EntityCard'
 import { AddMaintainerDialog } from '@/components/AddMaintainerDialog'
 import { useMaintainers } from '@/modules/npm/hooks'
 
@@ -55,16 +56,14 @@ export function MaintainersPage() {
             <DashboardGrid layout={layout} columns={{ sm: 2, md: 4 }} gap="md">
               {maintainers.map((m) => (
                 <DashboardGrid.Item key={m.username}>
-                  <Card
+                  <EntityCard
+                    avatar={<Avatar name={m.username} size="md" />}
+                    title={m.username}
+                    subtitle={`@${m.username}`}
                     interactive
                     style={{ cursor: 'pointer', height: '100%' }}
                     onClick={() => navigate({ to: '/maintainers/$username', params: { username: m.username } })}
-                  >
-                    <Box orientation="vertical" spacing={8} style={{ alignItems: 'center', padding: '0.5rem 0' }}>
-                      <Avatar name={m.username} size="lg" />
-                      <Text variant="caption-heading">{m.username}</Text>
-                    </Box>
-                  </Card>
+                  />
                 </DashboardGrid.Item>
               ))}
             </DashboardGrid>
