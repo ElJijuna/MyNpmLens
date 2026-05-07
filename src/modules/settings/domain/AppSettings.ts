@@ -1,4 +1,4 @@
-export type Language = 'en' | 'es' | 'es-PE' | 'qu'
+export type Language = 'en' | 'es' | 'es-CL' | 'es-ES' | 'es-PE' | 'fr' | 'it' | 'qu'
 
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system'

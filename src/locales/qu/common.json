@@ -15,7 +15,8 @@
     "packagesGroup": "Paquetekuna",
     "maintainersGroup": "Waqaychaqkuna",
     "badgeNew": "Musuq",
-    "saveToGist": "Gist nisqapi waqaychay"
+    "saveToGist": "Gist nisqapi waqaychay",
+    "addedAt": "{{date}} p'unchaw yapasqa"
   },
   "toolbar": {
     "toggleSidebar": "Waqta barra tikray",

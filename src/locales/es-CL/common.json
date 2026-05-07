@@ -1,0 +1,29 @@
+{
+  "sidebar": {
+    "settings": "Configuración",
+    "checkForUpdates": "Buscar actualizaciones"
+  },
+  "settings": {
+    "title": "Configuración",
+    "themeSubtitle": "Elige el esquema de colores",
+    "syncSubtitle": "Administra la sincronización de datos con Gist"
+  },
+  "dashboard": {
+    "gridView": "Cuadrícula"
+  },
+  "packageDetail": {
+    "published": "publicadas",
+    "packageInfo": "Información del paquete",
+    "bundleSize": "Tamaño del paquete",
+    "openIssues": "Issues abiertos",
+    "lastPushed": "Última actualización",
+    "depsRuntime": "Ejecución"
+  },
+  "about": {
+    "description": "Versión {{version}} — Sigue paquetes de npm, sigue mantenedores y mantente al día con el ecosistema.",
+    "reportBug": "Reportar un problema"
+  },
+  "sectionCard": {
+    "error": "Algo salió mal al cargar esta sección."
+  }
+}

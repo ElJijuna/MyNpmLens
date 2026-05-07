@@ -47,7 +47,11 @@ export function SettingsPage() {
                 options={[
                   { value: 'en', label: 'English' },
                   { value: 'es', label: 'Español' },
+                  { value: 'es-CL', label: 'Español (Chile)' },
+                  { value: 'es-ES', label: 'Español (España)' },
                   { value: 'es-PE', label: 'Español (Perú)' },
+                  { value: 'fr', label: 'Français' },
+                  { value: 'it', label: 'Italiano' },
                   { value: 'qu', label: 'Quechua' },
                 ]}
                 value={settings.language}

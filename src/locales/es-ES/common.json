@@ -1,0 +1,38 @@
+{
+  "sidebar": {
+    "checkForUpdates": "Buscar actualizaciones"
+  },
+  "settings": {
+    "title": "Configuración",
+    "appearanceGroup": "Apariencia",
+    "themeSubtitle": "Elige la combinación de colores",
+    "dataGroup": "Datos",
+    "syncTitle": "Sincronización",
+    "syncSubtitle": "Gestiona la sincronización de datos con Gist"
+  },
+  "dashboard": {
+    "gridView": "Cuadrícula"
+  },
+  "packageDetail": {
+    "published": "publicada",
+    "packageInfo": "Información del paquete",
+    "bundleSize": "Tamaño del paquete",
+    "openIssues": "Incidencias abiertas",
+    "lastPushed": "Última actualización",
+    "depsRuntime": "Ejecución",
+    "depsDev": "Desarrollo",
+    "depsPeer": "Pares",
+    "installSize": "Tamaño de instalación",
+    "publishSize": "Tamaño publicado"
+  },
+  "about": {
+    "description": "Versión {{version}} — Sigue paquetes de npm, sigue a mantenedores y mantente al día con el ecosistema.",
+    "reportBug": "Informar de un error"
+  },
+  "addPackage": {
+    "errorInvalid": "Introduce un nombre de paquete válido (p. ej. react, @scope/paquete) o una URL de npm (p. ej. https://www.npmjs.com/package/react)."
+  },
+  "sectionCard": {
+    "error": "Se ha producido un error al cargar esta sección."
+  }
+}

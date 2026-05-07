@@ -1,0 +1,167 @@
+{
+  "sidebar": {
+    "title": "Npm Lens",
+    "home": "Home",
+    "maintainers": "Maintainer",
+    "settings": "Impostazioni",
+    "about": "Informazioni",
+    "toggleSidebar": "Mostra o nascondi barra laterale",
+    "checkForUpdates": "Controlla aggiornamenti",
+    "checking": "Controllo…",
+    "upToDate": "Aggiornato!",
+    "sync": "Sincronizzazione"
+  },
+  "sync": {
+    "packagesGroup": "Pacchetti",
+    "maintainersGroup": "Maintainer",
+    "badgeNew": "Nuovo",
+    "saveToGist": "Salva su Gist",
+    "addedAt": "Aggiunto il {{date}}"
+  },
+  "toolbar": {
+    "toggleSidebar": "Mostra o nascondi barra laterale",
+    "add": "Aggiungi"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "appearanceGroup": "Aspetto",
+    "theme": "Tema",
+    "themeSubtitle": "Scegli lo schema di colori",
+    "themeSystem": "Predefinito di sistema",
+    "themeLight": "Chiaro",
+    "themeDark": "Scuro",
+    "languageGroup": "Lingua",
+    "language": "Lingua",
+    "accentColor": "Colore di accento",
+    "accentColorSubtitle": "Scegli un colore di evidenza per l'interfaccia",
+    "dataGroup": "Dati",
+    "syncTitle": "Sincronizzazione",
+    "syncSubtitle": "Gestisci la sincronizzazione dei dati con Gist"
+  },
+  "dashboard": {
+    "favoritePackages": "Pacchetti preferiti",
+    "add": "Aggiungi",
+    "packageLayout": "Layout pacchetti",
+    "gridView": "Griglia",
+    "columnView": "Colonna"
+  },
+  "emptyState": {
+    "title": "Ancora nessun pacchetto",
+    "description": "Aggiungi i tuoi pacchetti npm preferiti per seguirne le metriche a colpo d'occhio.",
+    "addPackage": "Aggiungi pacchetto"
+  },
+  "packageDetail": {
+    "version": "Versione",
+    "selectVersion": "Seleziona versione",
+    "published": "pubblicata",
+    "removePackage": "Rimuovi pacchetto",
+    "packageInfo": "Informazioni pacchetto",
+    "downloads": "Download",
+    "lastWeek": "Ultima settimana",
+    "lastMonth": "Ultimo mese",
+    "downloadsLabel": "download",
+    "bundleSize": "Dimensione bundle",
+    "minified": "Minificato",
+    "minifiedGzipped": "Minificato + gzip",
+    "hasSideEffects": "Ha effetti collaterali",
+    "sideEffectFree": "Senza effetti collaterali",
+    "github": "GitHub",
+    "stars": "Stelle",
+    "forks": "Fork",
+    "openIssues": "Issue aperte",
+    "lastPushed": "Ultimo push",
+    "vulnerabilities": "Vulnerabilità",
+    "noVulnerabilities": "Nessuna vulnerabilità nota",
+    "forVersion": "per v{{version}}",
+    "score": "Punteggio pacchetto",
+    "scoreQuality": "Qualità",
+    "scorePopularity": "Popolarità",
+    "scoreMaintenance": "Manutenzione",
+    "scoreFinal": "Complessivo",
+    "dependencies": "Dipendenze",
+    "noDependencies": "Nessuna dipendenza",
+    "depsRuntime": "Runtime",
+    "depsDev": "Dev",
+    "depsPeer": "Peer",
+    "depsOptional": "Opzionale",
+    "depsDirectCount": "dirette",
+    "depsTransitiveCount": "transitive",
+    "maintainers": "Maintainer",
+    "installSize": "Dimensione installazione",
+    "publishSize": "Dimensione pubblicata",
+    "files": "File",
+    "noFiles": "Nessun file disponibile"
+  },
+  "maintainers": {
+    "title": "Maintainer",
+    "emptyTitle": "Ancora nessun maintainer",
+    "emptyDescription": "Segui maintainer npm per monitorare i loro pacchetti pubblicati.",
+    "addMaintainer": "Aggiungi maintainer",
+    "add": "Aggiungi"
+  },
+  "maintainer": {
+    "unfollow": "Non seguire più",
+    "packages": "Pacchetti"
+  },
+  "profile": {
+    "signOut": "Esci"
+  },
+  "about": {
+    "title": "MyNpmLens",
+    "description": "Versione {{version}} — Monitora pacchetti npm, segui maintainer e resta aggiornato con l'ecosistema.",
+    "githubRepo": "Repository GitHub",
+    "reportBug": "Segnala un bug",
+    "changelog": "Registro modifiche"
+  },
+  "addPackage": {
+    "title": "Aggiungi pacchetto",
+    "cancel": "Annulla",
+    "add": "Aggiungi",
+    "validating": "Validazione…",
+    "placeholder": "react · @scope/package · https://www.npmjs.com/package/react",
+    "errorInvalid": "Inserisci un nome pacchetto valido (es. react, @scope/package) o un URL npm (es. https://www.npmjs.com/package/react).",
+    "errorAlreadyAdded": "\"{{name}}\" è già nella tua lista.",
+    "errorNotFound": "Il pacchetto \"{{name}}\" non è stato trovato su npm.",
+    "errorNetwork": "Impossibile raggiungere il registro npm. Controlla la connessione."
+  },
+  "addMaintainer": {
+    "title": "Aggiungi maintainer",
+    "cancel": "Annulla",
+    "add": "Aggiungi",
+    "searching": "Ricerca…",
+    "usernameLabel": "Nome utente npm",
+    "usernamePlaceholder": "es. sindresorhus",
+    "errorAlreadyAdded": "\"{{username}}\" è già nella tua lista.",
+    "errorNotFound": "Il maintainer \"{{username}}\" non è stato trovato su npm.",
+    "errorNetwork": "Impossibile raggiungere il registro npm. Controlla la connessione."
+  },
+  "offline": {
+    "title": "Nuova versione disponibile",
+    "cancel": "Annulla",
+    "update": "Aggiorna",
+    "description": "È disponibile una nuova versione di Npm Lens. Aggiorna ora per ottenere le ultime funzionalità e correzioni."
+  },
+  "mergeSync": {
+    "title": "Modifiche rilevate da un altro dispositivo",
+    "replaceCurrent": "Sostituisci con l'attuale",
+    "keepAll": "Mantieni tutto",
+    "packagesAdded": "Pacchetti aggiunti su un altro dispositivo",
+    "packagesRemoved": "Pacchetti rimossi su un altro dispositivo",
+    "maintainersAdded": "Maintainer aggiunti su un altro dispositivo",
+    "maintainersRemoved": "Maintainer rimossi su un altro dispositivo"
+  },
+  "auth": {
+    "signInWithGitHub": "Accedi con GitHub",
+    "signOut": "Esci"
+  },
+  "sectionCard": {
+    "error": "Si è verificato un errore durante il caricamento di questa sezione."
+  },
+  "nav": {
+    "home": "Home",
+    "maintainers": "Maintainer",
+    "about": "Informazioni",
+    "profile": "Profilo",
+    "settings": "Impostazioni"
+  }
+}
