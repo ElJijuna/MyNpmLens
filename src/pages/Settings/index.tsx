@@ -48,6 +48,7 @@ export function SettingsPage() {
                   { value: 'en', label: 'English' },
                   { value: 'es', label: 'Español' },
                   { value: 'es-PE', label: 'Español (Perú)' },
+                  { value: 'qu', label: 'Quechua' },
                 ]}
                 value={settings.language}
                 onValueChange={(language) => updateSettings.mutate({ language })}

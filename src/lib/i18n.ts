@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next'
 import en from '../locales/en/common.json'
 import es from '../locales/es/common.json'
 import esPE from '../locales/es-PE/common.json'
+import qu from '../locales/qu/common.json'
 
 function getInitialLanguage(): string {
   try {
@@ -22,10 +23,12 @@ void i18n.use(initReactI18next).init({
     en: { common: en },
     es: { common: es },
     'es-PE': { common: esPE },
+    qu: { common: qu },
   },
   lng: getInitialLanguage(),
   fallbackLng: {
     'es-PE': ['es', 'en'],
+    qu: ['es', 'en'],
     default: ['en'],
   },
   defaultNS: 'common',

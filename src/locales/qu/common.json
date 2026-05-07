@@ -1,0 +1,166 @@
+{
+  "sidebar": {
+    "title": "Npm Lens",
+    "home": "Qallariy",
+    "maintainers": "Waqaychaqkuna",
+    "settings": "Allichaykuna",
+    "about": "Kaymanta",
+    "toggleSidebar": "Waqta barra tikray",
+    "checkForUpdates": "Musuqyaykunata maskay",
+    "checking": "Qhawaspa…",
+    "upToDate": "Musuqchasqa!",
+    "sync": "Tinkuchiy"
+  },
+  "sync": {
+    "packagesGroup": "Paquetekuna",
+    "maintainersGroup": "Waqaychaqkuna",
+    "badgeNew": "Musuq",
+    "saveToGist": "Gist nisqapi waqaychay"
+  },
+  "toolbar": {
+    "toggleSidebar": "Waqta barra tikray",
+    "add": "Yapay"
+  },
+  "settings": {
+    "title": "Allichaykuna",
+    "appearanceGroup": "Rikchay",
+    "theme": "Tema",
+    "themeSubtitle": "Llimpikunapa rikchayninta akllay",
+    "themeSystem": "Sistemapa churasqan",
+    "themeLight": "Kanchay",
+    "themeDark": "Tutayay",
+    "languageGroup": "Simi",
+    "language": "Simi",
+    "accentColor": "Sapaq llimpi",
+    "accentColorSubtitle": "Interfaz nisqapa sapaq llimpinta akllay",
+    "dataGroup": "Willakuykuna",
+    "syncTitle": "Tinkuchiy",
+    "syncSubtitle": "Gistwan willakuykuna tinkuchiyta kamachiy"
+  },
+  "dashboard": {
+    "favoritePackages": "Munay paquetekuna",
+    "add": "Yapay",
+    "packageLayout": "Paquetekunapa rikchaynin",
+    "gridView": "Cuadricula",
+    "columnView": "Columna"
+  },
+  "emptyState": {
+    "title": "Manaraq paquetekuna kanchu",
+    "description": "Munay npm paquetekunaykita yapay, yupaykunata utqaylla qhawanaykipaq.",
+    "addPackage": "Paqueteta yapay"
+  },
+  "packageDetail": {
+    "version": "Versión",
+    "selectVersion": "Versiónta akllay",
+    "published": "lluqsisqa",
+    "removePackage": "Paqueteta hurquy",
+    "packageInfo": "Paquetepa willakuynin",
+    "downloads": "Uraykachiykuna",
+    "lastWeek": "Qhipa semana",
+    "lastMonth": "Qhipa killa",
+    "downloadsLabel": "uraykachiykuna",
+    "bundleSize": "Bundle sayaynin",
+    "minified": "Uchuychasqa",
+    "minifiedGzipped": "Uchuychasqa + gzip",
+    "hasSideEffects": "Waq ruwaykunata kan",
+    "sideEffectFree": "Mana waq ruwayniyuq",
+    "github": "GitHub",
+    "stars": "Quyllurkuna",
+    "forks": "Forks",
+    "openIssues": "Kichasqa issues",
+    "lastPushed": "Qhipa push",
+    "vulnerabilities": "Pisi kallpakuna",
+    "noVulnerabilities": "Mana riqsisqa pisi kallpakuna kanchu",
+    "forVersion": "v{{version}}paq",
+    "score": "Paquetepa puntuaciónnin",
+    "scoreQuality": "Allin kay",
+    "scorePopularity": "Riqsisqa kay",
+    "scoreMaintenance": "Waqaychay",
+    "scoreFinal": "Tukuy",
+    "dependencies": "Dependenciakuna",
+    "noDependencies": "Mana dependenciakuna kanchu",
+    "depsRuntime": "Runtime",
+    "depsDev": "Dev",
+    "depsPeer": "Peer",
+    "depsOptional": "Akllana",
+    "depsDirectCount": "chiqan",
+    "depsTransitiveCount": "muyuriq",
+    "maintainers": "Waqaychaqkuna",
+    "installSize": "Churay sayaynin",
+    "publishSize": "Lluqsisqa sayaynin",
+    "files": "Archivokuna",
+    "noFiles": "Mana archivokuna kanchu"
+  },
+  "maintainers": {
+    "title": "Waqaychaqkuna",
+    "emptyTitle": "Manaraq waqaychaqkuna kanchu",
+    "emptyDescription": "npm waqaychaqkunata qatiy, paykunapa lluqsichisqa paquetekunata qhawanaykipaq.",
+    "addMaintainer": "Waqaychaqta yapay",
+    "add": "Yapay"
+  },
+  "maintainer": {
+    "unfollow": "Manaña qatiy",
+    "packages": "Paquetekuna"
+  },
+  "profile": {
+    "signOut": "Lluqsiy"
+  },
+  "about": {
+    "title": "MyNpmLens",
+    "description": "Versión {{version}} — npm paquetekunata qatiy, waqaychaqkunata qatiy, hinaspa ecosistema nisqawan musuqchasqa kay.",
+    "githubRepo": "GitHub repositorio",
+    "reportBug": "Pantayta willay",
+    "changelog": "Tikraykunapa willakuynin"
+  },
+  "addPackage": {
+    "title": "Paqueteta yapay",
+    "cancel": "Saqiy",
+    "add": "Yapay",
+    "validating": "Qhawaspa…",
+    "placeholder": "react · @scope/paquete · https://www.npmjs.com/package/react",
+    "errorInvalid": "Allin paquete sutita (ej. react, @scope/paquete) utaq npm URL nisqata qillqay.",
+    "errorAlreadyAdded": "\"{{name}}\" ñam listaykipi kachkan.",
+    "errorNotFound": "\"{{name}}\" paqueteqa npm nisqapi mana tarisqachu.",
+    "errorNetwork": "npm registro nisqaman mana tinkuyta atikunchu. Tinkusqaykita qhaway."
+  },
+  "addMaintainer": {
+    "title": "Waqaychaqta yapay",
+    "cancel": "Saqiy",
+    "add": "Yapay",
+    "searching": "Maskaspa…",
+    "usernameLabel": "npm ruraqpa sutin",
+    "usernamePlaceholder": "ej. sindresorhus",
+    "errorAlreadyAdded": "\"{{username}}\" ñam listaykipi kachkan.",
+    "errorNotFound": "\"{{username}}\" waqaychaqqa npm nisqapi mana tarisqachu.",
+    "errorNetwork": "npm registro nisqaman mana tinkuyta atikunchu. Tinkusqaykita qhaway."
+  },
+  "offline": {
+    "title": "Musuq versión kachkan",
+    "cancel": "Saqiy",
+    "update": "Musuqchay",
+    "description": "Npm Lenspa musuq versiónnin kachkan. Musuq ruwaykuna allichaykunapas chaskinaykipaq kunan musuqchay."
+  },
+  "mergeSync": {
+    "title": "Huk dispositivomanta tikraykuna tarisqa",
+    "replaceCurrent": "Kunan kaqwan rantiy",
+    "keepAll": "Tukuyta waqaychay",
+    "packagesAdded": "Huk dispositivomanta yapasqa paquetekuna",
+    "packagesRemoved": "Huk dispositivomanta hurqusqa paquetekuna",
+    "maintainersAdded": "Huk dispositivomanta yapasqa waqaychaqkuna",
+    "maintainersRemoved": "Huk dispositivomanta hurqusqa waqaychaqkuna"
+  },
+  "auth": {
+    "signInWithGitHub": "GitHubwan yaykuy",
+    "signOut": "Lluqsiy"
+  },
+  "sectionCard": {
+    "error": "Kay t'aqata cargaypi imapas mana allinchu karqan."
+  },
+  "nav": {
+    "home": "Qallariy",
+    "maintainers": "Waqaychaqkuna",
+    "about": "Kaymanta",
+    "profile": "Perfil",
+    "settings": "Allichaykuna"
+  }
+}
