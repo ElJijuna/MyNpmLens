@@ -1009,3 +1009,84 @@ export const RadialBarChart = () => null
 | `src/__mocks__/api-hooks-npm.ts` | Nuevos mocks |
 | `src/__mocks__/gnome-ui-charts.ts` | `AreaChart`, `RadialBarChart` |
 | `src/pages/PackageDetail/__tests__/PackageDetailPage.test.tsx` | Tests del botón condicional |
+
+---
+
+## Fase 15 — Formateo internacional con `Intl`
+
+Centralizar el formateo de números, fechas, porcentajes y tamaños usando la API nativa
+`Intl`, tomando el idioma activo desde `react-i18next`.
+
+No crear un contexto nuevo de internacionalización: `i18next` ya es la fuente de verdad
+para el idioma seleccionado. La capa nueva debe ser un hook ligero que consuma
+`useTranslation()` y exponga formatters reutilizables.
+
+### Objetivo
+
+- Evitar helpers locales repetidos (`formatNumber`, `formatDate`) en componentes.
+- Usar formato real por idioma para números compactos, fechas y unidades.
+- Mantener separado el texto traducido (`i18next`) del formato de valores (`Intl`).
+- Dar soporte correcto a locales regionales como `es-PE`, `es-CL` y `es-ES`.
+- Usar fallback de formato para idiomas que el navegador no soporte bien, por ejemplo
+  `qu` → `es-PE`.
+
+### Archivos propuestos
+
+| Archivo | Responsabilidad |
+| --- | --- |
+| `src/lib/locale.ts` *(nuevo)* | Resolver el locale de `Intl` desde `i18n.language` |
+| `src/hooks/useFormatters.ts` *(nuevo)* | Exponer helpers memoizados de formato |
+
+### API sugerida
+
+```ts
+const {
+  locale,
+  formatNumber,
+  formatCompactNumber,
+  formatDate,
+  formatPercent,
+  formatBytes,
+} = useFormatters()
+```
+
+Implementación base:
+
+```ts
+export function resolveIntlLocale(language: string): string {
+  if (language === 'qu') return 'es-PE'
+  return Intl.NumberFormat.supportedLocalesOf([language])[0] ?? 'en'
+}
+```
+
+```ts
+new Intl.NumberFormat(locale).format(value)
+
+new Intl.NumberFormat(locale, {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+}).format(value)
+
+new Intl.DateTimeFormat(locale, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+}).format(new Date(value))
+```
+
+### Reemplazos iniciales
+
+| Archivo | Cambio |
+| --- | --- |
+| `src/pages/DataSync/index.tsx` | Reemplazar `formatDate(..., i18n.language)` por `formatDate(...)` |
+| `src/pages/PackageDetail/sections/DownloadsSection.tsx` | Reemplazar `formatNumber` local y `toLocaleString(i18n.language)` |
+| `src/pages/PackageDetail/sections/GitHubSection.tsx` | Reemplazar `formatNumber` y `formatDate` locales |
+| `src/modules/npm/components/PackageCard/index.tsx` | Reemplazar compactación manual `M/k` por `formatCompactNumber` |
+| `src/modules/npm/components/MaintainerCard/index.tsx` | Reemplazar `formatNumber` local |
+
+### Criterios de aceptación
+
+- No quedan helpers `formatNumber` / `formatDate` duplicados en componentes.
+- El cambio de idioma en Settings cambia también fechas y números sin recargar.
+- `qu` no rompe `Intl` y usa `es-PE` como locale de formato.
+- Los tests existentes se actualizan solo donde cambien strings formateados.
