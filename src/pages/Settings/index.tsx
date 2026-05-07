@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from '@tanstack/react-router'
 import { PreferencesGroup, BoxedList, ComboRow, ActionRow, ColorPicker, Box } from '@gnome-ui/react'
 import { useSettings, useUpdateSettings } from '@/modules/settings/hooks'
 import { DEFAULT_SETTINGS } from '@/modules/settings/domain'
 
 export function SettingsPage() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { data: settings = DEFAULT_SETTINGS } = useSettings()
   const updateSettings = useUpdateSettings()
 
@@ -49,6 +51,17 @@ export function SettingsPage() {
                 ]}
                 value={settings.language}
                 onValueChange={(language) => updateSettings.mutate({ language })}
+              />
+            </BoxedList>
+          </PreferencesGroup>
+
+          <PreferencesGroup title={t('settings.dataGroup')}>
+            <BoxedList>
+              <ActionRow
+                title={t('settings.syncTitle')}
+                subtitle={t('settings.syncSubtitle')}
+                interactive
+                onClick={() => void navigate({ to: '/sync' })}
               />
             </BoxedList>
           </PreferencesGroup>

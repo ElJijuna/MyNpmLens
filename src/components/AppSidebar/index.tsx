@@ -16,7 +16,7 @@ import {
   Box,
   WrapBox,
 } from '@gnome-ui/react'
-import { GoHome, Star, Information, Settings, OpenMenu, Refresh, Share } from '@gnome-ui/icons'
+import { GoHome, Star, Information, Settings, OpenMenu, Refresh } from '@gnome-ui/icons'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSidebar } from '@/context/SidebarContext'
 import { version } from '../../../package.json'
@@ -98,12 +98,6 @@ export function AppSidebar() {
           icon={Settings}
           active={!!matchRoute({ to: '/settings' })}
           onClick={() => go('/settings')}
-        />
-        <SidebarItem
-          label={t('sidebar.sync')}
-          icon={Share}
-          active={!!matchRoute({ to: '/sync' })}
-          onClick={() => go('/sync')}
         />
         <SidebarItem
           label={t('sidebar.about')}

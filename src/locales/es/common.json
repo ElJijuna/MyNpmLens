@@ -32,7 +32,10 @@
     "languageGroup": "Idioma",
     "language": "Idioma",
     "accentColor": "Color de acento",
-    "accentColorSubtitle": "Elige un color de resaltado para la interfaz"
+    "accentColorSubtitle": "Elige un color de resaltado para la interfaz",
+    "dataGroup": "Datos",
+    "syncTitle": "Sincronización",
+    "syncSubtitle": "Administrar la sincronización de datos con Gist"
   },
   "dashboard": {
     "favoritePackages": "Paquetes favoritos",
