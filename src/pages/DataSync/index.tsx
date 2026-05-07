@@ -5,6 +5,11 @@ import { ActionRow } from '@gnome-ui/react/components/ActionRow'
 import { Box } from '@gnome-ui/react/components/Box'
 import { Button } from '@gnome-ui/react/components/Button'
 import { Badge } from '@gnome-ui/react/components/Badge'
+import { Avatar } from '@gnome-ui/react/components/Avatar'
+import { Icon } from '@gnome-ui/react/components/Icon'
+import { IconBadge } from '@gnome-ui/layout/components/IconBadge'
+import { Npm } from '@gnome-ui/icons/third-party'
+import { getIcon } from 'very-simple-icons'
 import { useFavorites } from '@/modules/npm/hooks/useFavorites'
 import { useMaintainers } from '@/modules/npm/hooks/useMaintainers'
 import { useGistSync } from '@/modules/gist/hooks/useGistSync'
@@ -42,11 +47,17 @@ export function DataSyncPage() {
                 const isNew = delta.addedInGist.some((g) => g.name === pkg.name)
                 const isOnlyLocal = delta.removedInGist.some((l) => l.name === pkg.name)
                 const date = formatDate(pkg.addedAt, i18n.language)
+                const iconData = getIcon(pkg.name)
                 return (
                   <ActionRow
                     key={pkg.name}
                     title={pkg.name}
                     subtitle={date ? t('sync.addedAt', { date }) : undefined}
+                    leading={
+                      <IconBadge color={iconData?.hex ? `#${iconData.hex}` : 'blue'} size="sm">
+                        <Icon icon={iconData ? { path: iconData.path } : Npm} />
+                      </IconBadge>
+                    }
                     trailing={
                       isNew ? (
                         <Badge variant="success">{t('sync.badgeNew')}</Badge>
@@ -78,6 +89,7 @@ export function DataSyncPage() {
                     key={m.username}
                     title={m.username}
                     subtitle={date ? t('sync.addedAt', { date }) : undefined}
+                    leading={<Avatar name={m.username} size="sm" />}
                     trailing={
                       isNew ? (
                         <Badge variant="success">{t('sync.badgeNew')}</Badge>
