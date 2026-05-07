@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
-import { Text, Badge, Link, Box, WrapBox } from '@gnome-ui/react'
+import { Text, Badge, Link, Box, WrapBox, Avatar } from '@gnome-ui/react'
 import { SectionCard } from '@/components/SectionCard'
-import { useNpmPackageVersion } from '@api-hooks/npm'
+import { useNpmPackageVersion, useNpmPackageMaintainers } from '@api-hooks/npm'
 
 interface PackageInfoSectionProps {
   name: string
@@ -11,6 +11,7 @@ interface PackageInfoSectionProps {
 export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
   const { t } = useTranslation()
   const { data, isPending, error } = useNpmPackageVersion(name, version)
+  const { data: maintainers } = useNpmPackageMaintainers(name)
 
   return (
     <SectionCard title={t('packageDetail.packageInfo')} isLoading={isPending} error={error as Error | null}>
@@ -32,6 +33,23 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
                 {data.homepage}
               </Link>
             </Text>
+          )}
+
+          {maintainers && maintainers.length > 0 && (
+            <Box orientation="vertical" spacing={4}>
+              <Text variant="caption-heading" color="dim">{t('packageDetail.maintainers')}</Text>
+              <WrapBox childSpacing={8} align="center">
+                {maintainers.map((m) => {
+                  const label = m.name ?? m.username ?? m.email ?? '?'
+                  return (
+                    <WrapBox key={label} align="center" childSpacing={4}>
+                      <Avatar name={label} size="sm" />
+                      <Text variant="caption">{label}</Text>
+                    </WrapBox>
+                  )
+                })}
+              </WrapBox>
+            </Box>
           )}
         </Box>
       )}

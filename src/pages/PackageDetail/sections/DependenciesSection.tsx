@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from '@tanstack/react-router'
 import { Badge, Box, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Npm } from '@gnome-ui/icons/third-party'
-import { useNpmPackageVersion } from '@api-hooks/npm'
+import { useNpmPackageVersion, useNpmPackageVersionDependencies } from '@api-hooks/npm'
 import { getIcon } from 'very-simple-icons'
 import { SectionCard } from '@/components/SectionCard'
 import type { BadgeVariant } from '@gnome-ui/react'
@@ -62,6 +62,9 @@ export function DependenciesSection({ name, version }: DependenciesSectionProps)
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { data, isPending, error } = useNpmPackageVersion(name, version)
+  const { data: resolved } = useNpmPackageVersionDependencies(name, version, {
+    enabled: name.length > 0 && version.length > 0,
+  })
 
   function goToPackage(pkgName: string) {
     void navigate({ to: '/packages/$name', params: { name: pkgName }, search: {} })
@@ -74,8 +77,22 @@ export function DependenciesSection({ name, version }: DependenciesSectionProps)
     Object.keys(data.optionalDependencies ?? {}).length > 0
   )
 
+  const directCount = resolved?.nodes.filter(n => n.relation === 'DIRECT').length ?? 0
+  const transitiveCount = resolved?.nodes.filter(n => n.relation === 'INDIRECT').length ?? 0
+
   return (
     <SectionCard title={t('packageDetail.dependencies')} isLoading={isPending} error={error as Error | null}>
+      {resolved && (directCount > 0 || transitiveCount > 0) && (
+        <WrapBox childSpacing={6} align="center" style={{ marginBottom: '1rem' }}>
+          {directCount > 0 && (
+            <Badge variant="accent">{directCount} {t('packageDetail.depsDirectCount')}</Badge>
+          )}
+          {transitiveCount > 0 && (
+            <Badge variant="neutral">{transitiveCount} {t('packageDetail.depsTransitiveCount')}</Badge>
+          )}
+        </WrapBox>
+      )}
+
       {data && !hasDeps && (
         <Text color="dim">{t('packageDetail.noDependencies')}</Text>
       )}

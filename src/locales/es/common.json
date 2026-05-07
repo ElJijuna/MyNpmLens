@@ -82,7 +82,14 @@
     "depsRuntime": "Runtime",
     "depsDev": "Dev",
     "depsPeer": "Peer",
-    "depsOptional": "Opcional"
+    "depsOptional": "Opcional",
+    "depsDirectCount": "directas",
+    "depsTransitiveCount": "transitivas",
+    "maintainers": "Mantenedores",
+    "installSize": "Tamaño de instalación",
+    "publishSize": "Tamaño publicado",
+    "files": "Archivos",
+    "noFiles": "Sin archivos disponibles"
   },
   "maintainers": {
     "title": "Mantenedores",
