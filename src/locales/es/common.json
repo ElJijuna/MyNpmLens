@@ -76,7 +76,13 @@
     "scoreQuality": "Calidad",
     "scorePopularity": "Popularidad",
     "scoreMaintenance": "Mantenimiento",
-    "scoreFinal": "General"
+    "scoreFinal": "General",
+    "dependencies": "Dependencias",
+    "noDependencies": "Sin dependencias",
+    "depsRuntime": "Runtime",
+    "depsDev": "Dev",
+    "depsPeer": "Peer",
+    "depsOptional": "Opcional"
   },
   "maintainers": {
     "title": "Mantenedores",

@@ -13,6 +13,7 @@ import { BundleSizeSection } from './sections/BundleSizeSection';
 import { GitHubSection } from './sections/GitHubSection';
 import { VulnerabilitySection } from './sections/VulnerabilitySection';
 import { ScoreSection } from './sections/ScoreSection';
+import { DependenciesSection } from './sections/DependenciesSection';
 
 export function PackageDetailPage() {
   const { t } = useTranslation()
@@ -114,6 +115,9 @@ export function PackageDetailPage() {
             </DashboardGrid.Item>
             <DashboardGrid.Item span={2}>
               <VulnerabilitySection packageName={name} version={version} />
+            </DashboardGrid.Item>
+            <DashboardGrid.Item span={2}>
+              <DependenciesSection name={name} version={version} />
             </DashboardGrid.Item>
           </DashboardGrid>
 
