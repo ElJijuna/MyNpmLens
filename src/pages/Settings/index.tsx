@@ -46,13 +46,17 @@ export function SettingsPage() {
                 title={t('settings.language')}
                 options={[
                   { value: 'en', label: 'English' },
+                  { value: 'de', label: 'Deutsch' },
                   { value: 'es', label: 'Español' },
                   { value: 'es-CL', label: 'Español (Chile)' },
                   { value: 'es-ES', label: 'Español (España)' },
+                  { value: 'es-MX', label: 'Español (México)' },
                   { value: 'es-PE', label: 'Español (Perú)' },
                   { value: 'fr', label: 'Français' },
                   { value: 'it', label: 'Italiano' },
+                  { value: 'pt-BR', label: 'Português (Brasil)' },
                   { value: 'qu', label: 'Quechua' },
+                  { value: 'zh-CN', label: '中文 (简体)' },
                 ]}
                 value={settings.language}
                 onValueChange={(language) => updateSettings.mutate({ language })}
