@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { Avatar, Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, Text, WrapBox } from '@gnome-ui/react'
+import { Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, Text, WrapBox } from '@gnome-ui/react'
 import { Applications, Delete, ViewSidebar } from '@gnome-ui/icons'
 import { CounterCard } from '@gnome-ui/layout/components/CounterCard'
 import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
-import { useNpmMaintainer, useNpmMaintainerPackages, useNpmMaintainerAvatar } from '@api-hooks/npm'
+import { useNpmMaintainer, useNpmMaintainerPackages } from '@api-hooks/npm'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { DownloadsChart } from '@/modules/npm/components/DownloadsChart'
+import { MaintainerAvatar } from '@/modules/npm/components/MaintainerAvatar'
 import { useRemoveMaintainer } from '@/modules/npm/hooks'
 
 export function MaintainerPage() {
@@ -17,7 +18,6 @@ export function MaintainerPage() {
   const [packagesLayout, setPackagesLayout] = useState<DashboardGridLayout>('grid')
   const { data: user } = useNpmMaintainer(username)
   const { data: result } = useNpmMaintainerPackages(username)
-  const avatarSrc = useNpmMaintainerAvatar(username)
   const removeMaintainer = useRemoveMaintainer()
 
   const packageNames = result?.objects.map((o) => o.package.name) ?? []
@@ -35,7 +35,7 @@ export function MaintainerPage() {
         <Box spacing={16}>
           <WrapBox justify="space-between" align="center">
             <Box orientation="horizontal" spacing={12} style={{ alignItems: 'center' }}>
-              <Avatar name={user?.name ?? username} src={avatarSrc} size="lg" />
+              <MaintainerAvatar username={username} name={user?.name} size="lg" />
               <Box orientation="vertical" spacing={2}>
                 <Text variant="heading">{user?.name ?? username}</Text>
                 {user?.email && <Text variant="caption" color="dim">{user.email}</Text>}

@@ -1,7 +1,7 @@
-import { Avatar } from '@gnome-ui/react/components/Avatar'
 import { EntityCard } from '@gnome-ui/layout/components/EntityCard'
 import { useNavigate } from '@tanstack/react-router'
-import { useNpmMaintainer, useNpmMaintainerAvatar, useNpmMaintainerPackages } from '@api-hooks/npm'
+import { useNpmMaintainer, useNpmMaintainerPackages } from '@api-hooks/npm'
+import { MaintainerAvatar } from '@/modules/npm/components/MaintainerAvatar'
 
 interface MaintainerCardProps {
   username: string
@@ -15,7 +15,6 @@ function formatNumber(n: number): string {
 
 export function MaintainerCard({ username }: MaintainerCardProps) {
   const navigate = useNavigate()
-  const avatarSrc = useNpmMaintainerAvatar(username)
   const { data: user } = useNpmMaintainer(username)
   const { data: packages } = useNpmMaintainerPackages(username)
 
@@ -23,7 +22,7 @@ export function MaintainerCard({ username }: MaintainerCardProps) {
 
   return (
     <EntityCard
-      avatar={<Avatar name={user?.name ?? username} src={avatarSrc} size="md" />}
+      avatar={<MaintainerAvatar username={username} name={user?.name} size="md" />}
       title={user?.name ?? username}
       subtitle={`@${username}`}
       meta={[packagesStr, user?.email]}
