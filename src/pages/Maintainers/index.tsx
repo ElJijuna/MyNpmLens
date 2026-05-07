@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { Avatar, Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, StatusPage, Text, WrapBox } from '@gnome-ui/react'
+import { Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, StatusPage, Text, WrapBox } from '@gnome-ui/react'
 import { Add, Applications, Star, ViewSidebar } from '@gnome-ui/icons'
 import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
-import { EntityCard } from '@gnome-ui/layout/components/EntityCard'
 import { AddMaintainerDialog } from '@/components/AddMaintainerDialog'
+import { MaintainerCard } from '@/modules/npm/components/MaintainerCard'
 import { useMaintainers } from '@/modules/npm/hooks'
 
 export function MaintainersPage() {
@@ -13,7 +12,6 @@ export function MaintainersPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [layout, setLayout] = useState<DashboardGridLayout>('grid')
   const { data: maintainers = [] } = useMaintainers()
-  const navigate = useNavigate()
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -56,14 +54,7 @@ export function MaintainersPage() {
             <DashboardGrid layout={layout} columns={{ sm: 2, md: 4 }} gap="md">
               {maintainers.map((m) => (
                 <DashboardGrid.Item key={m.username}>
-                  <EntityCard
-                    avatar={<Avatar name={m.username} size="md" />}
-                    title={m.username}
-                    subtitle={`@${m.username}`}
-                    interactive
-                    style={{ cursor: 'pointer', height: '100%' }}
-                    onClick={() => navigate({ to: '/maintainers/$username', params: { username: m.username } })}
-                  />
+                  <MaintainerCard username={m.username} />
                 </DashboardGrid.Item>
               ))}
             </DashboardGrid>
