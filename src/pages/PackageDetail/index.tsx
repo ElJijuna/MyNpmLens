@@ -1,11 +1,12 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Route } from '@/routes/packages.$name';
 import { useRemoveFavorite, useAddFavorite, useFavorites } from '@/modules/npm/hooks';
 import { useNpmPackage } from '@api-hooks/npm';
 import { useNavigate } from '@tanstack/react-router';
-import { Dropdown, Text, Button, Icon, Box } from '@gnome-ui/react';
-import { Delete, StarOutline } from '@gnome-ui/icons';
-import { DashboardGrid } from '@gnome-ui/layout/components/DashboardGrid';
+import { Dropdown, Text, Button, Icon, Box, WrapBox, InlineViewSwitcher, InlineViewSwitcherItem } from '@gnome-ui/react';
+import { Delete, StarOutline, Applications, ViewSidebar } from '@gnome-ui/icons';
+import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid';
 import { PackageInfoSection } from './sections/PackageInfoSection';
 import { DownloadsSection } from './sections/DownloadsSection';
 import { BundleSizeSection } from './sections/BundleSizeSection';
@@ -15,6 +16,7 @@ import { ScoreSection } from './sections/ScoreSection';
 
 export function PackageDetailPage() {
   const { t } = useTranslation()
+  const [sectionsLayout, setSectionsLayout] = useState<DashboardGridLayout>('grid')
   const { name } = Route.useParams()
   const { version: searchVersion, fromMaintainer } = Route.useSearch()
   const { data: pkg } = useNpmPackage(name)
@@ -68,22 +70,33 @@ export function PackageDetailPage() {
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <main className="page-content">
         <Box spacing={16}>
-          {versionOptions.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>{t('packageDetail.version')}</Text>
-              <Dropdown
-                aria-label={t('packageDetail.selectVersion')}
-                options={versionOptions}
-                value={version || latestVersion}
-                onChange={handleVersionChange}
-              />
-              <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
-                {versionList.length} {t('packageDetail.published')}
-              </Text>
-            </div>
-          )}
+          <WrapBox justify="space-between" align="center">
+            {versionOptions.length > 0 ? (
+              <WrapBox align="center" childSpacing={12}>
+                <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>{t('packageDetail.version')}</Text>
+                <Dropdown
+                  aria-label={t('packageDetail.selectVersion')}
+                  options={versionOptions}
+                  value={version || latestVersion}
+                  onChange={handleVersionChange}
+                />
+                <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
+                  {versionList.length} {t('packageDetail.published')}
+                </Text>
+              </WrapBox>
+            ) : <span />}
+            <InlineViewSwitcher
+              value={sectionsLayout}
+              onValueChange={(value) => setSectionsLayout(value as DashboardGridLayout)}
+              variant="pill"
+              aria-label={t('dashboard.packageLayout')}
+            >
+              <InlineViewSwitcherItem name="grid" label={t('dashboard.gridView')} icon={Applications} />
+              <InlineViewSwitcherItem name="column" label={t('dashboard.columnView')} icon={ViewSidebar} />
+            </InlineViewSwitcher>
+          </WrapBox>
 
-          <DashboardGrid columns={{ sm: 1, md: 2 }} gap="md">
+          <DashboardGrid layout={sectionsLayout} columns={{ sm: 1, md: 2 }} gap="md">
             <DashboardGrid.Item span={2}>
               <PackageInfoSection name={name} version={version} />
             </DashboardGrid.Item>

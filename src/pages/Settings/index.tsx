@@ -31,7 +31,6 @@ export function SettingsPage() {
                 <ColorPicker
                   value={settings.accentColor}
                   onChange={(color) => updateSettings.mutate({ accentColor: color })}
-                  allowCustom
                 />
               }
             />
