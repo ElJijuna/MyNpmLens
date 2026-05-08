@@ -9,6 +9,7 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { NpmClientProvider } from '@api-hooks/npm'
 import { queryClient } from '@/lib/queryClient'
 import { getDb } from '@/lib/db'
 import { routeTree } from './routeTree.gen'
@@ -42,11 +43,13 @@ const rootElement = document.getElementById('root')!
 createRoot(rootElement).render(
   <StrictMode>
     <PersistQueryClientProvider client={queryClient} persistOptions={{ persister, maxAge: 1000 * 60 * 60 * 24 * 7 }}>
-      <GnomeLocaleProvider>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
-      </GnomeLocaleProvider>
+      <NpmClientProvider>
+        <GnomeLocaleProvider>
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
+        </GnomeLocaleProvider>
+      </NpmClientProvider>
     </PersistQueryClientProvider>
   </StrictMode>,
 )

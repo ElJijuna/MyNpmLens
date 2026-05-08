@@ -1,11 +1,9 @@
 import { useQueries } from '@tanstack/react-query'
-import { npmQueryKeys } from '@api-hooks/npm'
-import { NpmClient } from 'npmjs-api-client'
+import { npmQueryKeys, useNpmClient } from '@api-hooks/npm'
 import { BarChart } from '@gnome-ui/charts'
 import { Card, Text } from '@gnome-ui/react'
 import { useTranslation } from 'react-i18next'
 
-const client = new NpmClient()
 const MAX_VISIBLE_MAINTAINERS = 12
 
 interface MaintainersPackagesChartProps {
@@ -14,6 +12,7 @@ interface MaintainersPackagesChartProps {
 
 export function MaintainersPackagesChart({ usernames }: MaintainersPackagesChartProps) {
   const { t } = useTranslation()
+  const client = useNpmClient()
   const results = useQueries({
     queries: usernames.map((username) => ({
       queryKey: npmQueryKeys.maintainerPackages(username, { size: 1, from: 0 }),

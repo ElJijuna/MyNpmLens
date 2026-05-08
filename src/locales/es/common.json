@@ -2,6 +2,7 @@
   "sidebar": {
     "title": "Npm Lens",
     "home": "Inicio",
+    "favorites": "Favoritos",
     "maintainers": "Mantenedores",
     "settings": "Ajustes",
     "about": "Acerca de",
@@ -39,6 +40,28 @@
     "syncSubtitle": "Administrar la sincronización de datos con Gist"
   },
   "dashboard": {
+    "title": "Dashboard",
+    "description": "Sigue tu lista de npm y descubre paquetes que vale la pena revisar.",
+    "favoritePackages": "Paquetes favoritos",
+    "followedMaintainers": "Mantenedores seguidos",
+    "weeklyDownloads": "Descargas semanales",
+    "viewFavorites": "Ver favoritos",
+    "discover": "Descubrir paquetes",
+    "ranking": "Ranking de paquetes",
+    "topPackages": "Top",
+    "popularity": "Popularidad",
+    "quality": "Calidad",
+    "maintenance": "Mantenimiento",
+    "byKeyword": "Por keyword",
+    "byScope": "Por scope",
+    "keywordPlaceholder": "react · testing · cli",
+    "scopePlaceholder": "@types · @vitejs · @tanstack",
+    "add": "Agregar",
+    "packageLayout": "Vista de paquetes",
+    "gridView": "Grid",
+    "columnView": "Columna"
+  },
+  "favorites": {
     "favoritePackages": "Paquetes favoritos",
     "add": "Agregar",
     "packageLayout": "Vista de paquetes",
@@ -159,6 +182,7 @@
   },
   "nav": {
     "home": "Inicio",
+    "favorites": "Favoritos",
     "maintainers": "Mantenedores",
     "about": "Acerca de",
     "profile": "Perfil",

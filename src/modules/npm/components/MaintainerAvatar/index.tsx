@@ -9,7 +9,7 @@ interface MaintainerAvatarProps {
 }
 
 export function MaintainerAvatar({ username, name, size = 'md' }: MaintainerAvatarProps) {
-  const avatarSrc = useNpmMaintainerAvatar(username)
+  const { data: avatarSrc } = useNpmMaintainerAvatar(username)
   const [failedSrc, setFailedSrc] = useState<string | null>(null)
   const displayName = name ?? username
 
@@ -22,7 +22,9 @@ export function MaintainerAvatar({ username, name, size = 'md' }: MaintainerAvat
       name={displayName}
       src={failedSrc === avatarSrc ? undefined : avatarSrc}
       size={size}
-      onError={() => setFailedSrc(avatarSrc)}
+      onError={() => {
+        if (avatarSrc) setFailedSrc(avatarSrc)
+      }}
     />
   )
 }

@@ -37,6 +37,9 @@ export function usePathSegments(): PathBarSegment[] {
     case 'about':
       return [HOME, { label: t('nav.about'), path: '/about' }]
 
+    case 'favorites':
+      return [HOME, { label: t('nav.favorites'), path: '/favorites' }]
+
     case 'profile':
       return [HOME, { label: t('nav.profile'), path: '/profile' }]
 

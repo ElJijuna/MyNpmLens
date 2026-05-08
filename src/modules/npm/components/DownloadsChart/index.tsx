@@ -1,16 +1,14 @@
 import { useQueries } from '@tanstack/react-query'
-import { npmQueryKeys } from '@api-hooks/npm'
-import { NpmClient } from 'npmjs-api-client'
+import { npmQueryKeys, useNpmClient } from '@api-hooks/npm'
 import { BarChart } from '@gnome-ui/charts'
 import { Card, Text } from '@gnome-ui/react'
-
-const client = new NpmClient()
 
 interface DownloadsChartProps {
   packageNames: string[]
 }
 
 export function DownloadsChart({ packageNames }: DownloadsChartProps) {
+  const client = useNpmClient()
   const results = useQueries({
     queries: packageNames.flatMap((name) => [
       {

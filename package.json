@@ -15,7 +15,7 @@
   "dependencies": {
     "@api-hooks/bp": "^1.4.0",
     "@api-hooks/gh": "^1.9.0",
-    "@api-hooks/npm": "^1.11.0",
+    "@api-hooks/npm": "^1.12.0",
     "@api-hooks/osv": "^1.1.0",
     "@gnome-ui/charts": "^1.29.0",
     "@gnome-ui/core": "^1.41.0",

@@ -13,6 +13,7 @@ import { Route as SyncRouteImport } from './routes/sync'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MaintainersRouteImport } from './routes/maintainers'
+import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PackagesNameRouteImport } from './routes/packages.$name'
@@ -36,6 +37,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const MaintainersRoute = MaintainersRouteImport.update({
   id: '/maintainers',
   path: '/maintainers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritesRoute = FavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -62,6 +68,7 @@ const MaintainersUsernameRoute = MaintainersUsernameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/favorites': typeof FavoritesRoute
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/favorites': typeof FavoritesRoute
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/favorites': typeof FavoritesRoute
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/favorites'
     | '/maintainers'
     | '/profile'
     | '/settings'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/favorites'
     | '/maintainers'
     | '/profile'
     | '/settings'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/favorites'
     | '/maintainers'
     | '/profile'
     | '/settings'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  FavoritesRoute: typeof FavoritesRoute
   MaintainersRoute: typeof MaintainersRoute
   ProfileRoute: typeof ProfileRoute
   SettingsRoute: typeof SettingsRoute
@@ -164,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MaintainersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/favorites': {
+      id: '/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof FavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  FavoritesRoute: FavoritesRoute,
   MaintainersRoute: MaintainersRoute,
   ProfileRoute: ProfileRoute,
   SettingsRoute: SettingsRoute,

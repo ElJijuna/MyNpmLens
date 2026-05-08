@@ -16,7 +16,7 @@ import {
   Box,
   WrapBox,
 } from '@gnome-ui/react'
-import { GoHome, Star, Information, Settings, OpenMenu, Refresh } from '@gnome-ui/icons'
+import { GoHome, Star, Information, Settings, OpenMenu, Refresh, Applications } from '@gnome-ui/icons'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSidebar } from '@/context/SidebarContext'
 import { version } from '../../../package.json'
@@ -92,6 +92,12 @@ export function AppSidebar() {
           icon={Star}
           active={!!matchRoute({ to: '/maintainers', fuzzy: true })}
           onClick={() => go('/maintainers')}
+        />
+        <SidebarItem
+          label={t('sidebar.favorites')}
+          icon={Applications}
+          active={!!matchRoute({ to: '/favorites', fuzzy: false })}
+          onClick={() => go('/favorites')}
         />
         <SidebarItem
           label={t('sidebar.settings')}
