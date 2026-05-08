@@ -10,20 +10,16 @@ import { useNpmPackage, useNpmPackageDownloads } from '@api-hooks/npm'
 import { useGitHubStats } from '@/modules/github/hooks'
 import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug'
 import { getIcon } from 'very-simple-icons';
+import { useFormatters } from '@/hooks/useFormatters'
 
 interface PackageCardProps {
   name: string
   fromMaintainer?: string
 }
 
-function formatNumber(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`
-  return String(n)
-}
-
 export function PackageCard({ name, fromMaintainer }: PackageCardProps) {
   const navigate = useNavigate()
+  const { formatCompactNumber } = useFormatters()
   const iconData = getIcon(name)
   const { data: pkg } = useNpmPackage(name)
   const { data: weekly } = useNpmPackageDownloads(name, { period: 'last-week' })
@@ -33,7 +29,7 @@ export function PackageCard({ name, fromMaintainer }: PackageCardProps) {
   const version = pkg?.['dist-tags']?.latest
   const versionCount = pkg ? Object.keys(pkg.versions).length : 0
   const versionStr = version ? `v${version}${versionCount > 0 ? ` · ${versionCount} versions` : ''}` : undefined
-  const downloadsStr = weekly ? `↓ ${formatNumber(weekly.downloads)}/wk` : undefined
+  const downloadsStr = weekly ? `↓ ${formatCompactNumber(weekly.downloads)}/wk` : undefined
 
   return (
     <EntityCard
@@ -50,7 +46,7 @@ export function PackageCard({ name, fromMaintainer }: PackageCardProps) {
         github ? (
           <Text variant="caption" color="dim" style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
             <Icon icon={Star} size="sm" />
-            {formatNumber(github.stars)}
+            {formatCompactNumber(github.stars)}
           </Text>
         ) : undefined
       }

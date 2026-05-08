@@ -3,20 +3,16 @@ import { Text, Badge, Box, WrapBox } from '@gnome-ui/react'
 import { AreaChart } from '@gnome-ui/charts'
 import { SectionCard } from '@/components/SectionCard'
 import { useNpmPackageVersionDownloads, useNpmPackageDownloadRange } from '@api-hooks/npm'
+import { useFormatters } from '@/hooks/useFormatters'
 
 interface DownloadsSectionProps {
   name: string
   version: string
 }
 
-function formatNumber(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(2)}M`
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`
-  return n.toLocaleString()
-}
-
 export function DownloadsSection({ name, version }: DownloadsSectionProps) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const { formatNumber, formatCompactNumber } = useFormatters()
   const { data, isPending, error } = useNpmPackageVersionDownloads(name, version, { period: 'last-week' })
   const { data: rangeData } = useNpmPackageDownloadRange(name, { period: 'last-month' })
 
@@ -29,9 +25,9 @@ export function DownloadsSection({ name, version }: DownloadsSectionProps) {
           <Box orientation="vertical" spacing={3}>
             <Text variant="caption-heading" color="dim">{t('packageDetail.lastWeek')}</Text>
             <Text variant="numeric" style={{ fontSize: '2rem' }}>
-              {formatNumber(data.downloads)}
+              {formatCompactNumber(data.downloads)}
             </Text>
-            <Badge variant="accent">{data.downloads.toLocaleString(i18n.language)} {t('packageDetail.downloadsLabel')}</Badge>
+            <Badge variant="accent">{formatNumber(data.downloads)} {t('packageDetail.downloadsLabel')}</Badge>
           </Box>
         </WrapBox>
       )}

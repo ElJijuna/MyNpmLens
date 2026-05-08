@@ -3,6 +3,7 @@ import { Text } from '@gnome-ui/react'
 import { RadialBarChart } from '@gnome-ui/charts'
 import { SectionCard } from '@/components/SectionCard'
 import { useNpmPackageScore } from '@api-hooks/npm'
+import { useFormatters } from '@/hooks/useFormatters'
 
 interface ScoreSectionProps {
   name: string
@@ -10,6 +11,7 @@ interface ScoreSectionProps {
 
 export function ScoreSection({ name }: ScoreSectionProps) {
   const { t } = useTranslation()
+  const { formatPercent } = useFormatters()
   const { data, isPending, error } = useNpmPackageScore(name)
 
   const chartData = data ? [
@@ -30,7 +32,7 @@ export function ScoreSection({ name }: ScoreSectionProps) {
             aria-label={t('packageDetail.score')}
           />
           <Text variant="caption" color="dim">
-            {t('packageDetail.scoreFinal')}: {(data.score.final * 100).toFixed(0)}%
+            {t('packageDetail.scoreFinal')}: {formatPercent(data.score.final)}
           </Text>
         </>
       )}

@@ -5,29 +5,18 @@ import { SectionCard } from '@/components/SectionCard'
 import { useGitHubStats } from '@/modules/github/hooks'
 import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug'
 import { useNpmPackage } from '@api-hooks/npm'
+import { useFormatters } from '@/hooks/useFormatters'
 
 interface GitHubSectionProps {
   packageName: string
 }
 
-function formatNumber(n: number): string {
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`
-  return String(n)
-}
-
 export function GitHubSection({ packageName }: GitHubSectionProps) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const { formatCompactNumber, formatDate, formatNumber } = useFormatters()
   const { data: pkg } = useNpmPackage(packageName)
   const slug = pkg?.repository?.url ? parseGitHubSlug(pkg.repository.url) : null
   const { data, isPending, error } = useGitHubStats(slug?.owner ?? null, slug?.repo ?? null)
-
-  function formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString(i18n.language, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
-  }
 
   if (!isPending && !slug) return null
 
@@ -40,19 +29,19 @@ export function GitHubSection({ packageName }: GitHubSectionProps) {
               <Text variant="caption-heading" color="dim">{t('packageDetail.stars')}</Text>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <Icon icon={Star} />
-                <Text variant="numeric">{formatNumber(data.stars)}</Text>
+                <Text variant="numeric">{formatCompactNumber(data.stars)}</Text>
               </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
               <Text variant="caption-heading" color="dim">{t('packageDetail.forks')}</Text>
-              <Text variant="numeric">{formatNumber(data.forks)}</Text>
+              <Text variant="numeric">{formatCompactNumber(data.forks)}</Text>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
               <Text variant="caption-heading" color="dim">{t('packageDetail.openIssues')}</Text>
               <Badge variant={data.openIssues > 100 ? 'warning' : 'neutral'}>
-                {data.openIssues}
+                {formatNumber(data.openIssues)}
               </Badge>
             </div>
           </div>

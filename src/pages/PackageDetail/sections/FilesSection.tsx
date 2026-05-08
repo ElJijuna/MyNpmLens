@@ -1,19 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import { Icon, Text, WrapBox } from '@gnome-ui/react'
+import { Box, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Document, Folder } from '@gnome-ui/icons'
 import { useNpmPackageVersionFiles } from '@api-hooks/npm'
 import { SectionCard } from '@/components/SectionCard'
 import type { UnpkgFile } from 'npmjs-api-client'
+import { useFormatters } from '@/hooks/useFormatters'
 
 interface FilesSectionProps {
   name: string
   version: string
-}
-
-function formatBytes(bytes: number): string {
-  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
-  if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} kB`
-  return `${bytes} B`
 }
 
 function flattenFiles(node: UnpkgFile): UnpkgFile[] {
@@ -23,6 +18,7 @@ function flattenFiles(node: UnpkgFile): UnpkgFile[] {
 
 export function FilesSection({ name, version }: FilesSectionProps) {
   const { t } = useTranslation()
+  const { formatBytes } = useFormatters()
   const { data, isPending, error } = useNpmPackageVersionFiles(name, version, {
     enabled: name.length > 0 && version.length > 0,
   })

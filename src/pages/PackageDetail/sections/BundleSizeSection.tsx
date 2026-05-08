@@ -3,20 +3,16 @@ import { Text, Badge, Box, WrapBox } from '@gnome-ui/react'
 import { SectionCard } from '@/components/SectionCard'
 import { useBpPackageVersionSize } from '@api-hooks/bp'
 import { useNpmPackageVersionSize } from '@api-hooks/npm'
+import { useFormatters } from '@/hooks/useFormatters'
 
 interface BundleSizeSectionProps {
   name: string
   version?: string
 }
 
-function formatBytes(bytes: number): string {
-  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
-  if (bytes >= 1024) return `${(bytes / 1024).toFixed(2)} kB`
-  return `${bytes} B`
-}
-
 export function BundleSizeSection({ name, version = '' }: BundleSizeSectionProps) {
   const { t } = useTranslation()
+  const { formatBytes, formatNumber } = useFormatters()
   const enabled = name.length > 0 && version.length > 0
   const { data, isPending, error } = useBpPackageVersionSize(name, version, { enabled })
   const { data: sizeData } = useNpmPackageVersionSize(name, version, { enabled })
@@ -53,12 +49,12 @@ export function BundleSizeSection({ name, version = '' }: BundleSizeSectionProps
               <Box orientation="vertical" spacing={3}>
                 <Text variant="caption-heading" color="dim">{t('packageDetail.publishSize')}</Text>
                 <Text variant="numeric" style={{ fontSize: '1.5rem' }}>{sizeData.publish.pretty}</Text>
-                <Text variant="caption" color="dim">{sizeData.publish.files} files</Text>
+                <Text variant="caption" color="dim">{formatNumber(sizeData.publish.files)} files</Text>
               </Box>
               <Box orientation="vertical" spacing={3}>
                 <Text variant="caption-heading" color="dim">{t('packageDetail.installSize')}</Text>
                 <Text variant="numeric" style={{ fontSize: '1.5rem' }}>{sizeData.install.pretty}</Text>
-                <Text variant="caption" color="dim">{sizeData.install.files} files</Text>
+                <Text variant="caption" color="dim">{formatNumber(sizeData.install.files)} files</Text>
               </Box>
             </WrapBox>
           )}

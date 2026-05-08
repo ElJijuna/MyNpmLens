@@ -14,14 +14,11 @@ import { useFavorites } from '@/modules/npm/hooks/useFavorites'
 import { useMaintainers } from '@/modules/npm/hooks/useMaintainers'
 import { useGistSync } from '@/modules/gist/hooks/useGistSync'
 import { usePushToGist } from '@/modules/gist/hooks/usePushToGist'
-
-function formatDate(dateStr: string | undefined, locale: string): string | undefined {
-  if (!dateStr) return undefined
-  return new Date(dateStr).toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' })
-}
+import { useFormatters } from '@/hooks/useFormatters'
 
 export function DataSyncPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const { formatDate } = useFormatters()
   const { data: localFavorites = [] } = useFavorites()
   const { data: localMaintainers = [] } = useMaintainers()
   const { delta, gistFavorites, gistMaintainers } = useGistSync()
@@ -46,7 +43,7 @@ export function DataSyncPage() {
               {allPackages.map((pkg) => {
                 const isNew = delta.addedInGist.some((g) => g.name === pkg.name)
                 const isOnlyLocal = delta.removedInGist.some((l) => l.name === pkg.name)
-                const date = formatDate(pkg.addedAt, i18n.language)
+                const date = pkg.addedAt ? formatDate(pkg.addedAt) : undefined
                 const iconData = getIcon(pkg.name)
                 return (
                   <ActionRow
@@ -83,7 +80,7 @@ export function DataSyncPage() {
               {allMaintainers.map((m) => {
                 const isNew = delta.addedMaintainersInGist.some((g) => g.username === m.username)
                 const isOnlyLocal = delta.removedMaintainersInGist.some((l) => l.username === m.username)
-                const date = formatDate(m.addedAt, i18n.language)
+                const date = m.addedAt ? formatDate(m.addedAt) : undefined
                 return (
                   <ActionRow
                     key={m.username}
