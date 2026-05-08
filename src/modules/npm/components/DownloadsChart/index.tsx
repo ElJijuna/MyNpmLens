@@ -1,5 +1,4 @@
-import { useQueries } from '@tanstack/react-query'
-import { npmQueryKeys, useNpmClient } from '@api-hooks/npm'
+import { useNpmBulkDownloads } from '@api-hooks/npm'
 import { BarChart } from '@gnome-ui/charts'
 import { Card, Text } from '@gnome-ui/react'
 
@@ -8,30 +7,23 @@ interface DownloadsChartProps {
 }
 
 export function DownloadsChart({ packageNames }: DownloadsChartProps) {
-  const client = useNpmClient()
-  const results = useQueries({
-    queries: packageNames.flatMap((name) => [
-      {
-        queryKey: npmQueryKeys.packageDownloads(name, 'last-week'),
-        queryFn: ({ signal }: { signal: AbortSignal }) => client.package(name).downloads('last-week', signal),
-        staleTime: 1000 * 60 * 60,
-      },
-      {
-        queryKey: npmQueryKeys.packageDownloads(name, 'last-month'),
-        queryFn: ({ signal }: { signal: AbortSignal }) => client.package(name).downloads('last-month', signal),
-        staleTime: 1000 * 60 * 60,
-      },
-    ]),
+  const weekly = useNpmBulkDownloads(packageNames, {
+    period: 'last-week',
+    enabled: packageNames.length > 0,
+  })
+  const monthly = useNpmBulkDownloads(packageNames, {
+    period: 'last-month',
+    enabled: packageNames.length > 0,
   })
 
-  const hasData = results.some((r) => r.data != null)
+  const hasData = weekly.data != null || monthly.data != null
 
   if (!hasData) return null
 
-  const data = packageNames.map((name, i) => ({
+  const data = packageNames.map((name) => ({
     name,
-    weekly: results[i * 2].data?.downloads ?? 0,
-    monthly: results[i * 2 + 1].data?.downloads ?? 0,
+    weekly: weekly.data?.[name]?.downloads ?? 0,
+    monthly: monthly.data?.[name]?.downloads ?? 0,
   }))
 
   return (
