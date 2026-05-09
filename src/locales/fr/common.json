@@ -40,6 +40,8 @@
   },
   "dashboard": {
     "favoritePackages": "Paquets favoris",
+    "emptyPackagesTitle": "Aucun paquet trouvé",
+    "emptyPackagesDescription": "Essayez un autre mot-clé, scope ou classement.",
     "add": "Ajouter",
     "packageLayout": "Disposition des paquets",
     "gridView": "Grille",

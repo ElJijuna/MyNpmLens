@@ -40,6 +40,8 @@
   },
   "dashboard": {
     "favoritePackages": "Pacotes favoritos",
+    "emptyPackagesTitle": "Nenhum pacote encontrado",
+    "emptyPackagesDescription": "Tente outra palavra-chave, escopo ou ranking.",
     "add": "Adicionar",
     "packageLayout": "Layout dos pacotes",
     "gridView": "Grade",

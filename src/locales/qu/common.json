@@ -40,6 +40,8 @@
   },
   "dashboard": {
     "favoritePackages": "Munay paquetekuna",
+    "emptyPackagesTitle": "Paquetekuna mana tarisqachu",
+    "emptyPackagesDescription": "Huk keyword, scope utaq ranking nisqata qhaway.",
     "add": "Yapay",
     "packageLayout": "Paquetekunapa rikchaynin",
     "gridView": "Cuadricula",

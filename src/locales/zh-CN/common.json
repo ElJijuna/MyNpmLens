@@ -40,6 +40,8 @@
   },
   "dashboard": {
     "favoritePackages": "收藏的包",
+    "emptyPackagesTitle": "未找到包",
+    "emptyPackagesDescription": "试试其他关键词、scope 或排名。",
     "add": "添加",
     "packageLayout": "包布局",
     "gridView": "网格",

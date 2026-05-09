@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from '@tanstack/react-router'
-import { Box, Button, Card, Icon, InlineViewSwitcher, InlineViewSwitcherItem, SearchBar, Text, WrapBox } from '@gnome-ui/react'
+import { Box, Button, Card, Icon, InlineViewSwitcher, InlineViewSwitcherItem, SearchBar, StatusPage, Text, WrapBox } from '@gnome-ui/react'
 import { Add, Applications, Star, ViewSidebar } from '@gnome-ui/icons'
 import { DashboardGrid } from '@gnome-ui/layout/components/DashboardGrid'
 import { AddPackageModal } from '@/components/AddPackageModal'
@@ -115,7 +115,11 @@ export function DashboardPage() {
                 <InlineViewSwitcherItem name="maintenance" label={t('dashboard.maintenance')} icon={ViewSidebar} />
               </InlineViewSwitcher>
             </WrapBox>
-            <PackageGrid names={(rankingData?.objects ?? []).map((item) => item.package.name)} />
+            <PackageGrid
+              names={(rankingData?.objects ?? []).map((item) => item.package.name)}
+              emptyTitle={t('dashboard.emptyPackagesTitle')}
+              emptyDescription={t('dashboard.emptyPackagesDescription')}
+            />
           </Box>
 
           <DashboardGrid layout="grid" columns={{ sm: 1, md: 2 }} gap="md">
@@ -131,7 +135,11 @@ export function DashboardPage() {
                   onClear={() => setKeyword('')}
                   autoCapitalize="none"
                 />
-                <PackageGrid names={(keywordPackages.data?.objects ?? []).map((item) => item.package.name)} />
+                <PackageGrid
+                  names={(keywordPackages.data?.objects ?? []).map((item) => item.package.name)}
+                  emptyTitle={t('dashboard.emptyPackagesTitle')}
+                  emptyDescription={t('dashboard.emptyPackagesDescription')}
+                />
               </Box>
             </DashboardGrid.Item>
             <DashboardGrid.Item>
@@ -146,7 +154,11 @@ export function DashboardPage() {
                   onClear={() => setScope('')}
                   autoCapitalize="none"
                 />
-                <PackageGrid names={(scopePackages.data?.objects ?? []).map((item) => item.package.name)} />
+                <PackageGrid
+                  names={(scopePackages.data?.objects ?? []).map((item) => item.package.name)}
+                  emptyTitle={t('dashboard.emptyPackagesTitle')}
+                  emptyDescription={t('dashboard.emptyPackagesDescription')}
+                />
               </Box>
             </DashboardGrid.Item>
           </DashboardGrid>
@@ -170,8 +182,25 @@ function MetricCard({ label, value }: { label: string; value: string | number })
   )
 }
 
-function PackageGrid({ names }: { names: string[] }) {
-  if (names.length === 0) return null
+function PackageGrid({
+  names,
+  emptyTitle,
+  emptyDescription,
+}: {
+  names: string[]
+  emptyTitle: string
+  emptyDescription: string
+}) {
+  if (names.length === 0) {
+    return (
+      <StatusPage
+        compact
+        icon={Applications}
+        title={emptyTitle}
+        description={emptyDescription}
+      />
+    )
+  }
 
   return (
     <DashboardGrid layout="grid" columns={{ sm: 1, md: 2 }} gap="sm">

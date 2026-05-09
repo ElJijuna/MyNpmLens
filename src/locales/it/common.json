@@ -40,6 +40,8 @@
   },
   "dashboard": {
     "favoritePackages": "Pacchetti preferiti",
+    "emptyPackagesTitle": "Nessun pacchetto trovato",
+    "emptyPackagesDescription": "Prova con un'altra keyword, scope o classifica.",
     "add": "Aggiungi",
     "packageLayout": "Layout pacchetti",
     "gridView": "Griglia",

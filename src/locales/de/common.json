@@ -40,6 +40,8 @@
   },
   "dashboard": {
     "favoritePackages": "Favoriten",
+    "emptyPackagesTitle": "Keine Pakete gefunden",
+    "emptyPackagesDescription": "Versuche ein anderes Keyword, einen anderen Scope oder ein anderes Ranking.",
     "add": "Hinzufügen",
     "packageLayout": "Paketansicht",
     "gridView": "Raster",

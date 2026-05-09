@@ -56,6 +56,8 @@
     "byScope": "By scope",
     "keywordPlaceholder": "react · testing · cli",
     "scopePlaceholder": "@types · @vitejs · @tanstack",
+    "emptyPackagesTitle": "No packages found",
+    "emptyPackagesDescription": "Try another keyword, scope, or ranking.",
     "add": "Add",
     "packageLayout": "Package layout",
     "gridView": "Grid",

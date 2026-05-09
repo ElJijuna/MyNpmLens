@@ -56,6 +56,8 @@
     "byScope": "Por scope",
     "keywordPlaceholder": "react · testing · cli",
     "scopePlaceholder": "@types · @vitejs · @tanstack",
+    "emptyPackagesTitle": "No se encontraron paquetes",
+    "emptyPackagesDescription": "Prueba con otra keyword, scope o ranking.",
     "add": "Agregar",
     "packageLayout": "Vista de paquetes",
     "gridView": "Grid",
