@@ -88,16 +88,16 @@ export function AppSidebar() {
           onClick={() => go('/')}
         />
         <SidebarItem
-          label={t('sidebar.maintainers')}
-          icon={Star}
-          active={!!matchRoute({ to: '/maintainers', fuzzy: true })}
-          onClick={() => go('/maintainers')}
-        />
-        <SidebarItem
           label={t('sidebar.favorites')}
           icon={Applications}
           active={!!matchRoute({ to: '/favorites', fuzzy: false })}
           onClick={() => go('/favorites')}
+        />
+        <SidebarItem
+          label={t('sidebar.maintainers')}
+          icon={Star}
+          active={!!matchRoute({ to: '/maintainers', fuzzy: true })}
+          onClick={() => go('/maintainers')}
         />
         <SidebarItem
           label={t('sidebar.settings')}

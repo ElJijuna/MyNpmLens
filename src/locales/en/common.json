@@ -79,6 +79,7 @@
     "version": "Version",
     "selectVersion": "Select version",
     "published": "published",
+    "addPackage": "Add package",
     "removePackage": "Remove package",
     "packageInfo": "Package info",
     "downloads": "Downloads",

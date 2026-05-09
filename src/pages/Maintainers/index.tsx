@@ -29,7 +29,7 @@ export function MaintainersPage() {
             </Button>
           </StatusPage>
         ) : (
-          <Box>
+          <Box spacing={24}>
             <WrapBox justify="space-between" align="center">
               <Text variant="heading">{t('maintainers.title')}</Text>
               <WrapBox childSpacing={8} align="center">

@@ -27,7 +27,7 @@ export function FavoritesPage() {
         {favorites.length === 0 ? (
           <EmptyState onAddClick={() => setModalOpen(true)} />
         ) : (
-          <Box>
+          <Box spacing={24}>
             <WrapBox justify="space-between" align="center">
               <Text variant="heading">
                 {t('favorites.favoritePackages')}

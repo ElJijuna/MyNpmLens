@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import { Text, Badge, Link, Box, WrapBox, Avatar } from '@gnome-ui/react'
+import { Text, Badge, Link, Box, WrapBox } from '@gnome-ui/react'
 import { SectionCard } from '@/components/SectionCard'
 import { useNpmPackageVersion, useNpmPackageMaintainers } from '@api-hooks/npm'
+import { MaintainerAvatar } from '@/modules/npm/components/MaintainerAvatar'
 
 interface PackageInfoSectionProps {
   name: string
@@ -41,9 +42,10 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
               <WrapBox childSpacing={8} align="center">
                 {maintainers.map((m) => {
                   const label = m.name ?? m.username ?? m.email ?? '?'
+                  const username = m.username ?? m.name ?? label
                   return (
                     <WrapBox key={label} align="center" childSpacing={4}>
-                      <Avatar name={label} size="sm" />
+                      <MaintainerAvatar username={username} name={label} size="sm" />
                       <Text variant="caption">{label}</Text>
                     </WrapBox>
                   )

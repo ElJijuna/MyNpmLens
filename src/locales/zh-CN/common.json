@@ -56,6 +56,7 @@
     "version": "版本",
     "selectVersion": "选择版本",
     "published": "已发布",
+    "addPackage": "添加包",
     "removePackage": "移除包",
     "packageInfo": "包信息",
     "downloads": "下载量",

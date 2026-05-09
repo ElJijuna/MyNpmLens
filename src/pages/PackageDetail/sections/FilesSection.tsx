@@ -1,7 +1,9 @@
+import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Document, Folder } from '@gnome-ui/icons'
 import { useNpmPackageVersionFiles } from '@api-hooks/npm'
+import { getIcon } from 'very-simple-icons'
 import { SectionCard } from '@/components/SectionCard'
 import type { UnpkgFile } from 'npmjs-api-client'
 import { useFormatters } from '@/hooks/useFormatters'
@@ -12,8 +14,39 @@ interface FilesSectionProps {
 }
 
 function flattenFiles(node: UnpkgFile): UnpkgFile[] {
-  if (node.type === 'file') return [node]
-  return (node.files ?? []).flatMap(flattenFiles)
+  if (node.files?.length) return node.files.flatMap(flattenFiles)
+  if (node.type === 'directory') return []
+  return [node]
+}
+
+const FILE_ICON_BY_EXTENSION: Record<string, string> = {
+  cjs: 'javascript',
+  css: 'css',
+  html: 'html5',
+  js: 'javascript',
+  json: 'json',
+  jsx: 'react',
+  mjs: 'javascript',
+  ts: 'typescript',
+  tsx: 'react',
+  vue: 'vuedotjs',
+}
+
+const filesGridStyle: CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+  columnGap: '1.5rem',
+  rowGap: '0.25rem',
+}
+
+const fileRowStyle: CSSProperties = {
+  minWidth: 0,
+}
+
+function getFileIcon(path: string) {
+  const extension = path.split('.').pop()?.toLowerCase()
+  if (!extension) return undefined
+  return getIcon(FILE_ICON_BY_EXTENSION[extension] ?? extension)
 }
 
 export function FilesSection({ name, version }: FilesSectionProps) {
@@ -38,32 +71,46 @@ export function FilesSection({ name, version }: FilesSectionProps) {
       {files.length > 0 && (
         <Box orientation="vertical" spacing={4}>
           {dirs.size > 0 && (
-            <WrapBox childSpacing={6} align="center" style={{ marginBottom: '0.5rem' }}>
+            <div style={{ ...filesGridStyle, marginBottom: '0.5rem' }}>
               {[...dirs].sort().map(dir => (
-                <WrapBox key={dir} align="center" childSpacing={4}>
+                <WrapBox key={dir} align="center" childSpacing={12} style={fileRowStyle}>
                   <Icon icon={Folder} size="sm" />
-                  <Text variant="caption" color="dim" style={{ fontFamily: 'monospace' }}>{dir}/</Text>
+                  <Text
+                    variant="caption"
+                    color="dim"
+                    style={{ fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}
+                  >
+                    {dir}/
+                  </Text>
                 </WrapBox>
               ))}
-            </WrapBox>
+            </div>
           )}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.25rem' }}>
-            {files.map(f => (
-              <WrapBox key={f.path} align="center" childSpacing={6} style={{ minWidth: 0 }}>
-                <Icon icon={Document} size="sm" />
-                <Text
-                  variant="caption"
-                  style={{ fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}
-                >
-                  {f.path}
-                </Text>
-                {f.size != null && (
-                  <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>
-                    {formatBytes(f.size)}
+          <div style={filesGridStyle}>
+            {files.map(f => {
+              const iconData = getFileIcon(f.path)
+
+              return (
+                <WrapBox key={f.path} align="center" childSpacing={12} style={fileRowStyle}>
+                  <Icon
+                    icon={iconData ? { path: iconData.path } : Document}
+                    size="sm"
+                    style={iconData?.hex ? { color: `#${iconData.hex}` } : undefined}
+                  />
+                  <Text
+                    variant="caption"
+                    style={{ fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}
+                  >
+                    {f.path}
                   </Text>
-                )}
-              </WrapBox>
-            ))}
+                  {f.size != null && (
+                    <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>
+                      {formatBytes(f.size)}
+                    </Text>
+                  )}
+                </WrapBox>
+              )
+            })}
           </div>
         </Box>
       )}

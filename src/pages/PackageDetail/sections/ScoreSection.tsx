@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Text } from '@gnome-ui/react'
 import { RadialBarChart } from '@gnome-ui/charts'
+import { ErrorState } from '@gnome-ui/layout/components/ErrorState'
 import { SectionCard } from '@/components/SectionCard'
 import { useNpmPackageScore } from '@api-hooks/npm'
 import { useFormatters } from '@/hooks/useFormatters'
@@ -21,7 +22,14 @@ export function ScoreSection({ name }: ScoreSectionProps) {
   ] : []
 
   return (
-    <SectionCard title={t('packageDetail.score')} isLoading={isPending} error={error as Error | null}>
+    <SectionCard title={t('packageDetail.score')} isLoading={isPending}>
+      {error && (
+        <ErrorState
+          type="generic"
+          title={t('sectionCard.error')}
+          description={error.message}
+        />
+      )}
       {data && (
         <>
           <RadialBarChart

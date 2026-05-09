@@ -6,7 +6,10 @@ import { useNpmPackage } from '@api-hooks/npm';
 import { useNavigate } from '@tanstack/react-router';
 import { Dropdown, Text, Button, Icon, Box, WrapBox, InlineViewSwitcher, InlineViewSwitcherItem } from '@gnome-ui/react';
 import { Delete, StarOutline, Applications, ViewSidebar } from '@gnome-ui/icons';
+import { Npm } from '@gnome-ui/icons/third-party'
 import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid';
+import { IconBadge } from '@gnome-ui/layout/components/IconBadge'
+import { getIcon } from 'very-simple-icons'
 import { PackageInfoSection } from './sections/PackageInfoSection';
 import { DownloadsSection } from './sections/DownloadsSection';
 import { BundleSizeSection } from './sections/BundleSizeSection';
@@ -24,6 +27,7 @@ export function PackageDetailPage() {
   const { data: pkg } = useNpmPackage(name)
   const { data: favorites = [] } = useFavorites()
   const navigate = useNavigate()
+  const iconData = getIcon(name)
 
   const latestVersion = pkg?.['dist-tags']?.latest ?? ''
   const version = searchVersion ?? latestVersion
@@ -71,31 +75,39 @@ export function PackageDetailPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <main className="page-content">
-        <Box spacing={16}>
+        <Box spacing={24}>
           <WrapBox justify="space-between" align="center">
-            {versionOptions.length > 0 ? (
-              <WrapBox align="center" childSpacing={12}>
-                <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>{t('packageDetail.version')}</Text>
-                <Dropdown
-                  aria-label={t('packageDetail.selectVersion')}
-                  options={versionOptions}
-                  value={version || latestVersion}
-                  onChange={handleVersionChange}
-                />
-                <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
-                  {versionList.length} {t('packageDetail.published')}
-                </Text>
-              </WrapBox>
-            ) : <span />}
-            <InlineViewSwitcher
-              value={sectionsLayout}
-              onValueChange={(value) => setSectionsLayout(value as DashboardGridLayout)}
-              variant="pill"
-              aria-label={t('dashboard.packageLayout')}
-            >
-              <InlineViewSwitcherItem name="grid" label={t('dashboard.gridView')} icon={Applications} />
-              <InlineViewSwitcherItem name="column" label={t('dashboard.columnView')} icon={ViewSidebar} />
-            </InlineViewSwitcher>
+            <WrapBox align="center" childSpacing={12}>
+              <IconBadge color={iconData?.hex ? `#${iconData.hex}` : 'blue'} size="lg">
+                <Icon icon={iconData ? { path: iconData.path } : Npm} />
+              </IconBadge>
+              {versionOptions.length > 0 && (
+                <>
+                  <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>{t('packageDetail.version')}</Text>
+                  <Dropdown
+                    aria-label={t('packageDetail.selectVersion')}
+                    options={versionOptions}
+                    value={version || latestVersion}
+                    onChange={handleVersionChange}
+                  />
+                  <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
+                    {versionList.length} {t('packageDetail.published')}
+                  </Text>
+                </>
+              )}
+            </WrapBox>
+            <WrapBox childSpacing={8} align="center">
+              <InlineViewSwitcher
+                value={sectionsLayout}
+                onValueChange={(value) => setSectionsLayout(value as DashboardGridLayout)}
+                variant="pill"
+                aria-label={t('dashboard.packageLayout')}
+              >
+                <InlineViewSwitcherItem name="grid" label={t('dashboard.gridView')} icon={Applications} />
+                <InlineViewSwitcherItem name="column" label={t('dashboard.columnView')} icon={ViewSidebar} />
+              </InlineViewSwitcher>
+              {actionButton}
+            </WrapBox>
           </WrapBox>
 
           <DashboardGrid layout={sectionsLayout} columns={{ sm: 1, md: 2 }} gap="md">
@@ -124,8 +136,6 @@ export function PackageDetailPage() {
               <FilesSection name={name} version={version} />
             </DashboardGrid.Item>
           </DashboardGrid>
-
-          {actionButton}
         </Box>
       </main>
     </div>

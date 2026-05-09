@@ -6,21 +6,25 @@ interface DownloadsChartProps {
   packageNames: string[]
 }
 
+const BULK_DOWNLOADS_LIMIT = 128
+
 export function DownloadsChart({ packageNames }: DownloadsChartProps) {
-  const weekly = useNpmBulkDownloads(packageNames, {
+  const chartPackageNames = packageNames.slice(0, BULK_DOWNLOADS_LIMIT)
+
+  const weekly = useNpmBulkDownloads(chartPackageNames, {
     period: 'last-week',
-    enabled: packageNames.length > 0,
+    enabled: chartPackageNames.length > 0,
   })
-  const monthly = useNpmBulkDownloads(packageNames, {
+  const monthly = useNpmBulkDownloads(chartPackageNames, {
     period: 'last-month',
-    enabled: packageNames.length > 0,
+    enabled: chartPackageNames.length > 0,
   })
 
   const hasData = weekly.data != null || monthly.data != null
 
   if (!hasData) return null
 
-  const data = packageNames.map((name) => ({
+  const data = chartPackageNames.map((name) => ({
     name,
     weekly: weekly.data?.[name]?.downloads ?? 0,
     monthly: monthly.data?.[name]?.downloads ?? 0,

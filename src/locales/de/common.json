@@ -56,6 +56,7 @@
     "version": "Version",
     "selectVersion": "Version auswählen",
     "published": "veröffentlicht",
+    "addPackage": "Paket hinzufügen",
     "removePackage": "Paket entfernen",
     "packageInfo": "Paketinfo",
     "downloads": "Downloads",
