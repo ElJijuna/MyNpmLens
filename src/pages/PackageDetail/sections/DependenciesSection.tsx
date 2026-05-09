@@ -67,7 +67,7 @@ export function DependenciesSection({ name, version }: DependenciesSectionProps)
   })
 
   function goToPackage(pkgName: string) {
-    void navigate({ to: '/packages/$name', params: { name: pkgName }, search: {} })
+    void navigate({ to: '/packages/$name', params: { name: pkgName }, search: { version: undefined, fromMaintainer: undefined } })
   }
 
   const hasDeps = data && (

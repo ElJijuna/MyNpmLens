@@ -61,7 +61,7 @@ export function DataSyncPage() {
                       ) : isOnlyLocal ? (
                         <Button
                           size="sm"
-                          variant="outlined"
+                          variant="default"
                           disabled={pushToGist.isPending}
                           onClick={() => pushToGist.mutate()}
                         >
@@ -93,7 +93,7 @@ export function DataSyncPage() {
                       ) : isOnlyLocal ? (
                         <Button
                           size="sm"
-                          variant="outlined"
+                          variant="default"
                           disabled={pushToGist.isPending}
                           onClick={() => pushToGist.mutate()}
                         >

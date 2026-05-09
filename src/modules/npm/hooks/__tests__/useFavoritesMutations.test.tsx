@@ -2,6 +2,7 @@ import { renderHook, waitFor, act } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { useAddFavorite, useRemoveFavorite, useFavorites } from '../useFavorites'
+import { favoritesStorage } from '@/store/favorites'
 
 jest.mock('@/modules/gist/hooks', () => ({
   usePushToGist: () => ({ mutate: jest.fn() }),
@@ -49,10 +50,7 @@ describe('useAddFavorite', () => {
 
 describe('useRemoveFavorite', () => {
   it('removes a package and invalidates favorites query', async () => {
-    localStorage.setItem(
-      'mynpmlens:favorites',
-      JSON.stringify([{ name: 'react', addedAt: '2024-01-01T00:00:00.000Z' }]),
-    )
+    await favoritesStorage.replace([{ name: 'react', addedAt: '2024-01-01T00:00:00.000Z' }])
     const wrapper = makeWrapper()
     const { result: favResult } = renderHook(() => useFavorites(), { wrapper })
     const { result: removeResult } = renderHook(() => useRemoveFavorite(), { wrapper })

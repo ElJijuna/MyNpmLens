@@ -87,7 +87,7 @@ describe('DashboardPage', () => {
 
     render(<DashboardPage />, { wrapper })
     fireEvent.click(screen.getByText('Add').closest('button')!)
-    expect(screen.getAllByText(/add package/i).length).toBeGreaterThan(1)
+    expect(screen.getByRole('dialog', { hidden: true, name: /add package/i })).toBeInTheDocument()
   })
 
   it('opens the Add package modal when the open-dialog-addpackage native event fires', () => {
@@ -113,6 +113,6 @@ describe('DashboardPage', () => {
       capturedHandler?.()
     })
 
-    expect(screen.getAllByText(/add package/i).length).toBeGreaterThan(1)
+    expect(screen.getByRole('dialog', { hidden: true, name: /add package/i })).toBeInTheDocument()
   })
 })

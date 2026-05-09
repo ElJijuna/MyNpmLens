@@ -84,21 +84,21 @@ describe('PackageDetailPage', () => {
   it('renders download numbers', () => {
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('1.00M')).toBeInTheDocument()
+    expect(screen.getByText('1M')).toBeInTheDocument()
   })
 
   it('renders bundle size', () => {
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('10.74 kB')).toBeInTheDocument()
-    expect(screen.getByText('4.10 kB')).toBeInTheDocument()
+    expect(screen.getByText('10.7 kB')).toBeInTheDocument()
+    expect(screen.getByText('4.1 kB')).toBeInTheDocument()
   })
 
   it('renders github stats', () => {
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('230.0k')).toBeInTheDocument()
-    expect(screen.getByText('47.0k')).toBeInTheDocument()
+    expect(screen.getByText('230K')).toBeInTheDocument()
+    expect(screen.getByText('47K')).toBeInTheDocument()
   })
 
   it('shows remove button when not from maintainer', () => {

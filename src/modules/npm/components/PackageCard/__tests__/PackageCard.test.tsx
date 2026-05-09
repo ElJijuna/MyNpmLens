@@ -51,6 +51,6 @@ describe('PackageCard', () => {
     expect(screen.getByText('MIT')).toBeInTheDocument()
     expect(screen.getByText('v19.0.0 · 3 versions')).toBeInTheDocument()
     expect(screen.getByText('A JavaScript library.')).toBeInTheDocument()
-    expect(screen.getByText('↓ 50.0M/wk')).toBeInTheDocument()
+    expect(screen.getByText('↓ 50M/wk')).toBeInTheDocument()
   })
 })

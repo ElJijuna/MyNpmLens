@@ -18,9 +18,11 @@ export function usePushToGist() {
     mutationFn: async () => {
       if (!user?.githubToken) return
 
-      const favorites = favoritesStorage.getAll()
-      const maintainers = maintainersStorage.getAll()
-      const settings = settingsStorage.get()
+      const [favorites, maintainers, settings] = await Promise.all([
+        favoritesStorage.getAll(),
+        maintainersStorage.getAll(),
+        settingsStorage.get(),
+      ])
       const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
       const files = { [GIST_FILENAME]: { content } }
 
