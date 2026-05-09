@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from '@tanstack/react-router'
-import { Box, Button, Card, Icon, InlineViewSwitcher, InlineViewSwitcherItem, SearchBar, StatusPage, Text, WrapBox } from '@gnome-ui/react'
+import { Box, Button, Card, Icon, InlineViewSwitcher, InlineViewSwitcherItem, SearchBar, Spinner, StatusPage, Text, WrapBox } from '@gnome-ui/react'
 import { Add, Applications, Star, ViewSidebar } from '@gnome-ui/icons'
 import { DashboardGrid } from '@gnome-ui/layout/components/DashboardGrid'
 import { AddPackageModal } from '@/components/AddPackageModal'
@@ -52,6 +52,12 @@ export function DashboardPage() {
     popularity: popularPackages.data,
     quality: qualityPackages.data,
     maintenance: maintenancePackages.data,
+  }[rankingView]
+  const rankingIsLoading = {
+    top: topPackages.isPending,
+    popularity: popularPackages.isPending,
+    quality: qualityPackages.isPending,
+    maintenance: maintenancePackages.isPending,
   }[rankingView]
 
   const weeklyDownloads = Object.values(favoriteDownloads ?? {}).reduce(
@@ -117,12 +123,13 @@ export function DashboardPage() {
             </WrapBox>
             <PackageGrid
               names={(rankingData?.objects ?? []).map((item) => item.package.name)}
+              isLoading={rankingIsLoading}
               emptyTitle={t('dashboard.emptyPackagesTitle')}
               emptyDescription={t('dashboard.emptyPackagesDescription')}
             />
           </Box>
 
-          <DashboardGrid layout="grid" columns={{ sm: 1, md: 2 }} gap="md">
+          <DashboardGrid layout="grid" columns="auto" gap="md">
             <DashboardGrid.Item>
               <Box spacing={12}>
                 <Text variant="heading">{t('dashboard.byKeyword')}</Text>
@@ -137,6 +144,7 @@ export function DashboardPage() {
                 />
                 <PackageGrid
                   names={(keywordPackages.data?.objects ?? []).map((item) => item.package.name)}
+                  isLoading={keywordPackages.isPending}
                   emptyTitle={t('dashboard.emptyPackagesTitle')}
                   emptyDescription={t('dashboard.emptyPackagesDescription')}
                 />
@@ -156,6 +164,7 @@ export function DashboardPage() {
                 />
                 <PackageGrid
                   names={(scopePackages.data?.objects ?? []).map((item) => item.package.name)}
+                  isLoading={scopePackages.isPending}
                   emptyTitle={t('dashboard.emptyPackagesTitle')}
                   emptyDescription={t('dashboard.emptyPackagesDescription')}
                 />
@@ -184,13 +193,23 @@ function MetricCard({ label, value }: { label: string; value: string | number })
 
 function PackageGrid({
   names,
+  isLoading,
   emptyTitle,
   emptyDescription,
 }: {
   names: string[]
+  isLoading: boolean
   emptyTitle: string
   emptyDescription: string
 }) {
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem' }}>
+        <Spinner size="md" />
+      </div>
+    )
+  }
+
   if (names.length === 0) {
     return (
       <StatusPage

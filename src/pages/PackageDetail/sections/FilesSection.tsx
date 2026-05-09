@@ -34,7 +34,7 @@ const FILE_ICON_BY_EXTENSION: Record<string, string> = {
 
 const filesGridStyle: CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
   columnGap: '1.5rem',
   rowGap: '0.25rem',
 }

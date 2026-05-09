@@ -39,14 +39,14 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
           {maintainers && maintainers.length > 0 && (
             <Box orientation="vertical" spacing={4}>
               <Text variant="caption-heading" color="dim">{t('packageDetail.maintainers')}</Text>
-              <WrapBox childSpacing={8} align="center">
+              <WrapBox childSpacing={8}>
                 {maintainers.map((m) => {
                   const label = m.name ?? m.username ?? m.email ?? '?'
                   const username = m.username ?? m.name ?? label
                   return (
-                    <WrapBox key={label} align="center" childSpacing={4}>
+                    <WrapBox key={label} align="center" childSpacing={4} style={{ minWidth: 0 }}>
                       <MaintainerAvatar username={username} name={label} size="sm" />
-                      <Text variant="caption">{label}</Text>
+                      <Text variant="caption" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</Text>
                     </WrapBox>
                   )
                 })}

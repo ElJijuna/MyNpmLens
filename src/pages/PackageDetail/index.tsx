@@ -57,17 +57,17 @@ export function PackageDetailPage() {
   const actionButton = fromMaintainer
     ? isFavorite
       ? (
-        <Button variant="destructive" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
+        <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
           {t('packageDetail.removePackage')}
         </Button>
       )
       : (
-        <Button variant="suggested" leadingIcon={<Icon icon={StarOutline} />} onClick={handleAdd} disabled={addFavorite.isPending}>
+        <Button variant="suggested" size="sm" leadingIcon={<Icon icon={StarOutline} />} onClick={handleAdd} disabled={addFavorite.isPending}>
           {t('packageDetail.addPackage')}
         </Button>
       )
     : (
-      <Button variant="destructive" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
+      <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
         {t('packageDetail.removePackage')}
       </Button>
     )
@@ -111,7 +111,7 @@ export function PackageDetailPage() {
           </WrapBox>
 
           <DashboardGrid layout={sectionsLayout} columns={{ sm: 1, md: 2 }} gap="md">
-            <DashboardGrid.Item span={2}>
+            <DashboardGrid.Item style={{ gridColumn: '1 / -1' }}>
               <PackageInfoSection name={name} version={version} />
             </DashboardGrid.Item>
             <DashboardGrid.Item span={1}>
@@ -126,13 +126,13 @@ export function PackageDetailPage() {
             <DashboardGrid.Item span={1}>
               <GitHubSection packageName={name} />
             </DashboardGrid.Item>
-            <DashboardGrid.Item span={2}>
+            <DashboardGrid.Item style={{ gridColumn: '1 / -1' }}>
               <VulnerabilitySection packageName={name} version={version} />
             </DashboardGrid.Item>
-            <DashboardGrid.Item span={2}>
+            <DashboardGrid.Item style={{ gridColumn: '1 / -1' }}>
               <DependenciesSection name={name} version={version} />
             </DashboardGrid.Item>
-            <DashboardGrid.Item span={2}>
+            <DashboardGrid.Item style={{ gridColumn: '1 / -1' }}>
               <FilesSection name={name} version={version} />
             </DashboardGrid.Item>
           </DashboardGrid>

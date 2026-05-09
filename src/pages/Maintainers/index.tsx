@@ -30,7 +30,7 @@ export function MaintainersPage() {
           </StatusPage>
         ) : (
           <Box spacing={24}>
-            <WrapBox justify="space-between" align="center">
+            <WrapBox justify="space-between" align="center" style={{ rowGap: '0.75rem' }}>
               <Text variant="heading">{t('maintainers.title')}</Text>
               <WrapBox childSpacing={8} align="center">
                 <InlineViewSwitcher
@@ -55,7 +55,7 @@ export function MaintainersPage() {
 
             <MaintainersPackagesChart usernames={usernames} />
 
-            <DashboardGrid layout={layout} columns={{ sm: 2, md: 3, lg: 4 }} gap="md">
+            <DashboardGrid layout={layout} columns={{ sm: 1, md: 3, lg: 4 }} gap="md">
               {maintainers.map((m) => (
                 <DashboardGrid.Item key={m.username}>
                   <MaintainerCard username={m.username} />
