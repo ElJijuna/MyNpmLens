@@ -63,5 +63,7 @@
     "typescript-eslint": "^8.0.0",
     "vite": "^8.0.7",
     "vite-plugin-pwa": "^1.2.0"
-  }
+  },
+  "author": "pilmee <pilmee@gmail.com> (https://github.com/ElJijuna)",
+  "license": "MIT"
 }
