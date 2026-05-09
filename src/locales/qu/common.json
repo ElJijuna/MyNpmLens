@@ -103,7 +103,10 @@
   },
   "maintainer": {
     "unfollow": "Manaña qatiy",
-    "packages": "Paquetekuna"
+    "packages": "Paquetekuna",
+    "totalPackages": "Llapan paquetekuna",
+    "scopedPackages": "Scopeyuq",
+    "averageScore": "Chawpi puntuación"
   },
   "profile": {
     "signOut": "Lluqsiy"

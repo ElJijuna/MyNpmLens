@@ -103,7 +103,10 @@
   },
   "maintainer": {
     "unfollow": "取消关注",
-    "packages": "包"
+    "packages": "包",
+    "totalPackages": "包总数",
+    "scopedPackages": "带 scope",
+    "averageScore": "平均评分"
   },
   "profile": {
     "signOut": "退出登录"

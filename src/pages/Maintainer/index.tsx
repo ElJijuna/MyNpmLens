@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, Text, WrapBox } from '@gnome-ui/react'
-import { Applications, Delete, ViewSidebar } from '@gnome-ui/icons'
-import { CounterCard } from '@gnome-ui/layout/components/CounterCard'
+import { Applications, Delete, Folder, Star, ViewSidebar } from '@gnome-ui/icons'
 import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
+import { StatCard } from '@gnome-ui/layout/components/StatCard'
 import { useNpmMaintainer, useNpmMaintainerPackages } from '@api-hooks/npm'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { DownloadsChart } from '@/modules/npm/components/DownloadsChart'
@@ -17,11 +17,17 @@ export function MaintainerPage() {
   const navigate = useNavigate()
   const [packagesLayout, setPackagesLayout] = useState<DashboardGridLayout>('grid')
   const { data: user } = useNpmMaintainer(username)
-  const { data: result } = useNpmMaintainerPackages(username)
+  const packagesQuery = useNpmMaintainerPackages(username)
+  const { data: result } = packagesQuery
   const removeMaintainer = useRemoveMaintainer()
 
-  const packageNames = result?.objects.map((o) => o.package.name) ?? []
+  const packageObjects = result?.objects ?? []
+  const packageNames = packageObjects.map((o) => o.package.name)
   const total = result?.total ?? 0
+  const scopedPackages = packageNames.filter((name) => name.startsWith('@')).length
+  const averageScore = packageObjects.length > 0
+    ? Math.round((packageObjects.reduce((sum, o) => sum + o.score.final, 0) / packageObjects.length) * 100)
+    : 0
 
   function handleUnfollow() {
     removeMaintainer.mutate(username, {
@@ -63,9 +69,33 @@ export function MaintainerPage() {
             </WrapBox>
           </WrapBox>
 
-          <DashboardGrid columns={{ sm: 1, md: 2 }} gap="sm" style={{ maxWidth: '400px' }}>
-            <DashboardGrid.Item span={1}>
-              <CounterCard label="" value={total} accent animated suffix={` ${t('maintainer.packages').toLowerCase()}`} duration={5000} />
+          <DashboardGrid layout="grid" columns={{ sm: 1, md: 3 }} gap="sm">
+            <DashboardGrid.Item>
+              <StatCard
+                label={t('maintainer.totalPackages')}
+                value={total}
+                unit={t('maintainer.packages').toLowerCase()}
+                icon={<Icon icon={Applications} size="sm" />}
+                loading={packagesQuery.isPending}
+              />
+            </DashboardGrid.Item>
+            <DashboardGrid.Item>
+              <StatCard
+                label={t('maintainer.scopedPackages')}
+                value={scopedPackages}
+                unit={t('maintainer.packages').toLowerCase()}
+                icon={<Icon icon={Folder} size="sm" />}
+                loading={packagesQuery.isPending}
+              />
+            </DashboardGrid.Item>
+            <DashboardGrid.Item>
+              <StatCard
+                label={t('maintainer.averageScore')}
+                value={averageScore}
+                unit="%"
+                icon={<Icon icon={Star} size="sm" />}
+                loading={packagesQuery.isPending}
+              />
             </DashboardGrid.Item>
           </DashboardGrid>
 

@@ -103,7 +103,10 @@
   },
   "maintainer": {
     "unfollow": "Entfolgen",
-    "packages": "Pakete"
+    "packages": "Pakete",
+    "totalPackages": "Pakete gesamt",
+    "scopedPackages": "Mit Scope",
+    "averageScore": "Durchschnittsscore"
   },
   "profile": {
     "signOut": "Abmelden"
