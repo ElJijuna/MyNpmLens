@@ -4,6 +4,7 @@ import en from '../locales/en/common.json'
 import de from '../locales/de/common.json'
 import es from '../locales/es/common.json'
 import esCL from '../locales/es-CL/common.json'
+import esCO from '../locales/es-CO/common.json'
 import esES from '../locales/es-ES/common.json'
 import esMX from '../locales/es-MX/common.json'
 import esPE from '../locales/es-PE/common.json'
@@ -32,6 +33,7 @@ void i18n.use(initReactI18next).init({
     de: { common: de },
     es: { common: es },
     'es-CL': { common: esCL },
+    'es-CO': { common: esCO },
     'es-ES': { common: esES },
     'es-MX': { common: esMX },
     'es-PE': { common: esPE },
@@ -44,6 +46,7 @@ void i18n.use(initReactI18next).init({
   lng: getInitialLanguage(),
   fallbackLng: {
     'es-CL': ['es', 'en'],
+    'es-CO': ['es', 'en'],
     'es-ES': ['es', 'en'],
     'es-MX': ['es', 'en'],
     'es-PE': ['es', 'en'],

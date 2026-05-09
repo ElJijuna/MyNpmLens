@@ -49,6 +49,7 @@ export function SettingsPage() {
                   { value: 'de', label: 'Deutsch' },
                   { value: 'es', label: 'Español' },
                   { value: 'es-CL', label: 'Español (Chile)' },
+                  { value: 'es-CO', label: 'Español (Colombia)' },
                   { value: 'es-ES', label: 'Español (España)' },
                   { value: 'es-MX', label: 'Español (México)' },
                   { value: 'es-PE', label: 'Español (Perú)' },

@@ -1,0 +1,18 @@
+{
+  "about": {
+    "reportBug": "Reportar un error"
+  },
+  "addPackage": {
+    "errorInvalid": "Ingresa un nombre de paquete válido (por ejemplo react, @scope/paquete) o una URL de npm (por ejemplo https://www.npmjs.com/package/react)."
+  },
+  "packageDetail": {
+    "published": "publicadas",
+    "lastPushed": "Última actualización"
+  },
+  "settings": {
+    "syncSubtitle": "Administra la sincronización de datos con Gist"
+  },
+  "sidebar": {
+    "checkForUpdates": "Buscar actualizaciones"
+  }
+}

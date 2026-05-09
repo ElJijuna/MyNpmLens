@@ -5,6 +5,7 @@ const LOCALE_FALLBACKS: Record<Language, string> = {
   de: 'de-DE',
   es: 'es',
   'es-CL': 'es-CL',
+  'es-CO': 'es-CO',
   'es-ES': 'es-ES',
   'es-MX': 'es-MX',
   'es-PE': 'es-PE',
