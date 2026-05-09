@@ -1,3 +1,12 @@
+## [1.14.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.14.0...v1.14.1) (2026-05-09)
+
+### Bug Fixes
+
+* hide switcher grid column in mobile views. ([3794d18](https://github.com/ElJijuna/MyNpmLens/commit/3794d18bc5705da85268b8bf021b767e84100759))
+* update and solve issues in mobile settings. ([3cf4e10](https://github.com/ElJijuna/MyNpmLens/commit/3cf4e106dc872d3b9ac62788607d9c8a6ce1d599))
+* update gist save. ([bd656fd](https://github.com/ElJijuna/MyNpmLens/commit/bd656fd23152c94ea44a12eae5777dcd9b646d1b))
+* update layout sidebar and dashboard issues. ([baf64f9](https://github.com/ElJijuna/MyNpmLens/commit/baf64f9bf140695a51935ece715c7556d3298884))
+
 ## [1.14.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.13.1...v1.14.0) (2026-05-09)
 
 ### Features
