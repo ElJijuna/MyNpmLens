@@ -1,5 +1,6 @@
+import { useMemo } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { useGhCreateGist, useGhUpdateGist } from '@api-hooks/gh'
+import { GitHubClient } from 'gh-api-client'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { favoritesStorage } from '@/store/favorites'
 import { maintainersStorage } from '@/store/maintainers'
@@ -10,9 +11,10 @@ export const GIST_FILENAME = 'mynpmlens.json'
 
 export function usePushToGist() {
   const { user } = useAuth()
-
-  const createGist = useGhCreateGist({ token: user?.githubToken })
-  const updateGist = useGhUpdateGist('', { token: user?.githubToken })
+  const client = useMemo(
+    () => new GitHubClient(user?.githubToken ? { token: user.githubToken } : {}),
+    [user?.githubToken],
+  )
 
   return useMutation({
     mutationFn: async () => {
@@ -29,9 +31,9 @@ export function usePushToGist() {
       const storedId = await getGistId(user.uid)
 
       if (storedId) {
-        await updateGist.mutateAsync({ files })
+        await client.gist(storedId).update({ files })
       } else {
-        const created = await createGist.mutateAsync({
+        const created = await client.createGist({
           description: 'MyNpmLens sync',
           public: false,
           files,
