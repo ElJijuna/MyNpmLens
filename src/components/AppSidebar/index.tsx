@@ -12,7 +12,6 @@ import {
   Icon,
   Spinner,
   Text,
-  useBreakpoint,
   Box,
   WrapBox,
 } from '@gnome-ui/react'
@@ -27,8 +26,7 @@ export function AppSidebar() {
   const navigate = useNavigate()
   const matchRoute = useMatchRoute()
   const { user } = useAuth()
-  const { closeSidebar, sidebarCollapsed, toggleCollapsed } = useSidebar()
-  const { isNarrow } = useBreakpoint()
+  const { closeSidebar, sidebarOverlay, sidebarCollapsed, toggleCollapsed } = useSidebar()
 
   function go(to: string) {
     void navigate({ to })
@@ -36,7 +34,7 @@ export function AppSidebar() {
   }
 
   function handleToggle() {
-    if (isNarrow) {
+    if (sidebarOverlay) {
       closeSidebar()
     } else {
       toggleCollapsed()
@@ -67,7 +65,7 @@ export function AppSidebar() {
     : upToDate
       ? t('sidebar.upToDate')
       : t('sidebar.checkForUpdates')
-  const isCollapsed = !isNarrow && sidebarCollapsed
+  const isCollapsed = !sidebarOverlay && sidebarCollapsed
 
   return (
     <Sidebar collapsed={isCollapsed}>
@@ -75,7 +73,7 @@ export function AppSidebar() {
         <Button variant="flat" size="sm" onClick={handleToggle} aria-label={t('sidebar.toggleSidebar')}>
           <Icon icon={OpenMenu} />
         </Button>
-        {(!sidebarCollapsed || isNarrow) && (
+        {(!sidebarCollapsed || sidebarOverlay) && (
           <Text variant="caption-heading">{t('sidebar.title')}</Text>
         )}
       </div>

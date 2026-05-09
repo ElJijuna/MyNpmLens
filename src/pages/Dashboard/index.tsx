@@ -107,9 +107,10 @@ export function DashboardPage() {
           </DashboardGrid>
 
           <Box spacing={12}>
-            <WrapBox justify="space-between" align="center">
+            <div className="dashboard-discover-header">
               <Text variant="heading">{t('dashboard.discover')}</Text>
               <InlineViewSwitcher
+                className="dashboard-ranking-switcher"
                 value={rankingView}
                 onValueChange={(value) => setRankingView(value as RankingView)}
                 variant="pill"
@@ -120,7 +121,7 @@ export function DashboardPage() {
                 <InlineViewSwitcherItem name="quality" label={t('dashboard.quality')} icon={Applications} />
                 <InlineViewSwitcherItem name="maintenance" label={t('dashboard.maintenance')} icon={ViewSidebar} />
               </InlineViewSwitcher>
-            </WrapBox>
+            </div>
             <PackageGrid
               names={(rankingData?.objects ?? []).map((item) => item.package.name)}
               isLoading={rankingIsLoading}

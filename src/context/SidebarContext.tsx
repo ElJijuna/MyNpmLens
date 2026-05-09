@@ -4,6 +4,7 @@ interface SidebarContextValue {
   sidebarOpen: boolean
   openSidebar: () => void
   closeSidebar: () => void
+  sidebarOverlay: boolean
   sidebarCollapsed: boolean
   toggleCollapsed: () => void
 }
@@ -12,6 +13,7 @@ const SidebarContext = createContext<SidebarContextValue>({
   sidebarOpen: false,
   openSidebar: () => {},
   closeSidebar: () => {},
+  sidebarOverlay: false,
   sidebarCollapsed: false,
   toggleCollapsed: () => {},
 })
@@ -21,6 +23,7 @@ export function SidebarProvider({
   sidebarOpen,
   openSidebar,
   closeSidebar,
+  sidebarOverlay,
   sidebarCollapsed,
   toggleCollapsed,
 }: {
@@ -28,11 +31,12 @@ export function SidebarProvider({
   sidebarOpen: boolean
   openSidebar: () => void
   closeSidebar: () => void
+  sidebarOverlay: boolean
   sidebarCollapsed: boolean
   toggleCollapsed: () => void
 }) {
   return (
-    <SidebarContext.Provider value={{ sidebarOpen, openSidebar, closeSidebar, sidebarCollapsed, toggleCollapsed }}>
+    <SidebarContext.Provider value={{ sidebarOpen, openSidebar, closeSidebar, sidebarOverlay, sidebarCollapsed, toggleCollapsed }}>
       {children}
     </SidebarContext.Provider>
   )

@@ -4,6 +4,55 @@
   z-index: 100;
 }
 
+.app-shell {
+  height: 100%;
+  min-width: 0;
+}
+
+.app-shell--overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.app-shell__content {
+  height: 100%;
+  min-width: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  border: 0;
+  padding: 0;
+  background: rgb(0 0 0 / 34%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.app-shell__sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 200;
+  width: min(84vw, 320px);
+  max-width: 100%;
+  transform: translateX(-100%);
+  transition: transform 180ms ease;
+}
+
+.app-shell[data-sidebar-open='true'] .app-shell__backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.app-shell[data-sidebar-open='true'] .app-shell__sidebar {
+  transform: translateX(0);
+}
+
 .wide-layout {
   display: flex;
   height: 100%;

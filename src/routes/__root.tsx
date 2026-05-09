@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
-import { OverlaySplitView, useBreakpoint } from '@gnome-ui/react'
 import { OfflineBanner } from '@/components/OfflineBanner'
 import { Toolbar } from '@/components/Toolbar'
 import { AppSidebar } from '@/components/AppSidebar'
@@ -18,44 +17,83 @@ interface RouterContext {
   queryClient: QueryClient
 }
 
+const SIDEBAR_OVERLAY_QUERY = '(max-width: 860px)'
+
+function getSidebarOverlay() {
+  return window.matchMedia(SIDEBAR_OVERLAY_QUERY).matches
+}
+
 function RootLayout() {
   const { status, delta, resolveKeepAll, resolveReplaceWithLocal } = useGistSync()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { isNarrow } = useBreakpoint()
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => window.innerWidth <= 860)
+  const [sidebarOverlay, setSidebarOverlay] = useState(getSidebarOverlay)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(getSidebarOverlay)
   useApplyTheme()
   useApplyLanguage()
   useApplyAccentColor()
   usePageView()
+
+  useEffect(() => {
+    const media = window.matchMedia(SIDEBAR_OVERLAY_QUERY)
+    const updateSidebarMode = () => {
+      const isOverlay = media.matches
+      setSidebarOverlay(isOverlay)
+      if (!isOverlay) setSidebarOpen(false)
+    }
+
+    updateSidebarMode()
+    media.addEventListener('change', updateSidebarMode)
+    return () => media.removeEventListener('change', updateSidebarMode)
+  }, [])
+
+  useEffect(() => {
+    if (!sidebarOverlay || !sidebarOpen) return
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSidebarOpen(false)
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [sidebarOpen, sidebarOverlay])
+
+  const appContent = (
+    <>
+      <OfflineBanner />
+      <Toolbar />
+      <Outlet />
+    </>
+  )
 
   return (
     <SidebarProvider
       sidebarOpen={sidebarOpen}
       openSidebar={() => setSidebarOpen(true)}
       closeSidebar={() => setSidebarOpen(false)}
+      sidebarOverlay={sidebarOverlay}
       sidebarCollapsed={sidebarCollapsed}
       toggleCollapsed={() => setSidebarCollapsed((c) => !c)}
     >
-      {isNarrow ? (
-        <OverlaySplitView
-          sidebar={<AppSidebar />}
-          content={
-            <>
-              <OfflineBanner />
-              <Toolbar />
-              <Outlet />
-            </>
-          }
-          showSidebar={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-        />
+      {sidebarOverlay ? (
+        <div className="app-shell app-shell--overlay" data-sidebar-open={sidebarOpen}>
+          <div className="app-shell__content">
+            {appContent}
+          </div>
+          <button
+            type="button"
+            className="app-shell__backdrop"
+            aria-label="Close sidebar"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <aside className="app-shell__sidebar" aria-hidden={!sidebarOpen}>
+            <AppSidebar />
+          </aside>
+        </div>
       ) : (
         <div className="wide-layout">
           <AppSidebar />
           <div className="wide-layout__content">
-            <OfflineBanner />
-            <Toolbar />
-            <Outlet />
+            {appContent}
           </div>
         </div>
       )}
