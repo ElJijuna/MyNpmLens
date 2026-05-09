@@ -113,6 +113,12 @@ body {
   }
 }
 
+@media (max-width: 600px) and (orientation: portrait) {
+  .layout-switcher-mobile-hidden {
+    display: none;
+  }
+}
+
 /* ─── Scrollbar (Adwaita-style thin) ────────────────────────────── */
 
 ::-webkit-scrollbar {

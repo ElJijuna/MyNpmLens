@@ -34,6 +34,7 @@ export function MaintainersPage() {
               <Text variant="heading">{t('maintainers.title')}</Text>
               <WrapBox childSpacing={8} align="center">
                 <InlineViewSwitcher
+                  className="layout-switcher-mobile-hidden"
                   value={layout}
                   onValueChange={(value) => setLayout(value as DashboardGridLayout)}
                   variant="pill"

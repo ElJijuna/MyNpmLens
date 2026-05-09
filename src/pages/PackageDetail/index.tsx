@@ -98,6 +98,7 @@ export function PackageDetailPage() {
             </WrapBox>
             <WrapBox childSpacing={8} align="center">
               <InlineViewSwitcher
+                className="layout-switcher-mobile-hidden"
                 value={sectionsLayout}
                 onValueChange={(value) => setSectionsLayout(value as DashboardGridLayout)}
                 variant="pill"
