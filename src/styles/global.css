@@ -119,6 +119,12 @@ body {
   }
 }
 
+/* ─── Settings ──────────────────────────────────────────────────── */
+
+.settings-combo-row > div:last-child {
+  min-width: min(195px, 100%);
+}
+
 /* ─── Scrollbar (Adwaita-style thin) ────────────────────────────── */
 
 ::-webkit-scrollbar {

@@ -17,6 +17,7 @@ export function SettingsPage() {
           <PreferencesGroup title={t('settings.appearanceGroup')}>
             <BoxedList>
               <ComboRow
+                className="settings-combo-row"
                 title={t('settings.theme')}
                 subtitle={t('settings.themeSubtitle')}
                 options={[
@@ -32,6 +33,7 @@ export function SettingsPage() {
                 subtitle={t('settings.accentColorSubtitle')}
                 trailing={
                   <ColorPicker
+                    size="sm"
                     value={settings.accentColor}
                     onChange={(color) => updateSettings.mutate({ accentColor: color })}
                   />
@@ -43,6 +45,7 @@ export function SettingsPage() {
           <PreferencesGroup title={t('settings.languageGroup')}>
             <BoxedList>
               <ComboRow
+                className="settings-combo-row"
                 title={t('settings.language')}
                 options={[
                   { value: 'en', label: 'English' },
