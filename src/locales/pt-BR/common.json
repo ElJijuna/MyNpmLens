@@ -1,0 +1,173 @@
+{
+  "sidebar": {
+    "title": "Npm Lens",
+    "home": "Início",
+    "maintainers": "Mantenedores",
+    "settings": "Configurações",
+    "about": "Sobre",
+    "toggleSidebar": "Alternar barra lateral",
+    "checkForUpdates": "Verificar atualizações",
+    "checking": "Verificando…",
+    "upToDate": "Atualizado!",
+    "sync": "Sincronizar"
+  },
+  "sync": {
+    "packagesGroup": "Pacotes",
+    "maintainersGroup": "Mantenedores",
+    "badgeNew": "Novo",
+    "saveToGist": "Salvar no Gist",
+    "addedAt": "Adicionado em {{date}}"
+  },
+  "toolbar": {
+    "toggleSidebar": "Alternar barra lateral",
+    "add": "Adicionar"
+  },
+  "settings": {
+    "title": "Configurações",
+    "appearanceGroup": "Aparência",
+    "theme": "Tema",
+    "themeSubtitle": "Escolha o esquema de cores",
+    "themeSystem": "Padrão do sistema",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "languageGroup": "Idioma",
+    "language": "Idioma",
+    "accentColor": "Cor de destaque",
+    "accentColorSubtitle": "Escolha uma cor de realce para a interface",
+    "dataGroup": "Dados",
+    "syncTitle": "Sincronizar",
+    "syncSubtitle": "Gerenciar sincronização de dados com o Gist"
+  },
+  "dashboard": {
+    "favoritePackages": "Pacotes favoritos",
+    "emptyPackagesTitle": "Nenhum pacote encontrado",
+    "emptyPackagesDescription": "Tente outra palavra-chave, escopo ou ranking.",
+    "add": "Adicionar",
+    "packageLayout": "Layout dos pacotes",
+    "gridView": "Grade",
+    "columnView": "Coluna"
+  },
+  "emptyState": {
+    "title": "Nenhum pacote ainda",
+    "description": "Adicione seus pacotes npm favoritos para acompanhar suas métricas de relance.",
+    "addPackage": "Adicionar pacote"
+  },
+  "packageDetail": {
+    "version": "Versão",
+    "selectVersion": "Selecionar versão",
+    "published": "publicado",
+    "addPackage": "Adicionar pacote",
+    "removePackage": "Remover pacote",
+    "packageInfo": "Info do pacote",
+    "downloads": "Downloads",
+    "lastWeek": "Última semana",
+    "lastMonth": "Último mês",
+    "downloadsLabel": "downloads",
+    "bundleSize": "Tamanho do bundle",
+    "minified": "Minificado",
+    "minifiedGzipped": "Minificado + gzip",
+    "hasSideEffects": "Tem efeitos colaterais",
+    "sideEffectFree": "Sem efeitos colaterais",
+    "github": "GitHub",
+    "stars": "Estrelas",
+    "forks": "Forks",
+    "openIssues": "Issues abertos",
+    "lastPushed": "Último push",
+    "vulnerabilities": "Vulnerabilidades",
+    "noVulnerabilities": "Nenhuma vulnerabilidade conhecida",
+    "forVersion": "para v{{version}}",
+    "score": "Pontuação do pacote",
+    "scoreQuality": "Qualidade",
+    "scorePopularity": "Popularidade",
+    "scoreMaintenance": "Manutenção",
+    "scoreFinal": "Geral",
+    "dependencies": "Dependências",
+    "noDependencies": "Sem dependências",
+    "depsRuntime": "Runtime",
+    "depsDev": "Dev",
+    "depsPeer": "Peer",
+    "depsOptional": "Opcional",
+    "depsDirectCount": "diretas",
+    "depsTransitiveCount": "transitivas",
+    "maintainers": "Mantenedores",
+    "installSize": "Tamanho de instalação",
+    "publishSize": "Tamanho publicado",
+    "files": "Arquivos",
+    "noFiles": "Nenhum arquivo disponível"
+  },
+  "maintainers": {
+    "title": "Mantenedores",
+    "emptyTitle": "Nenhum mantenedor ainda",
+    "emptyDescription": "Siga mantenedores do npm para acompanhar seus pacotes publicados.",
+    "addMaintainer": "Adicionar mantenedor",
+    "add": "Adicionar"
+  },
+  "maintainer": {
+    "unfollow": "Deixar de seguir",
+    "packages": "Pacotes",
+    "totalPackages": "Pacotes totais",
+    "scopedPackages": "Com escopo",
+    "averageScore": "Pontuação média"
+  },
+  "profile": {
+    "signOut": "Sair"
+  },
+  "about": {
+    "title": "MyNpmLens",
+    "description": "Versão {{version}} — Acompanhe pacotes npm, siga mantenedores e fique por dentro do ecossistema.",
+    "githubRepo": "Repositório no GitHub",
+    "reportBug": "Reportar um bug",
+    "changelog": "Histórico de mudanças"
+  },
+  "addPackage": {
+    "title": "Adicionar pacote",
+    "cancel": "Cancelar",
+    "add": "Adicionar",
+    "validating": "Validando…",
+    "placeholder": "react · @scope/pacote · https://www.npmjs.com/package/react",
+    "errorInvalid": "Insira um nome de pacote válido (ex: react, @scope/pacote) ou URL do npm (ex: https://www.npmjs.com/package/react).",
+    "errorAlreadyAdded": "\"{{name}}\" já está na sua lista.",
+    "errorNotFound": "O pacote \"{{name}}\" não foi encontrado no npm.",
+    "errorNetwork": "Não foi possível acessar o registro npm. Verifique sua conexão."
+  },
+  "addMaintainer": {
+    "title": "Adicionar mantenedor",
+    "cancel": "Cancelar",
+    "add": "Adicionar",
+    "searching": "Buscando…",
+    "usernameLabel": "Usuário npm",
+    "usernamePlaceholder": "ex: sindresorhus",
+    "errorAlreadyAdded": "\"{{username}}\" já está na sua lista.",
+    "errorNotFound": "O mantenedor \"{{username}}\" não foi encontrado no npm.",
+    "errorNetwork": "Não foi possível acessar o registro npm. Verifique sua conexão."
+  },
+  "offline": {
+    "title": "Nova versão disponível",
+    "cancel": "Cancelar",
+    "update": "Atualizar",
+    "description": "Uma nova versão do Npm Lens está disponível. Atualize agora para obter os últimos recursos e correções."
+  },
+  "mergeSync": {
+    "title": "Alterações detectadas de outro dispositivo",
+    "replaceCurrent": "Substituir pelo atual",
+    "keepAll": "Manter tudo",
+    "packagesAdded": "Pacotes adicionados em outro dispositivo",
+    "packagesRemoved": "Pacotes removidos em outro dispositivo",
+    "maintainersAdded": "Mantenedores adicionados em outro dispositivo",
+    "maintainersRemoved": "Mantenedores removidos em outro dispositivo"
+  },
+  "auth": {
+    "signInWithGitHub": "Entrar com GitHub",
+    "signOut": "Sair"
+  },
+  "sectionCard": {
+    "error": "Algo deu errado ao carregar esta seção."
+  },
+  "nav": {
+    "home": "Início",
+    "maintainers": "Mantenedores",
+    "about": "Sobre",
+    "profile": "Perfil",
+    "settings": "Configurações"
+  }
+}

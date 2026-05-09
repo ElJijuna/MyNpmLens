@@ -1,0 +1,15 @@
+{
+  "sidebar": {
+    "checkForUpdates": "Buscar actualizaciones"
+  },
+  "settings": {
+    "syncSubtitle": "Administra la sincronización de datos con Gist"
+  },
+  "packageDetail": {
+    "published": "publicado",
+    "lastPushed": "Último envío"
+  },
+  "about": {
+    "reportBug": "Reportar un error"
+  }
+}

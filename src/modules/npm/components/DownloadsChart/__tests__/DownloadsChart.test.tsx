@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { type ReactNode } from 'react'
 import { DownloadsChart } from '../index'
+import * as npmApiHooks from '@api-hooks/npm'
 
 jest.mock('@gnome-ui/charts', () => ({
   BarChart: ({ data, xAxisKey, series }: { data: Record<string, unknown>[]; xAxisKey: string; series: { dataKey: string; name: string }[] }) => (
@@ -19,14 +20,6 @@ jest.mock('@gnome-ui/charts', () => ({
   ),
 }))
 
-jest.mock('@tanstack/react-query', () => ({
-  ...jest.requireActual('@tanstack/react-query'),
-  useQueries: jest.fn(),
-}))
-
-import { useQueries } from '@tanstack/react-query'
-const mockUseQueries = useQueries as jest.Mock
-
 function wrapper({ children }: { children: ReactNode }) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>
@@ -36,46 +29,60 @@ afterEach(() => jest.restoreAllMocks())
 
 describe('DownloadsChart', () => {
   it('renders nothing when no package has data yet', () => {
-    mockUseQueries.mockReturnValue([
-      { data: undefined },
-      { data: undefined },
-      { data: undefined },
-      { data: undefined },
-    ])
+    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads').mockReturnValue({
+      data: undefined,
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
 
     const { container } = render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
     expect(container.firstChild).toBeNull()
   })
 
   it('renders the chart as soon as at least one package has data', () => {
-    mockUseQueries.mockReturnValue([
-      { data: { downloads: 50_000_000 } },
-      { data: { downloads: 200_000_000 } },
-      { data: undefined },
-      { data: undefined },
-    ])
+    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads')
+      .mockReturnValueOnce({
+        data: {
+          react: { downloads: 50_000_000, package: 'react', start: '', end: '' },
+        },
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
+      .mockReturnValueOnce({
+        data: undefined,
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
 
     render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
     expect(screen.getByTestId('bar-chart')).toBeInTheDocument()
   })
 
   it('shows the Downloads heading', () => {
-    mockUseQueries.mockReturnValue([
-      { data: { downloads: 1000 } },
-      { data: { downloads: 4000 } },
-    ])
+    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads')
+      .mockReturnValueOnce({
+        data: {
+          react: { downloads: 1000, package: 'react', start: '', end: '' },
+        },
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
+      .mockReturnValueOnce({
+        data: {
+          react: { downloads: 4000, package: 'react', start: '', end: '' },
+        },
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
 
     render(<DownloadsChart packageNames={['react']} />, { wrapper })
     expect(screen.getByText('Downloads')).toBeInTheDocument()
   })
 
   it('passes correct weekly and monthly values to the chart', () => {
-    mockUseQueries.mockReturnValue([
-      { data: { downloads: 5000 } },
-      { data: { downloads: 20000 } },
-      { data: { downloads: 3000 } },
-      { data: { downloads: 12000 } },
-    ])
+    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads')
+      .mockReturnValueOnce({
+        data: {
+          react: { downloads: 5000, package: 'react', start: '', end: '' },
+          lodash: { downloads: 3000, package: 'lodash', start: '', end: '' },
+        },
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
+      .mockReturnValueOnce({
+        data: {
+          react: { downloads: 20000, package: 'react', start: '', end: '' },
+          lodash: { downloads: 12000, package: 'lodash', start: '', end: '' },
+        },
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
 
     render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
 
@@ -86,16 +93,38 @@ describe('DownloadsChart', () => {
   })
 
   it('defaults missing data to 0 instead of crashing', () => {
-    mockUseQueries.mockReturnValue([
-      { data: { downloads: 1000 } },
-      { data: { downloads: 4000 } },
-      { data: undefined },
-      { data: undefined },
-    ])
+    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads')
+      .mockReturnValueOnce({
+        data: {
+          react: { downloads: 1000, package: 'react', start: '', end: '' },
+        },
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
+      .mockReturnValueOnce({
+        data: {
+          react: { downloads: 4000, package: 'react', start: '', end: '' },
+        },
+      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
 
     render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
 
     expect(screen.getByTestId('lodash-weekly').textContent).toBe('0')
     expect(screen.getByTestId('lodash-monthly').textContent).toBe('0')
+  })
+
+  it('requests weekly and monthly downloads in bulk', () => {
+    const bulkSpy = jest.spyOn(npmApiHooks, 'useNpmBulkDownloads').mockReturnValue({
+      data: undefined,
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
+
+    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper })
+
+    expect(bulkSpy).toHaveBeenNthCalledWith(1, ['react', 'lodash'], {
+      period: 'last-week',
+      enabled: true,
+    })
+    expect(bulkSpy).toHaveBeenNthCalledWith(2, ['react', 'lodash'], {
+      period: 'last-month',
+      enabled: true,
+    })
   })
 })

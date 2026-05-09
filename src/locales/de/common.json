@@ -1,0 +1,173 @@
+{
+  "sidebar": {
+    "title": "Npm Lens",
+    "home": "Startseite",
+    "maintainers": "Betreuer",
+    "settings": "Einstellungen",
+    "about": "Über",
+    "toggleSidebar": "Seitenleiste umschalten",
+    "checkForUpdates": "Nach Updates suchen",
+    "checking": "Wird geprüft…",
+    "upToDate": "Aktuell!",
+    "sync": "Synchronisieren"
+  },
+  "sync": {
+    "packagesGroup": "Pakete",
+    "maintainersGroup": "Betreuer",
+    "badgeNew": "Neu",
+    "saveToGist": "In Gist speichern",
+    "addedAt": "Hinzugefügt am {{date}}"
+  },
+  "toolbar": {
+    "toggleSidebar": "Seitenleiste umschalten",
+    "add": "Hinzufügen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "appearanceGroup": "Darstellung",
+    "theme": "Design",
+    "themeSubtitle": "Farbschema auswählen",
+    "themeSystem": "Systemstandard",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "languageGroup": "Sprache",
+    "language": "Sprache",
+    "accentColor": "Akzentfarbe",
+    "accentColorSubtitle": "Wähle eine Hervorhebungsfarbe für die Oberfläche",
+    "dataGroup": "Daten",
+    "syncTitle": "Synchronisieren",
+    "syncSubtitle": "Datensynchronisation mit Gist verwalten"
+  },
+  "dashboard": {
+    "favoritePackages": "Favoriten",
+    "emptyPackagesTitle": "Keine Pakete gefunden",
+    "emptyPackagesDescription": "Versuche ein anderes Keyword, einen anderen Scope oder ein anderes Ranking.",
+    "add": "Hinzufügen",
+    "packageLayout": "Paketansicht",
+    "gridView": "Raster",
+    "columnView": "Spalte"
+  },
+  "emptyState": {
+    "title": "Noch keine Pakete",
+    "description": "Füge deine npm-Lieblingspakete hinzu, um deren Kennzahlen auf einen Blick zu verfolgen.",
+    "addPackage": "Paket hinzufügen"
+  },
+  "packageDetail": {
+    "version": "Version",
+    "selectVersion": "Version auswählen",
+    "published": "veröffentlicht",
+    "addPackage": "Paket hinzufügen",
+    "removePackage": "Paket entfernen",
+    "packageInfo": "Paketinfo",
+    "downloads": "Downloads",
+    "lastWeek": "Letzte Woche",
+    "lastMonth": "Letzter Monat",
+    "downloadsLabel": "Downloads",
+    "bundleSize": "Bundle-Größe",
+    "minified": "Minifiziert",
+    "minifiedGzipped": "Minifiziert + gzip",
+    "hasSideEffects": "Hat Nebeneffekte",
+    "sideEffectFree": "Ohne Nebeneffekte",
+    "github": "GitHub",
+    "stars": "Sterne",
+    "forks": "Forks",
+    "openIssues": "Offene Issues",
+    "lastPushed": "Letzter Push",
+    "vulnerabilities": "Sicherheitslücken",
+    "noVulnerabilities": "Keine bekannten Sicherheitslücken",
+    "forVersion": "für v{{version}}",
+    "score": "Paketbewertung",
+    "scoreQuality": "Qualität",
+    "scorePopularity": "Beliebtheit",
+    "scoreMaintenance": "Wartung",
+    "scoreFinal": "Gesamt",
+    "dependencies": "Abhängigkeiten",
+    "noDependencies": "Keine Abhängigkeiten",
+    "depsRuntime": "Laufzeit",
+    "depsDev": "Entwicklung",
+    "depsPeer": "Peer",
+    "depsOptional": "Optional",
+    "depsDirectCount": "direkt",
+    "depsTransitiveCount": "transitiv",
+    "maintainers": "Betreuer",
+    "installSize": "Installationsgröße",
+    "publishSize": "Veröffentlichungsgröße",
+    "files": "Dateien",
+    "noFiles": "Keine Dateien verfügbar"
+  },
+  "maintainers": {
+    "title": "Betreuer",
+    "emptyTitle": "Noch keine Betreuer",
+    "emptyDescription": "Folge npm-Betreuern, um ihre veröffentlichten Pakete zu verfolgen.",
+    "addMaintainer": "Betreuer hinzufügen",
+    "add": "Hinzufügen"
+  },
+  "maintainer": {
+    "unfollow": "Entfolgen",
+    "packages": "Pakete",
+    "totalPackages": "Pakete gesamt",
+    "scopedPackages": "Mit Scope",
+    "averageScore": "Durchschnittsscore"
+  },
+  "profile": {
+    "signOut": "Abmelden"
+  },
+  "about": {
+    "title": "MyNpmLens",
+    "description": "Version {{version}} — npm-Pakete verfolgen, Betreuern folgen und im Ökosystem auf dem Laufenden bleiben.",
+    "githubRepo": "GitHub-Repository",
+    "reportBug": "Fehler melden",
+    "changelog": "Änderungsprotokoll"
+  },
+  "addPackage": {
+    "title": "Paket hinzufügen",
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "validating": "Wird überprüft…",
+    "placeholder": "react · @scope/paket · https://www.npmjs.com/package/react",
+    "errorInvalid": "Gib einen gültigen Paketnamen (z. B. react, @scope/paket) oder eine npm-URL (z. B. https://www.npmjs.com/package/react) ein.",
+    "errorAlreadyAdded": "\"{{name}}\" ist bereits in deiner Liste.",
+    "errorNotFound": "Paket \"{{name}}\" wurde auf npm nicht gefunden.",
+    "errorNetwork": "Das npm-Register konnte nicht erreicht werden. Überprüfe deine Verbindung."
+  },
+  "addMaintainer": {
+    "title": "Betreuer hinzufügen",
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "searching": "Wird gesucht…",
+    "usernameLabel": "npm-Benutzername",
+    "usernamePlaceholder": "z. B. sindresorhus",
+    "errorAlreadyAdded": "\"{{username}}\" ist bereits in deiner Liste.",
+    "errorNotFound": "Betreuer \"{{username}}\" wurde auf npm nicht gefunden.",
+    "errorNetwork": "Das npm-Register konnte nicht erreicht werden. Überprüfe deine Verbindung."
+  },
+  "offline": {
+    "title": "Neue Version verfügbar",
+    "cancel": "Abbrechen",
+    "update": "Aktualisieren",
+    "description": "Eine neue Version von Npm Lens ist verfügbar. Jetzt aktualisieren, um die neuesten Funktionen und Fehlerbehebungen zu erhalten."
+  },
+  "mergeSync": {
+    "title": "Änderungen von einem anderen Gerät erkannt",
+    "replaceCurrent": "Durch aktuelles ersetzen",
+    "keepAll": "Alles behalten",
+    "packagesAdded": "Pakete auf einem anderen Gerät hinzugefügt",
+    "packagesRemoved": "Pakete auf einem anderen Gerät entfernt",
+    "maintainersAdded": "Betreuer auf einem anderen Gerät hinzugefügt",
+    "maintainersRemoved": "Betreuer auf einem anderen Gerät entfernt"
+  },
+  "auth": {
+    "signInWithGitHub": "Mit GitHub anmelden",
+    "signOut": "Abmelden"
+  },
+  "sectionCard": {
+    "error": "Beim Laden dieses Abschnitts ist ein Fehler aufgetreten."
+  },
+  "nav": {
+    "home": "Startseite",
+    "maintainers": "Betreuer",
+    "about": "Über",
+    "profile": "Profil",
+    "settings": "Einstellungen"
+  }
+}

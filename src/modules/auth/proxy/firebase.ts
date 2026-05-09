@@ -1,15 +1,20 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
-import { getAnalytics } from 'firebase/analytics'
+import { getAuth, type Auth } from 'firebase/auth'
+import { getAnalytics, type Analytics } from 'firebase/analytics'
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+const apiKey = import.meta.env.VITE_FIREBASE_API_KEY as string | undefined
+
+export let auth: Auth | null = null
+export let analytics: Analytics | null = null
+
+if (apiKey) {
+  const app = initializeApp({
+    apiKey,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  })
+  auth = getAuth(app)
+  analytics = getAnalytics(app)
 }
-
-export const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
-export const analytics = getAnalytics(app)

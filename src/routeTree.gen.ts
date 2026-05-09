@@ -9,14 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SyncRouteImport } from './routes/sync'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MaintainersRouteImport } from './routes/maintainers'
+import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PackagesNameRouteImport } from './routes/packages.$name'
 import { Route as MaintainersUsernameRouteImport } from './routes/maintainers_.$username'
 
+const SyncRoute = SyncRouteImport.update({
+  id: '/sync',
+  path: '/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -30,6 +37,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const MaintainersRoute = MaintainersRouteImport.update({
   id: '/maintainers',
   path: '/maintainers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritesRoute = FavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -56,18 +68,22 @@ const MaintainersUsernameRoute = MaintainersUsernameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/favorites': typeof FavoritesRoute
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
   '/maintainers/$username': typeof MaintainersUsernameRoute
   '/packages/$name': typeof PackagesNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/favorites': typeof FavoritesRoute
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
   '/maintainers/$username': typeof MaintainersUsernameRoute
   '/packages/$name': typeof PackagesNameRoute
 }
@@ -75,9 +91,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/favorites': typeof FavoritesRoute
   '/maintainers': typeof MaintainersRoute
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
+  '/sync': typeof SyncRoute
   '/maintainers_/$username': typeof MaintainersUsernameRoute
   '/packages/$name': typeof PackagesNameRoute
 }
@@ -86,27 +104,33 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/favorites'
     | '/maintainers'
     | '/profile'
     | '/settings'
+    | '/sync'
     | '/maintainers/$username'
     | '/packages/$name'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/favorites'
     | '/maintainers'
     | '/profile'
     | '/settings'
+    | '/sync'
     | '/maintainers/$username'
     | '/packages/$name'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/favorites'
     | '/maintainers'
     | '/profile'
     | '/settings'
+    | '/sync'
     | '/maintainers_/$username'
     | '/packages/$name'
   fileRoutesById: FileRoutesById
@@ -114,15 +138,24 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  FavoritesRoute: typeof FavoritesRoute
   MaintainersRoute: typeof MaintainersRoute
   ProfileRoute: typeof ProfileRoute
   SettingsRoute: typeof SettingsRoute
+  SyncRoute: typeof SyncRoute
   MaintainersUsernameRoute: typeof MaintainersUsernameRoute
   PackagesNameRoute: typeof PackagesNameRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sync': {
+      id: '/sync'
+      path: '/sync'
+      fullPath: '/sync'
+      preLoaderRoute: typeof SyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -142,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/maintainers'
       fullPath: '/maintainers'
       preLoaderRoute: typeof MaintainersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favorites': {
+      id: '/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -178,9 +218,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  FavoritesRoute: FavoritesRoute,
   MaintainersRoute: MaintainersRoute,
   ProfileRoute: ProfileRoute,
   SettingsRoute: SettingsRoute,
+  SyncRoute: SyncRoute,
   MaintainersUsernameRoute: MaintainersUsernameRoute,
   PackagesNameRoute: PackagesNameRoute,
 }

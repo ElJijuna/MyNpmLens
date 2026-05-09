@@ -6,11 +6,9 @@ interface Suggestion { id: string; label: string }
 import { parseNpmUrl } from '@/modules/npm/domain'
 import { useAddFavorite, useFavorites } from '@/modules/npm/hooks'
 import { Analytics } from '@/lib/analytics'
-import { useNpmSearch } from '@api-hooks/npm'
+import { useNpmClient, useNpmSearch } from '@api-hooks/npm'
 import { useDebouncedValue } from '@tanstack/react-pacer'
-import { NpmClient, NpmApiError } from 'npmjs-api-client'
-
-const npmClient = new NpmClient()
+import { NpmApiError } from 'npmjs-api-client'
 
 interface AddPackageModalProps {
   open: boolean
@@ -19,6 +17,7 @@ interface AddPackageModalProps {
 
 export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
   const { t } = useTranslation()
+  const npmClient = useNpmClient()
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | undefined>()
   const [isValidating, setIsValidating] = useState(false)

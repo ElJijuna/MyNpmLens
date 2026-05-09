@@ -7,6 +7,6 @@ export function usePageView() {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
 
   useEffect(() => {
-    logEvent(analytics, 'page_view', { page_path: pathname })
+    if (analytics) logEvent(analytics, 'page_view', { page_path: pathname })
   }, [pathname])
 }

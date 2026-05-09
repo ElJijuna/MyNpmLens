@@ -30,7 +30,7 @@ export function useAddMaintainer() {
   return useMutation({
     mutationFn: async (username: string) => {
       await validateMaintainer(username)
-      maintainersStorage.add(username)
+      await maintainersStorage.add(username)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
@@ -44,9 +44,7 @@ export function useRemoveMaintainer() {
   const pushToGist = usePushToGist()
 
   return useMutation({
-    mutationFn: async (username: string) => {
-      maintainersStorage.remove(username)
-    },
+    mutationFn: (username: string) => maintainersStorage.remove(username),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
       pushToGist.mutate()

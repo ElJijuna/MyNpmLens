@@ -10,6 +10,7 @@ const config: Config = {
     '^firebase/app$': '<rootDir>/src/__mocks__/firebase-app.ts',
     '^firebase/auth$': '<rootDir>/src/__mocks__/firebase-auth.ts',
     '^firebase/analytics$': '<rootDir>/src/__mocks__/firebase-analytics.ts',
+    '^idb$': '<rootDir>/src/__mocks__/idb.ts',
     '^@/modules/auth/proxy/firebase$': '<rootDir>/src/__mocks__/auth-firebase.ts',
     '^@/modules/auth/AuthProvider$': '<rootDir>/src/__mocks__/auth-provider.ts',
     '^@/modules/auth/hooks$': '<rootDir>/src/__mocks__/auth-hooks.ts',

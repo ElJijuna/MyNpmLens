@@ -21,6 +21,8 @@ type SyncStatus = 'idle' | 'syncing' | 'conflict' | 'done' | 'error'
 interface GistSyncState {
   status: SyncStatus
   delta: GistDelta
+  gistFavorites: FavoritePackage[]
+  gistMaintainers: FollowedMaintainer[]
   resolveKeepAll: () => void
   resolveReplaceWithLocal: () => void
 }
@@ -117,21 +119,26 @@ export function useGistSync(): GistSyncState {
       setGistId(found.id)
       // useGhGist picks up the new id and handles the rest
     } else {
-      const favorites = favoritesStorage.getAll()
-      const maintainers = maintainersStorage.getAll()
-      const settings = settingsStorage.get()
-      const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
-      createGist.mutate(
-        { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
-        {
-          onSuccess: (created) => {
-            saveGistId(uid, created.id)
-            setGistId(created.id)
-            setStatus('done')
-          },
-          onError: () => setStatus('error'),
-        },
-      )
+      void Promise.all([
+        favoritesStorage.getAll(),
+        maintainersStorage.getAll(),
+        settingsStorage.get(),
+      ])
+        .then(([favorites, maintainers, settings]) => {
+          const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
+          createGist.mutate(
+            { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
+            {
+              onSuccess: (created) => {
+                saveGistId(uid, created.id)
+                setGistId(created.id)
+                setStatus('done')
+              },
+              onError: () => setStatus('error'),
+            },
+          )
+        })
+        .catch(() => setStatus('error'))
     }
   }, [listsLoaded, gistId, user?.uid, user?.githubToken])
 
@@ -145,28 +152,62 @@ export function useGistSync(): GistSyncState {
   useEffect(() => {
     if (!gistLoaded || !remoteGist) return
 
-    const raw = remoteGist.files[GIST_FILENAME]?.content ?? '{}'
-    const { favorites: remoteFavs, maintainers: remoteMaintainers, settings: remoteSettings } = parseGistContent(raw)
-    const localFavs = favoritesStorage.getAll()
-    const localMaintainers = maintainersStorage.getAll()
-    const computed = computeDelta(localFavs, remoteFavs, localMaintainers, remoteMaintainers)
+    const gist = remoteGist
+    let cancelled = false
 
-    const hasDiff =
-      computed.addedInGist.length > 0 ||
-      computed.removedInGist.length > 0 ||
-      computed.addedMaintainersInGist.length > 0 ||
-      computed.removedMaintainersInGist.length > 0
+    async function compareGist() {
+      const raw = gist.files[GIST_FILENAME]?.content ?? '{}'
+      const { favorites: remoteFavs, maintainers: remoteMaintainers, settings: remoteSettings } = parseGistContent(raw)
+      const [localFavs, localMaintainers] = await Promise.all([
+        favoritesStorage.getAll(),
+        maintainersStorage.getAll(),
+      ])
 
-    if (!hasDiff) {
-      settingsStorage.replace(remoteSettings)
-      queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
-      setStatus('done')
-    } else {
-      setGistFavs(remoteFavs)
-      setGistMaintainers(remoteMaintainers)
-      setGistSettings(remoteSettings)
-      setDelta(computed)
-      setStatus('conflict')
+      if (cancelled) return
+
+      if (localFavs.length === 0 && localMaintainers.length === 0 && (remoteFavs.length > 0 || remoteMaintainers.length > 0)) {
+        const now = new Date().toISOString()
+        await Promise.all([
+          favoritesStorage.replace(remoteFavs.map(f => ({ ...f, addedAt: f.addedAt ?? now }))),
+          maintainersStorage.replace(remoteMaintainers.map(m => ({ ...m, addedAt: m.addedAt ?? now }))),
+          settingsStorage.set(remoteSettings),
+        ])
+        if (cancelled) return
+        queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
+        queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
+        queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
+        setGistFavs(remoteFavs)
+        setGistMaintainers(remoteMaintainers)
+        setStatus('done')
+        return
+      }
+
+      const computed = computeDelta(localFavs, remoteFavs, localMaintainers, remoteMaintainers)
+
+      const hasDiff =
+        computed.addedInGist.length > 0 ||
+        computed.removedInGist.length > 0 ||
+        computed.addedMaintainersInGist.length > 0 ||
+        computed.removedMaintainersInGist.length > 0
+
+      if (!hasDiff) {
+        await settingsStorage.set(remoteSettings)
+        if (cancelled) return
+        queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
+        setStatus('done')
+      } else {
+        setGistFavs(remoteFavs)
+        setGistMaintainers(remoteMaintainers)
+        setGistSettings(remoteSettings)
+        setDelta(computed)
+        setStatus('conflict')
+      }
+    }
+
+    void compareGist().catch(() => setStatus('error'))
+
+    return () => {
+      cancelled = true
     }
   }, [gistLoaded, remoteGist])
 
@@ -174,26 +215,31 @@ export function useGistSync(): GistSyncState {
     if (gistError) setStatus('error')
   }, [gistError])
 
-  function resolveKeepAll() {
+  async function resolveKeepAll() {
     if (!user?.githubToken || !gistId) return
 
-    const localFavs = favoritesStorage.getAll()
+    const localFavs = await favoritesStorage.getAll()
+    const now = new Date().toISOString()
     const mergedFavs = [
       ...localFavs,
-      ...gistFavs.filter((g) => !localFavs.find((l) => l.name === g.name)),
+      ...gistFavs
+        .filter((g) => !localFavs.find((l) => l.name === g.name))
+        .map((g) => ({ ...g, addedAt: g.addedAt ?? now })),
     ]
-    favoritesStorage.replace(mergedFavs)
+    await favoritesStorage.replace(mergedFavs)
     queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
 
-    const localMaintainers = maintainersStorage.getAll()
+    const localMaintainers = await maintainersStorage.getAll()
     const mergedMaintainers = [
       ...localMaintainers,
-      ...gistMaintainers.filter((g) => !localMaintainers.find((l) => l.username === g.username)),
+      ...gistMaintainers
+        .filter((g) => !localMaintainers.find((l) => l.username === g.username))
+        .map((g) => ({ ...g, addedAt: g.addedAt ?? now })),
     ]
-    maintainersStorage.replace(mergedMaintainers)
+    await maintainersStorage.replace(mergedMaintainers)
     queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
 
-    settingsStorage.replace(gistSettings)
+    await settingsStorage.set(gistSettings)
     queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
 
     const content = JSON.stringify({ favorites: mergedFavs, maintainers: mergedMaintainers, settings: gistSettings }, null, 2)
@@ -201,15 +247,17 @@ export function useGistSync(): GistSyncState {
     setStatus('done')
   }
 
-  function resolveReplaceWithLocal() {
+  async function resolveReplaceWithLocal() {
     if (!user?.githubToken || !gistId) return
-    const favorites = favoritesStorage.getAll()
-    const maintainers = maintainersStorage.getAll()
-    const settings = settingsStorage.get()
+    const [favorites, maintainers, settings] = await Promise.all([
+      favoritesStorage.getAll(),
+      maintainersStorage.getAll(),
+      settingsStorage.get(),
+    ])
     const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
     updateGist.mutate({ files: { [GIST_FILENAME]: { content } } })
     setStatus('done')
   }
 
-  return { status, delta, resolveKeepAll, resolveReplaceWithLocal }
+  return { status, delta, gistFavorites: gistFavs, gistMaintainers, resolveKeepAll, resolveReplaceWithLocal }
 }

@@ -2,13 +2,22 @@
   "sidebar": {
     "title": "Npm Lens",
     "home": "Inicio",
+    "favorites": "Favoritos",
     "maintainers": "Mantenedores",
     "settings": "Ajustes",
     "about": "Acerca de",
     "toggleSidebar": "Alternar barra lateral",
     "checkForUpdates": "Buscar actualizaciones",
     "checking": "Verificando…",
-    "upToDate": "¡Al día!"
+    "upToDate": "¡Al día!",
+    "sync": "Sincronización"
+  },
+  "sync": {
+    "packagesGroup": "Paquetes",
+    "maintainersGroup": "Mantenedores",
+    "badgeNew": "Nuevo",
+    "saveToGist": "Guardar en Gist",
+    "addedAt": "Agregado el {{date}}"
   },
   "toolbar": {
     "toggleSidebar": "Alternar barra lateral",
@@ -23,11 +32,43 @@
     "themeLight": "Claro",
     "themeDark": "Oscuro",
     "languageGroup": "Idioma",
-    "language": "Idioma"
+    "language": "Idioma",
+    "accentColor": "Color de acento",
+    "accentColorSubtitle": "Elige un color de resaltado para la interfaz",
+    "dataGroup": "Datos",
+    "syncTitle": "Sincronización",
+    "syncSubtitle": "Administrar la sincronización de datos con Gist"
   },
   "dashboard": {
+    "title": "Dashboard",
+    "description": "Sigue tu lista de npm y descubre paquetes que vale la pena revisar.",
     "favoritePackages": "Paquetes favoritos",
-    "add": "Agregar"
+    "followedMaintainers": "Mantenedores seguidos",
+    "weeklyDownloads": "Descargas semanales",
+    "viewFavorites": "Ver favoritos",
+    "discover": "Descubrir paquetes",
+    "ranking": "Ranking de paquetes",
+    "topPackages": "Top",
+    "popularity": "Popularidad",
+    "quality": "Calidad",
+    "maintenance": "Mantenimiento",
+    "byKeyword": "Por keyword",
+    "byScope": "Por scope",
+    "keywordPlaceholder": "react · testing · cli",
+    "scopePlaceholder": "@types · @vitejs · @tanstack",
+    "emptyPackagesTitle": "No se encontraron paquetes",
+    "emptyPackagesDescription": "Prueba con otra keyword, scope o ranking.",
+    "add": "Agregar",
+    "packageLayout": "Vista de paquetes",
+    "gridView": "Grid",
+    "columnView": "Columna"
+  },
+  "favorites": {
+    "favoritePackages": "Paquetes favoritos",
+    "add": "Agregar",
+    "packageLayout": "Vista de paquetes",
+    "gridView": "Grid",
+    "columnView": "Columna"
   },
   "emptyState": {
     "title": "Sin paquetes aún",
@@ -38,6 +79,7 @@
     "version": "Versión",
     "selectVersion": "Seleccionar versión",
     "published": "publicadas",
+    "addPackage": "Agregar paquete",
     "removePackage": "Eliminar paquete",
     "packageInfo": "Info del paquete",
     "downloads": "Descargas",
@@ -56,7 +98,25 @@
     "lastPushed": "Último push",
     "vulnerabilities": "Vulnerabilidades",
     "noVulnerabilities": "Sin vulnerabilidades conocidas",
-    "forVersion": "para v{{version}}"
+    "forVersion": "para v{{version}}",
+    "score": "Puntuación del paquete",
+    "scoreQuality": "Calidad",
+    "scorePopularity": "Popularidad",
+    "scoreMaintenance": "Mantenimiento",
+    "scoreFinal": "General",
+    "dependencies": "Dependencias",
+    "noDependencies": "Sin dependencias",
+    "depsRuntime": "Runtime",
+    "depsDev": "Dev",
+    "depsPeer": "Peer",
+    "depsOptional": "Opcional",
+    "depsDirectCount": "directas",
+    "depsTransitiveCount": "transitivas",
+    "maintainers": "Mantenedores",
+    "installSize": "Tamaño de instalación",
+    "publishSize": "Tamaño publicado",
+    "files": "Archivos",
+    "noFiles": "Sin archivos disponibles"
   },
   "maintainers": {
     "title": "Mantenedores",
@@ -67,7 +127,10 @@
   },
   "maintainer": {
     "unfollow": "Dejar de seguir",
-    "packages": "Paquetes"
+    "packages": "Paquetes",
+    "totalPackages": "Paquetes totales",
+    "scopedPackages": "Con scope",
+    "averageScore": "Score promedio"
   },
   "profile": {
     "signOut": "Cerrar sesión"
@@ -125,6 +188,7 @@
   },
   "nav": {
     "home": "Inicio",
+    "favorites": "Favoritos",
     "maintainers": "Mantenedores",
     "about": "Acerca de",
     "profile": "Perfil",

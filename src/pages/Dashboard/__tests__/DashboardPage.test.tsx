@@ -4,7 +4,6 @@ import { type ReactNode } from 'react'
 import { DashboardPage } from '../index'
 import * as npmHooks from '@/modules/npm/hooks'
 import * as npmApiHooks from '@api-hooks/npm'
-import * as bpHooks from '@api-hooks/bp'
 
 jest.mock('@tanstack/react-router', () => ({
   useRouter: () => ({ history: { back: jest.fn() } }),
@@ -33,17 +32,25 @@ beforeEach(() => {
 afterEach(() => jest.restoreAllMocks())
 
 describe('DashboardPage', () => {
-  it('shows EmptyState when favorites list is empty', async () => {
+  it('shows the new dashboard overview', async () => {
     jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
       data: [],
       isSuccess: true,
     } as unknown as ReturnType<typeof npmHooks.useFavorites>)
+    jest.spyOn(npmHooks, 'useMaintainers').mockReturnValue({
+      data: [],
+      isSuccess: true,
+    } as unknown as ReturnType<typeof npmHooks.useMaintainers>)
+    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads').mockReturnValue({
+      data: undefined,
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
 
     render(<DashboardPage />, { wrapper })
-    expect(screen.getByText('No packages yet')).toBeInTheDocument()
+    expect(screen.getByText('Dashboard')).toBeInTheDocument()
+    expect(screen.getByText('Discover packages')).toBeInTheDocument()
   })
 
-  it('renders package cards when favorites exist', () => {
+  it('renders summary metrics when saved data exists', () => {
     jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
       data: [
         { name: 'react', addedAt: '2024-01-01T00:00:00.000Z' },
@@ -51,12 +58,21 @@ describe('DashboardPage', () => {
       ],
       isSuccess: true,
     } as unknown as ReturnType<typeof npmHooks.useFavorites>)
-    jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmApiHooks.useNpmPackage>)
-    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
-    jest.spyOn(bpHooks, 'useBpPackageSize').mockReturnValue({ data: undefined } as unknown as ReturnType<typeof bpHooks.useBpPackageSize>)
+    jest.spyOn(npmHooks, 'useMaintainers').mockReturnValue({
+      data: [{ username: 'sindresorhus', addedAt: '2024-01-03T00:00:00.000Z' }],
+      isSuccess: true,
+    } as unknown as ReturnType<typeof npmHooks.useMaintainers>)
+    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads').mockReturnValue({
+      data: {
+        react: { downloads: 1000, package: 'react', start: '', end: '' },
+        lodash: { downloads: 2000, package: 'lodash', start: '', end: '' },
+      },
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
 
     render(<DashboardPage />, { wrapper })
-    expect(screen.queryByText('No packages yet')).not.toBeInTheDocument()
+    expect(screen.getByText('Favorite Packages')).toBeInTheDocument()
+    expect(screen.getByText('Followed Maintainers')).toBeInTheDocument()
+    expect(screen.getByText('Weekly downloads')).toBeInTheDocument()
   })
 
   it('shows the Add package modal when toolbar button is clicked', () => {
@@ -64,22 +80,14 @@ describe('DashboardPage', () => {
       data: [],
       isSuccess: true,
     } as unknown as ReturnType<typeof npmHooks.useFavorites>)
-
-    render(<DashboardPage />, { wrapper })
-    const addBtn = screen.getAllByText(/add package/i)[0]
-    fireEvent.click(addBtn.closest('button')!)
-    expect(screen.getAllByText(/add package/i).length).toBeGreaterThan(1)
-  })
-
-  it('hides the Toolbar when isGnomeWebView is true', () => {
-    mockUsePlatform.mockReturnValue({ isGnomeWebView: true })
-    jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
+    jest.spyOn(npmHooks, 'useMaintainers').mockReturnValue({
       data: [],
       isSuccess: true,
-    } as unknown as ReturnType<typeof npmHooks.useFavorites>)
+    } as unknown as ReturnType<typeof npmHooks.useMaintainers>)
 
     render(<DashboardPage />, { wrapper })
-    expect(screen.queryByRole('banner')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByText('Add').closest('button')!)
+    expect(screen.getByRole('dialog', { hidden: true, name: /add package/i })).toBeInTheDocument()
   })
 
   it('opens the Add package modal when the open-dialog-addpackage native event fires', () => {
@@ -87,6 +95,10 @@ describe('DashboardPage', () => {
       data: [],
       isSuccess: true,
     } as unknown as ReturnType<typeof npmHooks.useFavorites>)
+    jest.spyOn(npmHooks, 'useMaintainers').mockReturnValue({
+      data: [],
+      isSuccess: true,
+    } as unknown as ReturnType<typeof npmHooks.useMaintainers>)
 
     let capturedHandler: (() => void) | undefined
     mockUseNativeEvent.mockImplementation((type: string, handler: () => void) => {
@@ -101,6 +113,6 @@ describe('DashboardPage', () => {
       capturedHandler?.()
     })
 
-    expect(screen.getAllByText(/add package/i).length).toBeGreaterThan(1)
+    expect(screen.getByRole('dialog', { hidden: true, name: /add package/i })).toBeInTheDocument()
   })
 })

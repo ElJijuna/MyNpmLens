@@ -59,20 +59,6 @@ body {
   }
 }
 
-/* ─── Package grid ───────────────────────────────────────────────── */
-
-.package-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--gnome-space-3, 1rem);
-}
-
-@media (min-width: 480px) {
-  .package-grid {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  }
-}
-
 /* ─── Maintainer grid ────────────────────────────────────────────── */
 
 .maintainer-grid {

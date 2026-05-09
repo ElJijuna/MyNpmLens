@@ -1,0 +1,173 @@
+{
+  "sidebar": {
+    "title": "Npm Lens",
+    "home": "Accueil",
+    "maintainers": "Mainteneurs",
+    "settings": "Paramètres",
+    "about": "À propos",
+    "toggleSidebar": "Afficher ou masquer la barre latérale",
+    "checkForUpdates": "Rechercher des mises à jour",
+    "checking": "Vérification…",
+    "upToDate": "À jour !",
+    "sync": "Synchronisation"
+  },
+  "sync": {
+    "packagesGroup": "Paquets",
+    "maintainersGroup": "Mainteneurs",
+    "badgeNew": "Nouveau",
+    "saveToGist": "Enregistrer dans Gist",
+    "addedAt": "Ajouté le {{date}}"
+  },
+  "toolbar": {
+    "toggleSidebar": "Afficher ou masquer la barre latérale",
+    "add": "Ajouter"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "appearanceGroup": "Apparence",
+    "theme": "Thème",
+    "themeSubtitle": "Choisissez le jeu de couleurs",
+    "themeSystem": "Valeur par défaut du système",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
+    "languageGroup": "Langue",
+    "language": "Langue",
+    "accentColor": "Couleur d'accent",
+    "accentColorSubtitle": "Choisissez une couleur de mise en avant pour l'interface",
+    "dataGroup": "Données",
+    "syncTitle": "Synchronisation",
+    "syncSubtitle": "Gérer la synchronisation des données avec Gist"
+  },
+  "dashboard": {
+    "favoritePackages": "Paquets favoris",
+    "emptyPackagesTitle": "Aucun paquet trouvé",
+    "emptyPackagesDescription": "Essayez un autre mot-clé, scope ou classement.",
+    "add": "Ajouter",
+    "packageLayout": "Disposition des paquets",
+    "gridView": "Grille",
+    "columnView": "Colonne"
+  },
+  "emptyState": {
+    "title": "Aucun paquet pour l'instant",
+    "description": "Ajoutez vos paquets npm favoris pour suivre leurs métriques en un coup d'oeil.",
+    "addPackage": "Ajouter un paquet"
+  },
+  "packageDetail": {
+    "version": "Version",
+    "selectVersion": "Sélectionner une version",
+    "published": "publiée",
+    "addPackage": "Ajouter un paquet",
+    "removePackage": "Supprimer le paquet",
+    "packageInfo": "Informations du paquet",
+    "downloads": "Téléchargements",
+    "lastWeek": "Semaine dernière",
+    "lastMonth": "Mois dernier",
+    "downloadsLabel": "téléchargements",
+    "bundleSize": "Taille du bundle",
+    "minified": "Minifié",
+    "minifiedGzipped": "Minifié + gzip",
+    "hasSideEffects": "A des effets de bord",
+    "sideEffectFree": "Sans effets de bord",
+    "github": "GitHub",
+    "stars": "Étoiles",
+    "forks": "Forks",
+    "openIssues": "Issues ouvertes",
+    "lastPushed": "Dernier push",
+    "vulnerabilities": "Vulnérabilités",
+    "noVulnerabilities": "Aucune vulnérabilité connue",
+    "forVersion": "pour v{{version}}",
+    "score": "Score du paquet",
+    "scoreQuality": "Qualité",
+    "scorePopularity": "Popularité",
+    "scoreMaintenance": "Maintenance",
+    "scoreFinal": "Global",
+    "dependencies": "Dépendances",
+    "noDependencies": "Aucune dépendance",
+    "depsRuntime": "Exécution",
+    "depsDev": "Développement",
+    "depsPeer": "Pair",
+    "depsOptional": "Optionnelle",
+    "depsDirectCount": "directes",
+    "depsTransitiveCount": "transitives",
+    "maintainers": "Mainteneurs",
+    "installSize": "Taille d'installation",
+    "publishSize": "Taille publiée",
+    "files": "Fichiers",
+    "noFiles": "Aucun fichier disponible"
+  },
+  "maintainers": {
+    "title": "Mainteneurs",
+    "emptyTitle": "Aucun mainteneur pour l'instant",
+    "emptyDescription": "Suivez des mainteneurs npm pour suivre leurs paquets publiés.",
+    "addMaintainer": "Ajouter un mainteneur",
+    "add": "Ajouter"
+  },
+  "maintainer": {
+    "unfollow": "Ne plus suivre",
+    "packages": "Paquets",
+    "totalPackages": "Paquets au total",
+    "scopedPackages": "Avec scope",
+    "averageScore": "Score moyen"
+  },
+  "profile": {
+    "signOut": "Se déconnecter"
+  },
+  "about": {
+    "title": "MyNpmLens",
+    "description": "Version {{version}} — Suivez des paquets npm, des mainteneurs, et restez à jour avec l'écosystème.",
+    "githubRepo": "Dépôt GitHub",
+    "reportBug": "Signaler un bug",
+    "changelog": "Journal des modifications"
+  },
+  "addPackage": {
+    "title": "Ajouter un paquet",
+    "cancel": "Annuler",
+    "add": "Ajouter",
+    "validating": "Validation…",
+    "placeholder": "react · @scope/package · https://www.npmjs.com/package/react",
+    "errorInvalid": "Saisissez un nom de paquet valide (ex. react, @scope/package) ou une URL npm (ex. https://www.npmjs.com/package/react).",
+    "errorAlreadyAdded": "\"{{name}}\" est déjà dans votre liste.",
+    "errorNotFound": "Le paquet \"{{name}}\" est introuvable sur npm.",
+    "errorNetwork": "Impossible de joindre le registre npm. Vérifiez votre connexion."
+  },
+  "addMaintainer": {
+    "title": "Ajouter un mainteneur",
+    "cancel": "Annuler",
+    "add": "Ajouter",
+    "searching": "Recherche…",
+    "usernameLabel": "Nom d'utilisateur npm",
+    "usernamePlaceholder": "ex. sindresorhus",
+    "errorAlreadyAdded": "\"{{username}}\" est déjà dans votre liste.",
+    "errorNotFound": "Le mainteneur \"{{username}}\" est introuvable sur npm.",
+    "errorNetwork": "Impossible de joindre le registre npm. Vérifiez votre connexion."
+  },
+  "offline": {
+    "title": "Nouvelle version disponible",
+    "cancel": "Annuler",
+    "update": "Mettre à jour",
+    "description": "Une nouvelle version de Npm Lens est disponible. Mettez à jour maintenant pour obtenir les dernières fonctionnalités et corrections."
+  },
+  "mergeSync": {
+    "title": "Changements détectés depuis un autre appareil",
+    "replaceCurrent": "Remplacer par l'actuel",
+    "keepAll": "Tout conserver",
+    "packagesAdded": "Paquets ajoutés sur un autre appareil",
+    "packagesRemoved": "Paquets supprimés sur un autre appareil",
+    "maintainersAdded": "Mainteneurs ajoutés sur un autre appareil",
+    "maintainersRemoved": "Mainteneurs supprimés sur un autre appareil"
+  },
+  "auth": {
+    "signInWithGitHub": "Se connecter avec GitHub",
+    "signOut": "Se déconnecter"
+  },
+  "sectionCard": {
+    "error": "Une erreur est survenue pendant le chargement de cette section."
+  },
+  "nav": {
+    "home": "Accueil",
+    "maintainers": "Mainteneurs",
+    "about": "À propos",
+    "profile": "Profil",
+    "settings": "Paramètres"
+  }
+}

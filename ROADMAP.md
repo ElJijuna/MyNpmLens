@@ -769,3 +769,324 @@ const asyncStoragePersister = createAsyncStoragePersister({
 | 11 | Autocompletado | Searchbar async en `AddPackageModal` con `@gnome-ui/react` | `components/AddPackageModal/index.tsx` |
 | 12 | Persistencia | `persistQueryClient` con IndexedDB (`idb` ya instalado) | `src/main.tsx`, `src/lib/queryClient.ts` |
 | 13 | Limpieza | Eliminar AppFooter, pulir estilos | `AppFooter/`, `global.css` |
+
+---
+
+## Fase 14 — API Hooks upgrade, nuevos charts y mejoras de navegación
+
+### Motivación
+
+Integrar los hooks nuevos de `@api-hooks/npm` (avatar de maintainer, score de paquete y rango de descargas), aprovechar los charts disponibles en `@gnome-ui/charts` que aún no se usan, refactorizar `PackageDetailPage` con `DashboardGrid`, agregar un color de acento personalizable en Settings, y corregir el comportamiento de la página de paquete cuando se navega desde un maintainer.
+
+---
+
+### 14.1 — Añadir `fromMaintainer` a los search params de la ruta
+
+**Archivo:** `src/routes/packages.$name.tsx`
+
+Extender `validateSearch` con `fromMaintainer?: string`. TanStack Router omite el param del URL cuando es `undefined`, por lo que la navegación desde el Dashboard no se ve afectada.
+
+```ts
+validateSearch: (search: Record<string, unknown>) => ({
+  version: typeof search.version === 'string' ? search.version : undefined,
+  fromMaintainer: typeof search.fromMaintainer === 'string' ? search.fromMaintainer : undefined,
+}),
+```
+
+---
+
+### 14.2 — Propagar contexto desde `PackageCard`
+
+**Archivo:** `src/modules/npm/components/PackageCard/index.tsx`
+
+Añadir prop opcional `fromMaintainer?: string`. Se incluye en `search` al navegar; si es `undefined` el param se omite del URL.
+
+---
+
+### 14.3 — Actualizar `MaintainerPage`
+
+**Archivo:** `src/pages/Maintainer/index.tsx`
+
+- **Avatar real**: usar `useNpmMaintainerAvatar(username)` (retorna URL string, sin llamada de red) y pasarla como `src` al `<Avatar>`.
+- **Contexto al navegar**: `<PackageCard name={name} fromMaintainer={username} />`.
+- **DashboardGrid para CounterCard**: reemplazar el `<div style={{ display: 'grid' }}>` manual por `<DashboardGrid>`.
+
+---
+
+### 14.4 — Botón condicional en `PackageDetailPage`
+
+**Archivo:** `src/pages/PackageDetail/index.tsx`
+
+Leer `fromMaintainer` de `Route.useSearch()`. Importar `useFavorites` y `useAddFavorite` de `@/modules/npm/hooks`.
+
+| Condición | Botón mostrado |
+| --- | --- |
+| Sin `fromMaintainer` | Remove (comportamiento actual) |
+| Con `fromMaintainer` + ya es favorito | Remove |
+| Con `fromMaintainer` + no es favorito | Add to favorites (`variant="suggested"`) |
+
+La clave i18n `packageDetail.addPackage` ya existe en los locales.
+
+---
+
+### 14.5 — Breadcrumb contextual
+
+**Archivo:** `src/hooks/usePathSegments.ts`
+
+Reemplazar `useLocation()` por `useRouterState({ select: (s) => s.location })` para acceder al query string sin acoplar el hook a una ruta específica. Parsear `fromMaintainer` con `URLSearchParams`.
+
+Resultado cuando `fromMaintainer` está presente en `/packages/$name`:
+
+```text
+Maintainers → {username} → {packageName}
+```
+
+(Se omite `Home` para mantener el trail corto en este contexto.)
+
+---
+
+### 14.6 — Layout con `DashboardGrid` en `PackageDetailPage`
+
+**Archivo:** `src/pages/PackageDetail/index.tsx`
+
+Reemplazar la clase CSS `detail-sections` (flex-column) por un `DashboardGrid` interno con la siguiente disposición responsiva (1 col en `sm`, 2 col en `md+`):
+
+| span | Sección |
+| --- | --- |
+| 2 | `PackageInfoSection` |
+| 1 | `ScoreSection` (nueva) |
+| 1 | `DownloadsSection` |
+| 1 | `BundleSizeSection` |
+| 1 | `GitHubSection` |
+| 2 | `VulnerabilitySection` |
+
+El selector de versión y el botón de acción quedan fuera del grid (arriba y abajo respectivamente).
+
+---
+
+### 14.7 — `AreaChart` en `DownloadsSection`
+
+**Archivo:** `src/pages/PackageDetail/sections/DownloadsSection.tsx`
+
+Añadir `useNpmPackageDownloadRange(name, { period: 'last-month' })`.  
+Datos: `NpmDownloadDay[]` — `{ day: string, downloads: number }`.  
+Renderizar con `AreaChart` de `@gnome-ui/charts` debajo del resumen numérico existente.
+
+```tsx
+<AreaChart
+  data={chartData}
+  xAxisKey="day"
+  series={[{ dataKey: 'downloads', name: t('packageDetail.downloadsLabel') }]}
+  height={200}
+  showGrid
+  gradient
+/>
+```
+
+---
+
+### 14.8 — Nueva `ScoreSection` con `RadialBarChart`
+
+**Archivo nuevo:** `src/pages/PackageDetail/sections/ScoreSection.tsx`
+
+Usa `useNpmPackageScore(name)` — retorna `NpmsScore` con `score.detail.{ quality, popularity, maintenance }` (valores 0–1).
+
+```tsx
+<RadialBarChart
+  data={[
+    { label: t('packageDetail.scoreQuality'),     value: Math.round(data.score.detail.quality     * 100) },
+    { label: t('packageDetail.scorePopularity'),  value: Math.round(data.score.detail.popularity  * 100) },
+    { label: t('packageDetail.scoreMaintenance'), value: Math.round(data.score.detail.maintenance * 100) },
+  ]}
+  height={220}
+  showLabels
+  showLegend
+/>
+```
+
+Nuevas claves i18n en `packageDetail`: `score`, `scoreQuality`, `scorePopularity`, `scoreMaintenance`, `scoreFinal`.
+
+---
+
+### 14.9 — Color de acento en Settings
+
+#### 14.9a — Extender `AppSettings`
+
+**Archivo:** `src/modules/settings/domain/AppSettings.ts`
+
+```ts
+export interface AppSettings {
+  theme: 'light' | 'dark' | 'system'
+  language: Language
+  accentColor?: string   // ← nuevo
+}
+```
+
+`DEFAULT_SETTINGS` no cambia; sin valor se aplica el azul GNOME (`#3584e4`) vía fallback CSS.
+
+#### 14.9b — Hook `useApplyAccentColor`
+
+**Archivo nuevo:** `src/hooks/useApplyAccentColor.ts`
+
+Mismo patrón que `useApplyTheme`. Aplica `--gnome-accent-bg-color` sobre `document.documentElement` (variable que `@gnome-ui/react` usa en botones, badges, checkboxes, etc.).
+
+```ts
+useEffect(() => {
+  if (accentColor) {
+    document.documentElement.style.setProperty('--gnome-accent-bg-color', accentColor)
+  } else {
+    document.documentElement.style.removeProperty('--gnome-accent-bg-color')
+  }
+}, [accentColor])
+```
+
+Registrar con `useApplyAccentColor()` en `src/routes/__root.tsx`.
+
+#### 14.9c — `ColorPicker` en `SettingsPage`
+
+**Archivo:** `src/pages/Settings/index.tsx`
+
+Añadir `ActionRow` + `ColorPicker` dentro del `PreferencesGroup` de apariencia existente.  
+`ColorPicker` viene de `@gnome-ui/react` y muestra `GNOME_PALETTE` (9 colores Adwaita) por defecto.  
+Activar `allowCustom` para colores hex arbitrarios.
+
+```tsx
+<ActionRow
+  title={t('settings.accentColor')}
+  subtitle={t('settings.accentColorSubtitle')}
+  trailing={
+    <ColorPicker
+      value={settings.accentColor}
+      onChange={(color) => updateSettings.mutate({ accentColor: color })}
+      allowCustom
+    />
+  }
+/>
+```
+
+Nuevas claves i18n en `settings`: `accentColor`, `accentColorSubtitle`.
+
+---
+
+### 14.10 — Actualizar mocks de test
+
+**`src/__mocks__/api-hooks-npm.ts`** — añadir:
+
+```ts
+export const useNpmMaintainerAvatar = jest.fn(() => 'https://www.npmjs.com/npm-avatar/test')
+export const useNpmPackageScore = jest.fn(() => defaultQuery)
+```
+
+(`useNpmPackageDownloadRange` ya está mockeado.)
+
+**`src/__mocks__/gnome-ui-charts.ts`** — añadir:
+
+```ts
+export const AreaChart = () => null
+export const RadialBarChart = () => null
+```
+
+**`src/pages/PackageDetail/__tests__/PackageDetailPage.test.tsx`** — actualizar mock de `useSearch` para incluir `fromMaintainer: undefined` y añadir casos para el botón condicional.
+
+---
+
+### Archivos afectados
+
+| Archivo | Cambio |
+| --- | --- |
+| `src/routes/packages.$name.tsx` | `fromMaintainer` en `validateSearch` |
+| `src/modules/npm/components/PackageCard/index.tsx` | Prop `fromMaintainer` + navegación |
+| `src/pages/Maintainer/index.tsx` | Avatar real, `fromMaintainer`, DashboardGrid |
+| `src/pages/PackageDetail/index.tsx` | Botón condicional, DashboardGrid interno |
+| `src/hooks/usePathSegments.ts` | `useRouterState`, breadcrumb con `fromMaintainer` |
+| `src/pages/PackageDetail/sections/DownloadsSection.tsx` | `AreaChart` con rango mensual |
+| `src/pages/PackageDetail/sections/ScoreSection.tsx` *(nuevo)* | `RadialBarChart` de scores |
+| `src/modules/settings/domain/AppSettings.ts` | Campo `accentColor` |
+| `src/hooks/useApplyAccentColor.ts` *(nuevo)* | CSS var accent |
+| `src/routes/__root.tsx` | Registrar `useApplyAccentColor` |
+| `src/pages/Settings/index.tsx` | `ActionRow` + `ColorPicker` |
+| `src/locales/*/common.json` | Claves score + accentColor (3 archivos) |
+| `src/__mocks__/api-hooks-npm.ts` | Nuevos mocks |
+| `src/__mocks__/gnome-ui-charts.ts` | `AreaChart`, `RadialBarChart` |
+| `src/pages/PackageDetail/__tests__/PackageDetailPage.test.tsx` | Tests del botón condicional |
+
+---
+
+## Fase 15 — Formateo internacional con `Intl`
+
+Centralizar el formateo de números, fechas, porcentajes y tamaños usando la API nativa
+`Intl`, tomando el idioma activo desde `react-i18next`.
+
+No crear un contexto nuevo de internacionalización: `i18next` ya es la fuente de verdad
+para el idioma seleccionado. La capa nueva debe ser un hook ligero que consuma
+`useTranslation()` y exponga formatters reutilizables.
+
+### Objetivo
+
+- Evitar helpers locales repetidos (`formatNumber`, `formatDate`) en componentes.
+- Usar formato real por idioma para números compactos, fechas y unidades.
+- Mantener separado el texto traducido (`i18next`) del formato de valores (`Intl`).
+- Dar soporte correcto a locales regionales como `es-PE`, `es-CL` y `es-ES`.
+- Usar fallback de formato para idiomas que el navegador no soporte bien, por ejemplo
+  `qu` → `es-PE`.
+
+### Archivos propuestos
+
+| Archivo | Responsabilidad |
+| --- | --- |
+| `src/lib/locale.ts` *(nuevo)* | Resolver el locale de `Intl` desde `i18n.language` |
+| `src/hooks/useFormatters.ts` *(nuevo)* | Exponer helpers memoizados de formato |
+
+### API sugerida
+
+```ts
+const {
+  locale,
+  formatNumber,
+  formatCompactNumber,
+  formatDate,
+  formatPercent,
+  formatBytes,
+} = useFormatters()
+```
+
+Implementación base:
+
+```ts
+export function resolveIntlLocale(language: string): string {
+  if (language === 'qu') return 'es-PE'
+  return Intl.NumberFormat.supportedLocalesOf([language])[0] ?? 'en'
+}
+```
+
+```ts
+new Intl.NumberFormat(locale).format(value)
+
+new Intl.NumberFormat(locale, {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+}).format(value)
+
+new Intl.DateTimeFormat(locale, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+}).format(new Date(value))
+```
+
+### Reemplazos iniciales
+
+| Archivo | Cambio |
+| --- | --- |
+| `src/pages/DataSync/index.tsx` | Reemplazar `formatDate(..., i18n.language)` por `formatDate(...)` |
+| `src/pages/PackageDetail/sections/DownloadsSection.tsx` | Reemplazar `formatNumber` local y `toLocaleString(i18n.language)` |
+| `src/pages/PackageDetail/sections/GitHubSection.tsx` | Reemplazar `formatNumber` y `formatDate` locales |
+| `src/modules/npm/components/PackageCard/index.tsx` | Reemplazar compactación manual `M/k` por `formatCompactNumber` |
+| `src/modules/npm/components/MaintainerCard/index.tsx` | Reemplazar `formatNumber` local |
+
+### Criterios de aceptación
+
+- No quedan helpers `formatNumber` / `formatDate` duplicados en componentes.
+- El cambio de idioma en Settings cambia también fechas y números sin recargar.
+- `qu` no rompe `Intl` y usa `es-PE` como locale de formato.
+- Los tests existentes se actualizan solo donde cambien strings formateados.

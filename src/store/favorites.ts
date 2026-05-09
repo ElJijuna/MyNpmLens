@@ -1,37 +1,29 @@
-/**
- * Raw localStorage persistence layer for favorite packages.
- * Do not use directly from components — use the hooks in modules/npm/hooks instead.
- */
-
+import { getDb } from '@/lib/db'
 import type { FavoritePackage } from '@/modules/npm/domain'
 
-const STORAGE_KEY = 'mynpmlens:favorites'
+const KEY = 'favorites'
 
 export const favoritesStorage = {
-  getAll(): FavoritePackage[] {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      return raw ? (JSON.parse(raw) as FavoritePackage[]) : []
-    } catch {
-      return []
-    }
+  async getAll(): Promise<FavoritePackage[]> {
+    const db = await getDb()
+    return (await db.get('user-data', KEY)) ?? []
   },
 
-  add(name: string): FavoritePackage[] {
-    const current = this.getAll()
-    if (current.some((p) => p.name === name)) return current
-    const updated = [...current, { name, addedAt: new Date().toISOString() }]
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-    return updated
+  async add(name: string): Promise<void> {
+    const db = await getDb()
+    const all = await this.getAll()
+    if (all.some((p) => p.name === name)) return
+    await db.put('user-data', [...all, { name, addedAt: new Date().toISOString() }], KEY)
   },
 
-  remove(name: string): FavoritePackage[] {
-    const updated = this.getAll().filter((p) => p.name !== name)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-    return updated
+  async remove(name: string): Promise<void> {
+    const db = await getDb()
+    const updated = (await this.getAll()).filter((p) => p.name !== name)
+    await db.put('user-data', updated, KEY)
   },
 
-  replace(favorites: FavoritePackage[]): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites))
+  async replace(favorites: FavoritePackage[]): Promise<void> {
+    const db = await getDb()
+    await db.put('user-data', favorites, KEY)
   },
 }

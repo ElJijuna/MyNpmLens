@@ -1,0 +1,173 @@
+{
+  "sidebar": {
+    "title": "Npm Lens",
+    "home": "首页",
+    "maintainers": "维护者",
+    "settings": "设置",
+    "about": "关于",
+    "toggleSidebar": "切换侧边栏",
+    "checkForUpdates": "检查更新",
+    "checking": "检查中…",
+    "upToDate": "已是最新！",
+    "sync": "同步"
+  },
+  "sync": {
+    "packagesGroup": "包",
+    "maintainersGroup": "维护者",
+    "badgeNew": "新",
+    "saveToGist": "保存到 Gist",
+    "addedAt": "添加于 {{date}}"
+  },
+  "toolbar": {
+    "toggleSidebar": "切换侧边栏",
+    "add": "添加"
+  },
+  "settings": {
+    "title": "设置",
+    "appearanceGroup": "外观",
+    "theme": "主题",
+    "themeSubtitle": "选择配色方案",
+    "themeSystem": "跟随系统",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "languageGroup": "语言",
+    "language": "语言",
+    "accentColor": "强调色",
+    "accentColorSubtitle": "为界面选择一种高亮颜色",
+    "dataGroup": "数据",
+    "syncTitle": "同步",
+    "syncSubtitle": "管理与 Gist 的数据同步"
+  },
+  "dashboard": {
+    "favoritePackages": "收藏的包",
+    "emptyPackagesTitle": "未找到包",
+    "emptyPackagesDescription": "试试其他关键词、scope 或排名。",
+    "add": "添加",
+    "packageLayout": "包布局",
+    "gridView": "网格",
+    "columnView": "列表"
+  },
+  "emptyState": {
+    "title": "暂无包",
+    "description": "添加你喜欢的 npm 包，一眼掌握它们的数据。",
+    "addPackage": "添加包"
+  },
+  "packageDetail": {
+    "version": "版本",
+    "selectVersion": "选择版本",
+    "published": "已发布",
+    "addPackage": "添加包",
+    "removePackage": "移除包",
+    "packageInfo": "包信息",
+    "downloads": "下载量",
+    "lastWeek": "上周",
+    "lastMonth": "上月",
+    "downloadsLabel": "次下载",
+    "bundleSize": "Bundle 大小",
+    "minified": "已压缩",
+    "minifiedGzipped": "压缩 + gzip",
+    "hasSideEffects": "有副作用",
+    "sideEffectFree": "无副作用",
+    "github": "GitHub",
+    "stars": "星标",
+    "forks": "Forks",
+    "openIssues": "未解决 Issues",
+    "lastPushed": "最近推送",
+    "vulnerabilities": "安全漏洞",
+    "noVulnerabilities": "无已知安全漏洞",
+    "forVersion": "适用于 v{{version}}",
+    "score": "包评分",
+    "scoreQuality": "质量",
+    "scorePopularity": "流行度",
+    "scoreMaintenance": "维护",
+    "scoreFinal": "综合",
+    "dependencies": "依赖",
+    "noDependencies": "无依赖",
+    "depsRuntime": "运行时",
+    "depsDev": "开发",
+    "depsPeer": "对等",
+    "depsOptional": "可选",
+    "depsDirectCount": "直接",
+    "depsTransitiveCount": "间接",
+    "maintainers": "维护者",
+    "installSize": "安装大小",
+    "publishSize": "发布大小",
+    "files": "文件",
+    "noFiles": "暂无文件"
+  },
+  "maintainers": {
+    "title": "维护者",
+    "emptyTitle": "暂无维护者",
+    "emptyDescription": "关注 npm 维护者，追踪他们发布的包。",
+    "addMaintainer": "添加维护者",
+    "add": "添加"
+  },
+  "maintainer": {
+    "unfollow": "取消关注",
+    "packages": "包",
+    "totalPackages": "包总数",
+    "scopedPackages": "带 scope",
+    "averageScore": "平均评分"
+  },
+  "profile": {
+    "signOut": "退出登录"
+  },
+  "about": {
+    "title": "MyNpmLens",
+    "description": "版本 {{version}} — 追踪 npm 包，关注维护者，掌握生态动态。",
+    "githubRepo": "GitHub 仓库",
+    "reportBug": "反馈问题",
+    "changelog": "更新日志"
+  },
+  "addPackage": {
+    "title": "添加包",
+    "cancel": "取消",
+    "add": "添加",
+    "validating": "验证中…",
+    "placeholder": "react · @scope/package · https://www.npmjs.com/package/react",
+    "errorInvalid": "请输入有效的包名（如 react、@scope/package）或 npm URL（如 https://www.npmjs.com/package/react）。",
+    "errorAlreadyAdded": "\"{{name}}\" 已在你的列表中。",
+    "errorNotFound": "在 npm 上未找到包 \"{{name}}\"。",
+    "errorNetwork": "无法连接到 npm 注册表，请检查你的网络连接。"
+  },
+  "addMaintainer": {
+    "title": "添加维护者",
+    "cancel": "取消",
+    "add": "添加",
+    "searching": "搜索中…",
+    "usernameLabel": "npm 用户名",
+    "usernamePlaceholder": "如 sindresorhus",
+    "errorAlreadyAdded": "\"{{username}}\" 已在你的列表中。",
+    "errorNotFound": "在 npm 上未找到维护者 \"{{username}}\"。",
+    "errorNetwork": "无法连接到 npm 注册表，请检查你的网络连接。"
+  },
+  "offline": {
+    "title": "有新版本可用",
+    "cancel": "取消",
+    "update": "立即更新",
+    "description": "Npm Lens 有新版本可用，立即更新以获取最新功能和修复。"
+  },
+  "mergeSync": {
+    "title": "检测到来自其他设备的变更",
+    "replaceCurrent": "替换为当前",
+    "keepAll": "全部保留",
+    "packagesAdded": "在其他设备上添加的包",
+    "packagesRemoved": "在其他设备上移除的包",
+    "maintainersAdded": "在其他设备上添加的维护者",
+    "maintainersRemoved": "在其他设备上移除的维护者"
+  },
+  "auth": {
+    "signInWithGitHub": "使用 GitHub 登录",
+    "signOut": "退出登录"
+  },
+  "sectionCard": {
+    "error": "加载此部分时出错。"
+  },
+  "nav": {
+    "home": "首页",
+    "maintainers": "维护者",
+    "about": "关于",
+    "profile": "个人资料",
+    "settings": "设置"
+  }
+}

@@ -1,23 +1,18 @@
+import { getDb } from '@/lib/db'
 import type { AppSettings } from '@/modules/settings/domain'
 import { DEFAULT_SETTINGS } from '@/modules/settings/domain'
 
-const STORAGE_KEY = 'mynpmlens:settings'
+const KEY = 'settings'
 
 export const settingsStorage = {
-  get(): AppSettings {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      return raw ? { ...DEFAULT_SETTINGS, ...(JSON.parse(raw) as Partial<AppSettings>) } : DEFAULT_SETTINGS
-    } catch {
-      return DEFAULT_SETTINGS
-    }
+  async get(): Promise<AppSettings> {
+    const db = await getDb()
+    const raw = await db.get('user-data', KEY)
+    return { ...DEFAULT_SETTINGS, ...(raw ?? {}) }
   },
 
-  set(settings: AppSettings): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
-  },
-
-  replace(settings: AppSettings): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
+  async set(settings: AppSettings): Promise<void> {
+    const db = await getDb()
+    await db.put('user-data', settings, KEY)
   },
 }

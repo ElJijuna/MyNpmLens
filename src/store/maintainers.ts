@@ -1,29 +1,29 @@
+import { getDb } from '@/lib/db'
 import type { FollowedMaintainer } from '@/modules/npm/domain'
 
-const STORAGE_KEY = 'mynpmlens:maintainers'
+const KEY = 'maintainers'
 
 export const maintainersStorage = {
-  getAll(): FollowedMaintainer[] {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      return raw ? (JSON.parse(raw) as FollowedMaintainer[]) : []
-    } catch {
-      return []
-    }
+  async getAll(): Promise<FollowedMaintainer[]> {
+    const db = await getDb()
+    return (await db.get('user-data', KEY)) ?? []
   },
 
-  add(username: string): void {
-    const current = this.getAll()
-    if (current.some((m) => m.username === username)) return
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...current, { username }]))
+  async add(username: string): Promise<void> {
+    const db = await getDb()
+    const all = await this.getAll()
+    if (all.some((m) => m.username === username)) return
+    await db.put('user-data', [...all, { username, addedAt: new Date().toISOString() }], KEY)
   },
 
-  remove(username: string): void {
-    const updated = this.getAll().filter((m) => m.username !== username)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+  async remove(username: string): Promise<void> {
+    const db = await getDb()
+    const updated = (await this.getAll()).filter((m) => m.username !== username)
+    await db.put('user-data', updated, KEY)
   },
 
-  replace(items: FollowedMaintainer[]): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+  async replace(items: FollowedMaintainer[]): Promise<void> {
+    const db = await getDb()
+    await db.put('user-data', items, KEY)
   },
 }

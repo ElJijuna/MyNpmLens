@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import type { ManifestOptions } from 'vite-plugin-pwa'
 import path from 'path'
 
 export default defineConfig(({ command }) => {
@@ -66,7 +67,7 @@ export default defineConfig(({ command }) => {
               orientation: 'landscape',
               label: 'Package Details - Versions',
             },
-          ] as any[],
+          ] as Array<ManifestOptions['screenshots'][number] & { orientation: string }>,
           icons: [
             {
               src: 'pwa-192x192.png',
@@ -87,6 +88,7 @@ export default defineConfig(({ command }) => {
           ],
         },
         workbox: {
+          maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
           runtimeCaching: [
             {

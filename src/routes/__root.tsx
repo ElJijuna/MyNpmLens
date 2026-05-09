@@ -3,12 +3,14 @@ import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
 import { OverlaySplitView, useBreakpoint } from '@gnome-ui/react'
 import { OfflineBanner } from '@/components/OfflineBanner'
+import { Toolbar } from '@/components/Toolbar'
 import { AppSidebar } from '@/components/AppSidebar'
 import { SidebarProvider } from '@/context/SidebarContext'
 import { useGistSync } from '@/modules/gist/hooks'
 import { MergeSyncDialog } from '@/modules/gist/components/MergeSyncDialog'
 import { useApplyTheme } from '@/hooks/useApplyTheme'
 import { useApplyLanguage } from '@/hooks/useApplyLanguage'
+import { useApplyAccentColor } from '@/hooks/useApplyAccentColor'
 import { usePageView } from '@/hooks/usePageView'
 import '@/app.css'
 
@@ -23,6 +25,7 @@ function RootLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => window.innerWidth <= 860)
   useApplyTheme()
   useApplyLanguage()
+  useApplyAccentColor()
   usePageView()
 
   return (
@@ -39,6 +42,7 @@ function RootLayout() {
           content={
             <>
               <OfflineBanner />
+              <Toolbar />
               <Outlet />
             </>
           }
@@ -50,6 +54,7 @@ function RootLayout() {
           <AppSidebar />
           <div className="wide-layout__content">
             <OfflineBanner />
+            <Toolbar />
             <Outlet />
           </div>
         </div>

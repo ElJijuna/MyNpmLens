@@ -5,11 +5,6 @@ import type { FavoritePackage } from '@/modules/npm/domain'
 
 export const FAVORITES_QUERY_KEY = ['favorites'] as const
 
-/**
- * Returns the list of favorite packages stored in localStorage.
- * React Query uses localStorage as the "server" — staleTime is Infinity
- * because the data only changes via our own mutations.
- */
 export function useFavorites() {
   return useQuery<FavoritePackage[]>({
     queryKey: FAVORITES_QUERY_KEY,
@@ -18,17 +13,11 @@ export function useFavorites() {
   })
 }
 
-/**
- * Adds a package to favorites, invalidates the favorites query, and pushes to Gist if authenticated.
- */
 export function useAddFavorite() {
   const queryClient = useQueryClient()
   const pushToGist = usePushToGist()
   return useMutation({
-    mutationFn: (name: string) => {
-      favoritesStorage.add(name)
-      return Promise.resolve()
-    },
+    mutationFn: (name: string) => favoritesStorage.add(name),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
       pushToGist.mutate()
@@ -36,17 +25,11 @@ export function useAddFavorite() {
   })
 }
 
-/**
- * Removes a package from favorites, invalidates the favorites query, and pushes to Gist if authenticated.
- */
 export function useRemoveFavorite() {
   const queryClient = useQueryClient()
   const pushToGist = usePushToGist()
   return useMutation({
-    mutationFn: (name: string) => {
-      favoritesStorage.remove(name)
-      return Promise.resolve()
-    },
+    mutationFn: (name: string) => favoritesStorage.remove(name),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
       pushToGist.mutate()

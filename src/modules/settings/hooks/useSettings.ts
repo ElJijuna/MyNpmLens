@@ -18,10 +18,9 @@ export function useUpdateSettings() {
   const pushToGist = usePushToGist()
 
   return useMutation({
-    mutationFn: (partial: Partial<AppSettings>) => {
-      const current = settingsStorage.get()
-      settingsStorage.set({ ...current, ...partial })
-      return Promise.resolve()
+    mutationFn: async (partial: Partial<AppSettings>) => {
+      const current = await settingsStorage.get()
+      await settingsStorage.set({ ...current, ...partial })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
