@@ -1,3 +1,41 @@
+## [1.14.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.13.1...v1.14.0) (2026-05-09)
+
+### Features
+
+* add addedAt info in sinchronization page. ([ac8ea57](https://github.com/ElJijuna/MyNpmLens/commit/ac8ea57327ef30b20bdf873a9d3ab9e304489456))
+* add dashboard discovery and move favorites to dedicated page ([233c2a9](https://github.com/ElJijuna/MyNpmLens/commit/233c2a92b097701cf4a037dce517cc88fd2925cc))
+* add fallback in maintaner avatar. ([5f19b5f](https://github.com/ElJijuna/MyNpmLens/commit/5f19b5f1bd5006068987b9d7b7ad59f9166fb99d))
+* add grid selector in PackageDetailPage and remove allowCustom in ColorPicker. ([66b3574](https://github.com/ElJijuna/MyNpmLens/commit/66b35748b492090c7d1ad4dbc357919400ccf28a))
+* add lang es-CO. ([b4c100c](https://github.com/ElJijuna/MyNpmLens/commit/b4c100c40c5331fbc9a880271713eddec8ae8f7c))
+* add languages ex-MX, pt-BR, de, zh-CN. ([0289935](https://github.com/ElJijuna/MyNpmLens/commit/0289935a29a0ab77a67545fc4dced776e3125938))
+* add languages it, es-ES, es-CL, fr. ([ed1c0c8](https://github.com/ElJijuna/MyNpmLens/commit/ed1c0c8207207ebdc1bdd25e821acf8e1ad22027))
+* add library icon from very-simple-icons and simple-icons. ([d08a022](https://github.com/ElJijuna/MyNpmLens/commit/d08a022e34055e948efcaaeea07a69fda6140ce7))
+* add list of dependencies in package detail. ([57f7852](https://github.com/ElJijuna/MyNpmLens/commit/57f7852b9b108e4e26a3e7a53fea086e189315e9))
+* add maintainer stat cards ([0e95bfb](https://github.com/ElJijuna/MyNpmLens/commit/0e95bfb81b9e4f316bdf1af5bf151ef6457de4ed))
+* add MaintainerCard component with real avatar, name, package count and email. ([f75aa9d](https://github.com/ElJijuna/MyNpmLens/commit/f75aa9ddc5460d5a03cbe057944a1a3438ea60a6))
+* add Quechua (qu) language support. ([b4527c9](https://github.com/ElJijuna/MyNpmLens/commit/b4527c9b9804ec51cf2b75c60c79ebfb1ba95d9a))
+* enrich PackageDetail with maintainers, install size, resolved deps, and file tree ([a7f5280](https://github.com/ElJijuna/MyNpmLens/commit/a7f5280f20fd674d1d94b4c6f886bcf2bc4007bd))
+* Gist-first init, /sync admin panel, and optional Firebase config ([42e3eb4](https://github.com/ElJijuna/MyNpmLens/commit/42e3eb4f8fda4792b6586c25a1aa00a994062ca2)), closes [#46](https://github.com/ElJijuna/MyNpmLens/issues/46)
+* improve mobile layouts and locale support ([d681972](https://github.com/ElJijuna/MyNpmLens/commit/d681972eb6d2e8f5fe1a27c41351e5970edc647b))
+* integrate gnome locale formatting and maintainer charts ([27efa71](https://github.com/ElJijuna/MyNpmLens/commit/27efa71bda1a5224543f59d9f256408ccef04bb4))
+* integrate new @api-hooks/npm hooks, charts, DashboardGrid, and accent color ([bc22618](https://github.com/ElJijuna/MyNpmLens/commit/bc22618e137438e7e9a957ff686f69b9b39c9677))
+* migrate user data to IndexedDB and enable offline-first mode ([deb3103](https://github.com/ElJijuna/MyNpmLens/commit/deb3103195f04096b6646c4255a8bd0f9a63ffb5)), closes [#45](https://github.com/ElJijuna/MyNpmLens/issues/45)
+* polish package and maintainer detail layouts, update langs, fix filesSection, add ErrorState, update maintanerAvatar and add infinity scroll in maintainer packages. ([c9a1812](https://github.com/ElJijuna/MyNpmLens/commit/c9a18125a8f8e0e59bb4395dd7948efa8366c613))
+* StatusPage when 0 results in dashboard. ([516da45](https://github.com/ElJijuna/MyNpmLens/commit/516da45b42c6ce9773870aeddcc9f05b9d6f9b9f))
+* update Maintaners and Maintaner to use DashboardGrid and chart summary. ([179938d](https://github.com/ElJijuna/MyNpmLens/commit/179938dab88e9f119e94aff6551e48da999beda7))
+* update packageCard to use EntityCard. ([4adab54](https://github.com/ElJijuna/MyNpmLens/commit/4adab54a440e1caded7672fadad0f61856f7946f))
+* updste list with avatars. ([8dfeec9](https://github.com/ElJijuna/MyNpmLens/commit/8dfeec98060bcc603ffab359efd72580ebb14dc3))
+
+### Bug Fixes
+
+* update async storage tests and build fixes and tests. ([6984f2a](https://github.com/ElJijuna/MyNpmLens/commit/6984f2a80dc1575528335895e08c7ade3dec1b2e))
+* update settings layout ([941135e](https://github.com/ElJijuna/MyNpmLens/commit/941135ea427b84e6c3c5d437744253974c75a851))
+
+### Refactoring
+
+* lift Toolbar into RootLayout and update gnome-ui deps. ([2c8745d](https://github.com/ElJijuna/MyNpmLens/commit/2c8745d7555804884321c5f144d947e31e9bafa1))
+* use bulk npm downloads in downloads chart ([b0ff26d](https://github.com/ElJijuna/MyNpmLens/commit/b0ff26daf965b7331ec5025a8b733cdd3300d05c))
+
 ## [1.13.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.13.0...v1.13.1) (2026-05-02)
 
 ### Bug Fixes
