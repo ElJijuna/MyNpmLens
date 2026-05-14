@@ -16,7 +16,9 @@
     "maintainersGroup": "Maintainer",
     "badgeNew": "Nuovo",
     "saveToGist": "Salva su Gist",
-    "addedAt": "Aggiunto il {{date}}"
+    "addedAt": "Aggiunto il {{date}}",
+    "toastSuccess": "Salvato su Gist.",
+    "toastError": "Errore nel salvataggio su Gist."
   },
   "toolbar": {
     "toggleSidebar": "Mostra o nascondi barra laterale",
@@ -93,7 +95,9 @@
     "installSize": "Dimensione installazione",
     "publishSize": "Dimensione pubblicata",
     "files": "File",
-    "noFiles": "Nessun file disponibile"
+    "noFiles": "Nessun file disponibile",
+    "latestRelease": "Ultima release",
+    "topics": "Argomenti"
   },
   "maintainers": {
     "title": "Maintainer",
@@ -107,7 +111,8 @@
     "packages": "Pacchetti",
     "totalPackages": "Pacchetti totali",
     "scopedPackages": "Con scope",
-    "averageScore": "Punteggio medio"
+    "averageScore": "Punteggio medio",
+    "toastUnfollowed": "Hai smesso di seguire {{username}}."
   },
   "profile": {
     "signOut": "Esci"
@@ -128,7 +133,8 @@
     "errorInvalid": "Inserisci un nome pacchetto valido (es. react, @scope/package) o un URL npm (es. https://www.npmjs.com/package/react).",
     "errorAlreadyAdded": "\"{{name}}\" è già nella tua lista.",
     "errorNotFound": "Il pacchetto \"{{name}}\" non è stato trovato su npm.",
-    "errorNetwork": "Impossibile raggiungere il registro npm. Controlla la connessione."
+    "errorNetwork": "Impossibile raggiungere il registro npm. Controlla la connessione.",
+    "toastSuccess": "\"{{name}}\" aggiunto ai preferiti."
   },
   "addMaintainer": {
     "title": "Aggiungi maintainer",
@@ -139,7 +145,8 @@
     "usernamePlaceholder": "es. sindresorhus",
     "errorAlreadyAdded": "\"{{username}}\" è già nella tua lista.",
     "errorNotFound": "Il maintainer \"{{username}}\" non è stato trovato su npm.",
-    "errorNetwork": "Impossibile raggiungere il registro npm. Controlla la connessione."
+    "errorNetwork": "Impossibile raggiungere il registro npm. Controlla la connessione.",
+    "toastSuccess": "\"{{username}}\" aggiunto ai maintainer seguiti."
   },
   "offline": {
     "title": "Nuova versione disponibile",

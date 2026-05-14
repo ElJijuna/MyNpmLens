@@ -16,7 +16,9 @@
     "maintainersGroup": "Mantenedores",
     "badgeNew": "Novo",
     "saveToGist": "Salvar no Gist",
-    "addedAt": "Adicionado em {{date}}"
+    "addedAt": "Adicionado em {{date}}",
+    "toastSuccess": "Salvo no Gist.",
+    "toastError": "Falha ao salvar no Gist."
   },
   "toolbar": {
     "toggleSidebar": "Alternar barra lateral",
@@ -93,7 +95,9 @@
     "installSize": "Tamanho de instalação",
     "publishSize": "Tamanho publicado",
     "files": "Arquivos",
-    "noFiles": "Nenhum arquivo disponível"
+    "noFiles": "Nenhum arquivo disponível",
+    "latestRelease": "Último release",
+    "topics": "Tópicos"
   },
   "maintainers": {
     "title": "Mantenedores",
@@ -107,7 +111,8 @@
     "packages": "Pacotes",
     "totalPackages": "Pacotes totais",
     "scopedPackages": "Com escopo",
-    "averageScore": "Pontuação média"
+    "averageScore": "Pontuação média",
+    "toastUnfollowed": "Deixou de seguir {{username}}."
   },
   "profile": {
     "signOut": "Sair"
@@ -128,7 +133,8 @@
     "errorInvalid": "Insira um nome de pacote válido (ex: react, @scope/pacote) ou URL do npm (ex: https://www.npmjs.com/package/react).",
     "errorAlreadyAdded": "\"{{name}}\" já está na sua lista.",
     "errorNotFound": "O pacote \"{{name}}\" não foi encontrado no npm.",
-    "errorNetwork": "Não foi possível acessar o registro npm. Verifique sua conexão."
+    "errorNetwork": "Não foi possível acessar o registro npm. Verifique sua conexão.",
+    "toastSuccess": "\"{{name}}\" adicionado aos favoritos."
   },
   "addMaintainer": {
     "title": "Adicionar mantenedor",
@@ -139,7 +145,8 @@
     "usernamePlaceholder": "ex: sindresorhus",
     "errorAlreadyAdded": "\"{{username}}\" já está na sua lista.",
     "errorNotFound": "O mantenedor \"{{username}}\" não foi encontrado no npm.",
-    "errorNetwork": "Não foi possível acessar o registro npm. Verifique sua conexão."
+    "errorNetwork": "Não foi possível acessar o registro npm. Verifique sua conexão.",
+    "toastSuccess": "\"{{username}}\" adicionado aos mantenedores seguidos."
   },
   "offline": {
     "title": "Nova versão disponível",
