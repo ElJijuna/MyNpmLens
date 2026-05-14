@@ -10,6 +10,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { NpmClientProvider } from '@api-hooks/npm'
+import { ToastProvider } from '@gnome-ui/layout/components/Toast'
 import { queryClient } from '@/lib/queryClient'
 import { getDb } from '@/lib/db'
 import { routeTree } from './routeTree.gen'
@@ -45,9 +46,11 @@ createRoot(rootElement).render(
     <PersistQueryClientProvider client={queryClient} persistOptions={{ persister, maxAge: 1000 * 60 * 60 * 24 * 7 }}>
       <NpmClientProvider>
         <GnomeLocaleProvider>
-          <AuthProvider>
-            <RouterProvider router={router} />
-          </AuthProvider>
+          <ToastProvider>
+            <AuthProvider>
+              <RouterProvider router={router} />
+            </AuthProvider>
+          </ToastProvider>
         </GnomeLocaleProvider>
       </NpmClientProvider>
     </PersistQueryClientProvider>

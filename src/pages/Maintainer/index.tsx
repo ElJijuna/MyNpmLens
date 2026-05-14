@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from '@tanstack/react-router'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, Spinner, Text, WrapBox } from '@gnome-ui/react'
 import { Applications, Delete, Folder, Star, ViewSidebar } from '@gnome-ui/icons'
 import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
 import { StatCard } from '@gnome-ui/layout/components/StatCard'
-import { useNpmClient, useNpmMaintainer } from '@api-hooks/npm'
+import { useToast } from '@gnome-ui/layout/components/Toast'
+import { useNpmMaintainer, useNpmMaintainerPackagesInfinite } from '@api-hooks/npm'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { DownloadsChart } from '@/modules/npm/components/DownloadsChart'
 import { MaintainerAvatar } from '@/modules/npm/components/MaintainerAvatar'
@@ -18,22 +18,13 @@ export function MaintainerPage() {
   const { t } = useTranslation()
   const { username } = useParams({ from: '/maintainers_/$username' })
   const navigate = useNavigate()
-  const npmClient = useNpmClient()
+  const toast = useToast()
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
   const [packagesLayout, setPackagesLayout] = useState<DashboardGridLayout>('grid')
   const { data: user } = useNpmMaintainer(username)
-  const packagesQuery = useInfiniteQuery({
-    queryKey: ['npm', 'maintainer', username, 'packages', 'infinite', MAINTAINER_PACKAGE_PAGE_SIZE],
-    queryFn: ({ pageParam, signal }) => npmClient.maintainer(username).packages({
-      size: MAINTAINER_PACKAGE_PAGE_SIZE,
-      from: pageParam,
-    }, signal),
-    initialPageParam: 0,
+  const packagesQuery = useNpmMaintainerPackagesInfinite(username, {
+    size: MAINTAINER_PACKAGE_PAGE_SIZE,
     enabled: username.length > 0,
-    getNextPageParam: (lastPage, pages) => {
-      const loaded = pages.reduce((total, page) => total + page.objects.length, 0)
-      return loaded < lastPage.total ? loaded : undefined
-    },
   })
   const removeMaintainer = useRemoveMaintainer()
 
@@ -68,7 +59,10 @@ export function MaintainerPage() {
 
   function handleUnfollow() {
     removeMaintainer.mutate(username, {
-      onSuccess: () => navigate({ to: '/maintainers' }),
+      onSuccess: () => {
+        toast.show({ title: t('maintainer.toastUnfollowed', { username }), type: 'info' })
+        void navigate({ to: '/maintainers' })
+      },
     })
   }
 

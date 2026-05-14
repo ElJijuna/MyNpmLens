@@ -6,6 +6,8 @@ import { useGitHubStats } from '@/modules/github/hooks'
 import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug'
 import { useNpmPackage } from '@api-hooks/npm'
 import { useFormatters } from '@/hooks/useFormatters'
+import { useGhRepoLatestRelease } from '@api-hooks/gh'
+import { useAuth } from '@/modules/auth/AuthProvider'
 
 interface GitHubSectionProps {
   packageName: string
@@ -14,9 +16,15 @@ interface GitHubSectionProps {
 export function GitHubSection({ packageName }: GitHubSectionProps) {
   const { t } = useTranslation()
   const { formatCompactNumber, formatDate, formatNumber } = useFormatters()
+  const { user } = useAuth()
   const { data: pkg } = useNpmPackage(packageName)
   const slug = pkg?.repository?.url ? parseGitHubSlug(pkg.repository.url) : null
   const { data, isPending, error } = useGitHubStats(slug?.owner ?? null, slug?.repo ?? null)
+
+  const { data: release } = useGhRepoLatestRelease(slug?.owner ?? '', slug?.repo ?? '', {
+    token: user?.githubToken,
+    enabled: slug !== null,
+  })
 
   if (!isPending && !slug) return null
 
@@ -50,6 +58,27 @@ export function GitHubSection({ packageName }: GitHubSectionProps) {
             <Text variant="caption-heading" color="dim">{t('packageDetail.lastPushed')}</Text>
             <Text variant="caption">{formatDate(data.lastPushedAt)}</Text>
           </div>
+
+          {release && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+              <Text variant="caption-heading" color="dim">{t('packageDetail.latestRelease')}</Text>
+              <Text variant="caption">
+                {release.tag_name}
+                {release.published_at && ` · ${formatDate(release.published_at)}`}
+              </Text>
+            </div>
+          )}
+
+          {data.topics && data.topics.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+              <Text variant="caption-heading" color="dim">{t('packageDetail.topics')}</Text>
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                {data.topics.map((topic) => (
+                  <Badge key={topic} variant="neutral">{topic}</Badge>
+                ))}
+              </div>
+            </div>
+          )}
 
           <Text variant="caption">
             <Link

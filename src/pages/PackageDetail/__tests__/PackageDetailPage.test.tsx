@@ -28,6 +28,9 @@ function wrapper({ children }: { children: ReactNode }) {
 
 afterEach(() => jest.restoreAllMocks())
 
+/** Strip all whitespace (incl. U+00A0) for locale-agnostic compact-number comparison */
+const stripSpaces = (s: string) => s.replace(/\s| /g, '').toUpperCase()
+
 const MOCK_PKG = {
   name: 'react',
   'dist-tags': { latest: '19.0.0' },
@@ -84,7 +87,7 @@ describe('PackageDetailPage', () => {
   it('renders download numbers', () => {
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('1M')).toBeInTheDocument()
+    expect(screen.getByText((c) => stripSpaces(c) === '1M')).toBeInTheDocument()
   })
 
   it('renders bundle size', () => {
@@ -97,8 +100,8 @@ describe('PackageDetailPage', () => {
   it('renders github stats', () => {
     render(<PackageDetailPage />, { wrapper })
 
-    expect(screen.getByText('230K')).toBeInTheDocument()
-    expect(screen.getByText('47K')).toBeInTheDocument()
+    expect(screen.getByText((c) => stripSpaces(c) === '230K')).toBeInTheDocument()
+    expect(screen.getByText((c) => stripSpaces(c) === '47K')).toBeInTheDocument()
   })
 
   it('shows remove button when not from maintainer', () => {

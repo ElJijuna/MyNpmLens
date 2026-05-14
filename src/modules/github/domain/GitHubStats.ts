@@ -11,4 +11,6 @@ export interface GitHubStats {
   lastPushedAt: string
   /** URL to the repository on GitHub */
   htmlUrl: string
+  /** Repository topics */
+  topics?: string[]
 }

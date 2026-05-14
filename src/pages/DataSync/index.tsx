@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { useToast } from '@gnome-ui/layout/components/Toast'
 import { PreferencesGroup } from '@gnome-ui/react/components/PreferencesGroup'
 import { BoxedList } from '@gnome-ui/react/components/BoxedList'
 import { ActionRow } from '@gnome-ui/react/components/ActionRow'
@@ -18,11 +19,19 @@ import { useFormatters } from '@/hooks/useFormatters'
 
 export function DataSyncPage() {
   const { t } = useTranslation()
+  const toast = useToast()
   const { formatDate } = useFormatters()
   const { data: localFavorites = [] } = useFavorites()
   const { data: localMaintainers = [] } = useMaintainers()
   const { delta, gistFavorites, gistMaintainers } = useGistSync()
   const pushToGist = usePushToGist()
+
+  function handleSaveToGist() {
+    pushToGist.mutate(undefined, {
+      onSuccess: () => toast.show({ title: t('sync.toastSuccess'), type: 'success' }),
+      onError: () => toast.show({ title: t('sync.toastError'), type: 'error' }),
+    })
+  }
 
   const allPackages = [
     ...localFavorites,
@@ -63,7 +72,7 @@ export function DataSyncPage() {
                           size="sm"
                           variant="default"
                           disabled={pushToGist.isPending}
-                          onClick={() => pushToGist.mutate()}
+                          onClick={handleSaveToGist}
                         >
                           {t('sync.saveToGist')}
                         </Button>
@@ -95,7 +104,7 @@ export function DataSyncPage() {
                           size="sm"
                           variant="default"
                           disabled={pushToGist.isPending}
-                          onClick={() => pushToGist.mutate()}
+                          onClick={handleSaveToGist}
                         >
                           {t('sync.saveToGist')}
                         </Button>

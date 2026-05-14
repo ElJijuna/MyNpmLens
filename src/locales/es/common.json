@@ -17,7 +17,9 @@
     "maintainersGroup": "Mantenedores",
     "badgeNew": "Nuevo",
     "saveToGist": "Guardar en Gist",
-    "addedAt": "Agregado el {{date}}"
+    "addedAt": "Agregado el {{date}}",
+    "toastSuccess": "Guardado en Gist.",
+    "toastError": "Error al guardar en Gist."
   },
   "toolbar": {
     "toggleSidebar": "Alternar barra lateral",
@@ -116,7 +118,9 @@
     "installSize": "Tamaño de instalación",
     "publishSize": "Tamaño publicado",
     "files": "Archivos",
-    "noFiles": "Sin archivos disponibles"
+    "noFiles": "Sin archivos disponibles",
+    "latestRelease": "Última release",
+    "topics": "Temas"
   },
   "maintainers": {
     "title": "Mantenedores",
@@ -130,7 +134,8 @@
     "packages": "Paquetes",
     "totalPackages": "Paquetes totales",
     "scopedPackages": "Con scope",
-    "averageScore": "Score promedio"
+    "averageScore": "Score promedio",
+    "toastUnfollowed": "Dejaste de seguir a {{username}}."
   },
   "profile": {
     "signOut": "Cerrar sesión"
@@ -151,7 +156,8 @@
     "errorInvalid": "Ingresa un nombre de paquete válido (ej. react, @scope/paquete) o una URL de npm (ej. https://www.npmjs.com/package/react).",
     "errorAlreadyAdded": "\"{{name}}\" ya está en tu lista.",
     "errorNotFound": "El paquete \"{{name}}\" no se encontró en npm.",
-    "errorNetwork": "No se pudo conectar al registro de npm. Verifica tu conexión."
+    "errorNetwork": "No se pudo conectar al registro de npm. Verifica tu conexión.",
+    "toastSuccess": "\"{{name}}\" agregado a favoritos."
   },
   "addMaintainer": {
     "title": "Agregar mantenedor",
@@ -162,7 +168,8 @@
     "usernamePlaceholder": "ej. sindresorhus",
     "errorAlreadyAdded": "\"{{username}}\" ya está en tu lista.",
     "errorNotFound": "El mantenedor \"{{username}}\" no se encontró en npm.",
-    "errorNetwork": "No se pudo conectar al registro de npm. Verifica tu conexión."
+    "errorNetwork": "No se pudo conectar al registro de npm. Verifica tu conexión.",
+    "toastSuccess": "\"{{username}}\" agregado a mantenedores seguidos."
   },
   "offline": {
     "title": "Nueva versión disponible",
