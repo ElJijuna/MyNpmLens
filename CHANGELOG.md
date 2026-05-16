@@ -1,3 +1,13 @@
+## [1.16.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.15.0...v1.16.0) (2026-05-16)
+
+### Features
+
+* update profile page ([a4ca5f0](https://github.com/ElJijuna/MyNpmLens/commit/a4ca5f08f3792454e1b9e4f3a95d12da44887de1))
+
+### Bug Fixes
+
+* remove duplicate toolbar ([d87e146](https://github.com/ElJijuna/MyNpmLens/commit/d87e146591c413b02e4ac9f4940d5af0301d127f))
+
 ## [1.15.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.14.1...v1.15.0) (2026-05-16)
 
 ### Features
