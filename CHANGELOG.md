@@ -1,3 +1,9 @@
+## [1.17.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.16.0...v1.17.0) (2026-05-16)
+
+### Features
+
+* add badge in sidebar and homologate maintainers grid with favorites grid ([b84d7dc](https://github.com/ElJijuna/MyNpmLens/commit/b84d7dc62cac49f31ffbcf5503d28fd5f3ebc476))
+
 ## [1.16.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.15.0...v1.16.0) (2026-05-16)
 
 ### Features
