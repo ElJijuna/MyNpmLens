@@ -2,7 +2,6 @@ import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { Avatar, Box, Button, Icon, Text, WrapBox } from '@gnome-ui/react'
 import { Delete } from '@gnome-ui/icons'
-import { Toolbar } from '@/components/Toolbar'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSignOut } from '@/modules/auth/hooks'
 
@@ -22,8 +21,6 @@ export function ProfilePage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-      <Toolbar />
-
       <main className="page-content">
         <Box spacing={16}>
           <WrapBox justify="space-between" align="center">
