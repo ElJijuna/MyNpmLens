@@ -138,7 +138,14 @@
     "toastUnfollowed": "Unfollowed {{username}}."
   },
   "profile": {
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "repositories": "Repositories",
+    "gists": "Gists",
+    "followers": "Followers",
+    "following": "Following",
+    "contributions": "contributions",
+    "recentRepos": "Recent repositories",
+    "memberSince": "Member since {{year}}"
   },
   "about": {
     "title": "MyNpmLens",
