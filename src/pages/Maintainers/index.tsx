@@ -56,7 +56,7 @@ export function MaintainersPage() {
 
             <MaintainersPackagesChart usernames={usernames} />
 
-            <DashboardGrid layout={layout} columns={{ sm: 1, md: 3, lg: 4, xl: 5, xxl: 6 }} gap="md">
+            <DashboardGrid layout={layout} columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} gap="md">
               {maintainers.map((m) => (
                 <DashboardGrid.Item key={m.username}>
                   <MaintainerCard username={m.username} />

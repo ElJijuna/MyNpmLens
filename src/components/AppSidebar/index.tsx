@@ -8,6 +8,7 @@ import {
   SidebarItem,
   ActionRow,
   Avatar,
+  Badge,
   Button,
   Icon,
   Spinner,
@@ -18,6 +19,7 @@ import {
 import { GoHome, Star, Information, Settings, OpenMenu, Refresh, Applications } from '@gnome-ui/icons'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSidebar } from '@/context/SidebarContext'
+import { useFavorites, useMaintainers } from '@/modules/npm/hooks'
 import { version } from '../../../package.json'
 import './index.css'
 
@@ -27,6 +29,8 @@ export function AppSidebar() {
   const matchRoute = useMatchRoute()
   const { user } = useAuth()
   const { closeSidebar, sidebarOverlay, sidebarCollapsed, toggleCollapsed } = useSidebar()
+  const { data: favorites = [] } = useFavorites()
+  const { data: maintainers = [] } = useMaintainers()
 
   function go(to: string) {
     void navigate({ to })
@@ -90,12 +94,14 @@ export function AppSidebar() {
           icon={Applications}
           active={!!matchRoute({ to: '/favorites', fuzzy: false })}
           onClick={() => go('/favorites')}
+          suffix={!isCollapsed ? <Badge variant="neutral">{favorites.length}</Badge> : undefined}
         />
         <SidebarItem
           label={t('sidebar.maintainers')}
           icon={Star}
           active={!!matchRoute({ to: '/maintainers', fuzzy: true })}
           onClick={() => go('/maintainers')}
+          suffix={!isCollapsed && maintainers.length > 0 ? <Badge variant="neutral">{maintainers.length}</Badge> : undefined}
         />
         <SidebarItem
           label={t('sidebar.settings')}
