@@ -29,7 +29,7 @@ function wrapper({ children }: { children: ReactNode }) {
 afterEach(() => jest.restoreAllMocks())
 
 /** Strip all whitespace (incl. U+00A0) for locale-agnostic compact-number comparison */
-const stripSpaces = (s: string) => s.replace(/\s| /g, '').toUpperCase()
+const stripSpaces = (s: string) => s.replace(/\s|\u00A0/g, '').toUpperCase()
 
 const MOCK_PKG = {
   name: 'react',
