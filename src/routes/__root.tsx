@@ -11,6 +11,7 @@ import { useApplyTheme } from '@/hooks/useApplyTheme'
 import { useApplyLanguage } from '@/hooks/useApplyLanguage'
 import { useApplyAccentColor } from '@/hooks/useApplyAccentColor'
 import { usePageView } from '@/hooks/usePageView'
+import { useScrollToTop } from '@/hooks/useScrollToTop'
 import '@/app.css'
 
 interface RouterContext {
@@ -32,6 +33,7 @@ function RootLayout() {
   useApplyLanguage()
   useApplyAccentColor()
   usePageView()
+  useScrollToTop()
 
   useEffect(() => {
     const media = window.matchMedia(SIDEBAR_OVERLAY_QUERY)
