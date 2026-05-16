@@ -1,3 +1,16 @@
+## [1.15.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.14.1...v1.15.0) (2026-05-16)
+
+### Features
+
+* migrate @api-hooks/gh, add toast feedback, fix locale-aware tests ([18cf94f](https://github.com/ElJijuna/MyNpmLens/commit/18cf94f39536605dbb47ebda7756a2b2a4394d2d))
+* update grid issues xl xxl xxxl ([bf63a38](https://github.com/ElJijuna/MyNpmLens/commit/bf63a3866a5874550944bf3134e70c9323ba7430))
+
+### Bug Fixes
+
+* add scroll to top when user change page ([8b40fe2](https://github.com/ElJijuna/MyNpmLens/commit/8b40fe250842316d23d6ae196489c6a9dde4301f))
+* update data to save in gist ([df4c0a4](https://github.com/ElJijuna/MyNpmLens/commit/df4c0a49991538dbddf323ed7da7f04d01a3fdc8))
+* update langs ([409e2ae](https://github.com/ElJijuna/MyNpmLens/commit/409e2ae49f8741387bf052ad7fa419a684bf68fb))
+
 ## [1.14.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.14.0...v1.14.1) (2026-05-09)
 
 ### Bug Fixes
