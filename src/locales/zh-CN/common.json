@@ -16,7 +16,9 @@
     "maintainersGroup": "维护者",
     "badgeNew": "新",
     "saveToGist": "保存到 Gist",
-    "addedAt": "添加于 {{date}}"
+    "addedAt": "添加于 {{date}}",
+    "toastSuccess": "已保存到 Gist。",
+    "toastError": "保存到 Gist 失败。"
   },
   "toolbar": {
     "toggleSidebar": "切换侧边栏",
@@ -93,7 +95,9 @@
     "installSize": "安装大小",
     "publishSize": "发布大小",
     "files": "文件",
-    "noFiles": "暂无文件"
+    "noFiles": "暂无文件",
+    "latestRelease": "最新发布",
+    "topics": "话题"
   },
   "maintainers": {
     "title": "维护者",
@@ -107,7 +111,8 @@
     "packages": "包",
     "totalPackages": "包总数",
     "scopedPackages": "带 scope",
-    "averageScore": "平均评分"
+    "averageScore": "平均评分",
+    "toastUnfollowed": "已取消关注 {{username}}。"
   },
   "profile": {
     "signOut": "退出登录"
@@ -128,7 +133,8 @@
     "errorInvalid": "请输入有效的包名（如 react、@scope/package）或 npm URL（如 https://www.npmjs.com/package/react）。",
     "errorAlreadyAdded": "\"{{name}}\" 已在你的列表中。",
     "errorNotFound": "在 npm 上未找到包 \"{{name}}\"。",
-    "errorNetwork": "无法连接到 npm 注册表，请检查你的网络连接。"
+    "errorNetwork": "无法连接到 npm 注册表，请检查你的网络连接。",
+    "toastSuccess": "\"{{name}}\" 已添加到收藏。"
   },
   "addMaintainer": {
     "title": "添加维护者",
@@ -139,7 +145,8 @@
     "usernamePlaceholder": "如 sindresorhus",
     "errorAlreadyAdded": "\"{{username}}\" 已在你的列表中。",
     "errorNotFound": "在 npm 上未找到维护者 \"{{username}}\"。",
-    "errorNetwork": "无法连接到 npm 注册表，请检查你的网络连接。"
+    "errorNetwork": "无法连接到 npm 注册表，请检查你的网络连接。",
+    "toastSuccess": "\"{{username}}\" 已添加到关注的维护者。"
   },
   "offline": {
     "title": "有新版本可用",

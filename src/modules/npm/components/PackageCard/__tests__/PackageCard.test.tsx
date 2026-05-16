@@ -16,6 +16,8 @@ function wrapper({ children }: { children: ReactNode }) {
 
 afterEach(() => jest.restoreAllMocks())
 
+/** Locale-agnostic download text match: ignores whitespace between number and unit */
+
 describe('PackageCard', () => {
   it('shows a spinner while loading', () => {
     jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmApiHooks.useNpmPackage>)
@@ -51,6 +53,6 @@ describe('PackageCard', () => {
     expect(screen.getByText('MIT')).toBeInTheDocument()
     expect(screen.getByText('v19.0.0 · 3 versions')).toBeInTheDocument()
     expect(screen.getByText('A JavaScript library.')).toBeInTheDocument()
-    expect(screen.getByText('↓ 50M/wk')).toBeInTheDocument()
+    expect(screen.getByText((c) => c.replace(/\s/g, '') === '↓50M/wk')).toBeInTheDocument()
   })
 })

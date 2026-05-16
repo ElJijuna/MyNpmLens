@@ -16,7 +16,9 @@
     "maintainersGroup": "Betreuer",
     "badgeNew": "Neu",
     "saveToGist": "In Gist speichern",
-    "addedAt": "Hinzugefügt am {{date}}"
+    "addedAt": "Hinzugefügt am {{date}}",
+    "toastSuccess": "In Gist gespeichert.",
+    "toastError": "Fehler beim Speichern in Gist."
   },
   "toolbar": {
     "toggleSidebar": "Seitenleiste umschalten",
@@ -93,7 +95,9 @@
     "installSize": "Installationsgröße",
     "publishSize": "Veröffentlichungsgröße",
     "files": "Dateien",
-    "noFiles": "Keine Dateien verfügbar"
+    "noFiles": "Keine Dateien verfügbar",
+    "latestRelease": "Neueste Version",
+    "topics": "Themen"
   },
   "maintainers": {
     "title": "Betreuer",
@@ -107,7 +111,8 @@
     "packages": "Pakete",
     "totalPackages": "Pakete gesamt",
     "scopedPackages": "Mit Scope",
-    "averageScore": "Durchschnittsscore"
+    "averageScore": "Durchschnittsscore",
+    "toastUnfollowed": "{{username}} wird nicht mehr gefolgt."
   },
   "profile": {
     "signOut": "Abmelden"
@@ -128,7 +133,8 @@
     "errorInvalid": "Gib einen gültigen Paketnamen (z. B. react, @scope/paket) oder eine npm-URL (z. B. https://www.npmjs.com/package/react) ein.",
     "errorAlreadyAdded": "\"{{name}}\" ist bereits in deiner Liste.",
     "errorNotFound": "Paket \"{{name}}\" wurde auf npm nicht gefunden.",
-    "errorNetwork": "Das npm-Register konnte nicht erreicht werden. Überprüfe deine Verbindung."
+    "errorNetwork": "Das npm-Register konnte nicht erreicht werden. Überprüfe deine Verbindung.",
+    "toastSuccess": "\"{{name}}\" zu Favoriten hinzugefügt."
   },
   "addMaintainer": {
     "title": "Betreuer hinzufügen",
@@ -139,7 +145,8 @@
     "usernamePlaceholder": "z. B. sindresorhus",
     "errorAlreadyAdded": "\"{{username}}\" ist bereits in deiner Liste.",
     "errorNotFound": "Betreuer \"{{username}}\" wurde auf npm nicht gefunden.",
-    "errorNetwork": "Das npm-Register konnte nicht erreicht werden. Überprüfe deine Verbindung."
+    "errorNetwork": "Das npm-Register konnte nicht erreicht werden. Überprüfe deine Verbindung.",
+    "toastSuccess": "\"{{username}}\" zu verfolgten Maintainern hinzugefügt."
   },
   "offline": {
     "title": "Neue Version verfügbar",

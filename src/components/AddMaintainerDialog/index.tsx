@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dialog, TextField } from '@gnome-ui/react'
+import { useToast } from '@gnome-ui/layout/components/Toast'
 import { useAddMaintainer, useMaintainers } from '@/modules/npm/hooks'
 import { Analytics } from '@/lib/analytics'
 import { ProxyError } from '@/modules/npm/proxy'
@@ -12,6 +13,7 @@ interface AddMaintainerDialogProps {
 
 export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps) {
   const { t } = useTranslation()
+  const toast = useToast()
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | undefined>()
   const { data: maintainers = [] } = useMaintainers()
@@ -29,6 +31,7 @@ export function AddMaintainerDialog({ open, onClose }: AddMaintainerDialogProps)
     Analytics.addMaintainer(username)
     addMaintainer.mutate(username, {
       onSuccess: () => {
+        toast.show({ title: t('addMaintainer.toastSuccess', { username }), type: 'success' })
         setInput('')
         setError(undefined)
         onClose()

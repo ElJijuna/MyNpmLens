@@ -16,7 +16,9 @@
     "maintainersGroup": "Mainteneurs",
     "badgeNew": "Nouveau",
     "saveToGist": "Enregistrer dans Gist",
-    "addedAt": "Ajouté le {{date}}"
+    "addedAt": "Ajouté le {{date}}",
+    "toastSuccess": "Enregistré dans Gist.",
+    "toastError": "Échec de l'enregistrement dans Gist."
   },
   "toolbar": {
     "toggleSidebar": "Afficher ou masquer la barre latérale",
@@ -93,7 +95,9 @@
     "installSize": "Taille d'installation",
     "publishSize": "Taille publiée",
     "files": "Fichiers",
-    "noFiles": "Aucun fichier disponible"
+    "noFiles": "Aucun fichier disponible",
+    "latestRelease": "Dernière version",
+    "topics": "Sujets"
   },
   "maintainers": {
     "title": "Mainteneurs",
@@ -107,7 +111,8 @@
     "packages": "Paquets",
     "totalPackages": "Paquets au total",
     "scopedPackages": "Avec scope",
-    "averageScore": "Score moyen"
+    "averageScore": "Score moyen",
+    "toastUnfollowed": "Vous ne suivez plus {{username}}."
   },
   "profile": {
     "signOut": "Se déconnecter"
@@ -128,7 +133,8 @@
     "errorInvalid": "Saisissez un nom de paquet valide (ex. react, @scope/package) ou une URL npm (ex. https://www.npmjs.com/package/react).",
     "errorAlreadyAdded": "\"{{name}}\" est déjà dans votre liste.",
     "errorNotFound": "Le paquet \"{{name}}\" est introuvable sur npm.",
-    "errorNetwork": "Impossible de joindre le registre npm. Vérifiez votre connexion."
+    "errorNetwork": "Impossible de joindre le registre npm. Vérifiez votre connexion.",
+    "toastSuccess": "\"{{name}}\" ajouté aux favoris."
   },
   "addMaintainer": {
     "title": "Ajouter un mainteneur",
@@ -139,7 +145,8 @@
     "usernamePlaceholder": "ex. sindresorhus",
     "errorAlreadyAdded": "\"{{username}}\" est déjà dans votre liste.",
     "errorNotFound": "Le mainteneur \"{{username}}\" est introuvable sur npm.",
-    "errorNetwork": "Impossible de joindre le registre npm. Vérifiez votre connexion."
+    "errorNetwork": "Impossible de joindre le registre npm. Vérifiez votre connexion.",
+    "toastSuccess": "\"{{username}}\" ajouté aux mainteneurs suivis."
   },
   "offline": {
     "title": "Nouvelle version disponible",

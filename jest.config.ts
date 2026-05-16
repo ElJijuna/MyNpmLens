@@ -18,6 +18,7 @@ const config: Config = {
     '^@api-hooks/npm$': '<rootDir>/src/__mocks__/api-hooks-npm.ts',
     '^@api-hooks/bp$': '<rootDir>/src/__mocks__/api-hooks-bp.ts',
     '^@api-hooks/osv$': '<rootDir>/src/__mocks__/api-hooks-osv.ts',
+    '^@gnome-ui/layout/components/Toast$': '<rootDir>/src/__mocks__/gnome-ui-layout-toast.ts',
     '^@gnome-ui/charts$': '<rootDir>/src/__mocks__/gnome-ui-charts.ts',
     '^virtual:pwa-register/react$': '<rootDir>/src/__mocks__/pwa-register.ts',
     '^@/(.*)$': '<rootDir>/src/$1',

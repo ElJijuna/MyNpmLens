@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dialog, SearchBar, Banner } from '@gnome-ui/react'
+import { useToast } from '@gnome-ui/layout/components/Toast'
 
 interface Suggestion { id: string; label: string }
 import { parseNpmUrl } from '@/modules/npm/domain'
@@ -17,6 +18,7 @@ interface AddPackageModalProps {
 
 export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
   const { t } = useTranslation()
+  const toast = useToast()
   const npmClient = useNpmClient()
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | undefined>()
@@ -64,6 +66,7 @@ export function AddPackageModal({ open, onClose }: AddPackageModalProps) {
     Analytics.addPackage(name)
     addFavorite.mutate(name, {
       onSuccess: () => {
+        toast.show({ title: t('addPackage.toastSuccess', { name }), type: 'success' })
         setInput('')
         setError(undefined)
         onClose()

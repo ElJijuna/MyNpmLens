@@ -55,7 +55,7 @@ export function FavoritesPage() {
             </WrapBox>
             <DownloadsChart packageNames={packageNames} />
 
-            <DashboardGrid layout={packagesLayout} columns={{ sm: 1, md: 2 }} gap="md">
+            <DashboardGrid layout={packagesLayout} columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} gap="md">
               {favorites.map((fav) => (
                 <DashboardGrid.Item key={fav.name}>
                   <PackageCard name={fav.name} />

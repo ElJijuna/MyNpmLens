@@ -16,7 +16,9 @@
     "maintainersGroup": "Waqaychaqkuna",
     "badgeNew": "Musuq",
     "saveToGist": "Gist nisqapi waqaychay",
-    "addedAt": "{{date}} p'unchaw yapasqa"
+    "addedAt": "{{date}} p'unchaw yapasqa",
+    "toastSuccess": "Gist nisqapi waqaychasqa.",
+    "toastError": "Gist nisqapi mana waqaychay atikurqanchu."
   },
   "toolbar": {
     "toggleSidebar": "Waqta barra tikray",
@@ -93,7 +95,9 @@
     "installSize": "Churay sayaynin",
     "publishSize": "Lluqsisqa sayaynin",
     "files": "Archivokuna",
-    "noFiles": "Mana archivokuna kanchu"
+    "noFiles": "Mana archivokuna kanchu",
+    "latestRelease": "Qhipa largarisqa",
+    "topics": "Lliw rimay"
   },
   "maintainers": {
     "title": "Waqaychaqkuna",
@@ -107,7 +111,8 @@
     "packages": "Paquetekuna",
     "totalPackages": "Llapan paquetekuna",
     "scopedPackages": "Scopeyuq",
-    "averageScore": "Chawpi puntuación"
+    "averageScore": "Chawpi puntuación",
+    "toastUnfollowed": "{{username}} manaña qatisqachu."
   },
   "profile": {
     "signOut": "Lluqsiy"
@@ -128,7 +133,8 @@
     "errorInvalid": "Allin paquete sutita (ej. react, @scope/paquete) utaq npm URL nisqata qillqay.",
     "errorAlreadyAdded": "\"{{name}}\" ñam listaykipi kachkan.",
     "errorNotFound": "\"{{name}}\" paqueteqa npm nisqapi mana tarisqachu.",
-    "errorNetwork": "npm registro nisqaman mana tinkuyta atikunchu. Tinkusqaykita qhaway."
+    "errorNetwork": "npm registro nisqaman mana tinkuyta atikunchu. Tinkusqaykita qhaway.",
+    "toastSuccess": "\"{{name}}\" munayniyuqman yapasqa."
   },
   "addMaintainer": {
     "title": "Waqaychaqta yapay",
@@ -139,7 +145,8 @@
     "usernamePlaceholder": "ej. sindresorhus",
     "errorAlreadyAdded": "\"{{username}}\" ñam listaykipi kachkan.",
     "errorNotFound": "\"{{username}}\" waqaychaqqa npm nisqapi mana tarisqachu.",
-    "errorNetwork": "npm registro nisqaman mana tinkuyta atikunchu. Tinkusqaykita qhaway."
+    "errorNetwork": "npm registro nisqaman mana tinkuyta atikunchu. Tinkusqaykita qhaway.",
+    "toastSuccess": "\"{{username}}\" qatisqa waqaychaqkunaman yapasqa."
   },
   "offline": {
     "title": "Musuq versión kachkan",

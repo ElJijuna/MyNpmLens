@@ -111,7 +111,7 @@ export function PackageDetailPage() {
             </WrapBox>
           </WrapBox>
 
-          <DashboardGrid layout={sectionsLayout} columns={{ sm: 1, md: 2 }} gap="md">
+          <DashboardGrid layout={sectionsLayout} columns={{ sm: 1, md: 2, xxl: 4 }} gap="md">
             <DashboardGrid.Item style={{ gridColumn: '1 / -1' }}>
               <PackageInfoSection name={name} version={version} />
             </DashboardGrid.Item>

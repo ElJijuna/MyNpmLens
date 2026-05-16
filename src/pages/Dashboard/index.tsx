@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from '@tanstack/react-router'
 import { Box, Button, Card, Icon, InlineViewSwitcher, InlineViewSwitcherItem, SearchBar, Spinner, StatusPage, Text, WrapBox } from '@gnome-ui/react'
 import { Add, Applications, Star, ViewSidebar } from '@gnome-ui/icons'
-import { DashboardGrid } from '@gnome-ui/layout/components/DashboardGrid'
+import { DashboardGrid, type DashboardGridColumns } from '@gnome-ui/layout/components/DashboardGrid'
 import { AddPackageModal } from '@/components/AddPackageModal'
 import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { AuthSection } from '@/modules/auth/components/AuthSection'
@@ -130,7 +130,7 @@ export function DashboardPage() {
             />
           </Box>
 
-          <DashboardGrid layout="grid" columns="auto" gap="md">
+          <DashboardGrid layout="grid" columns={1} gap="md">
             <DashboardGrid.Item>
               <Box spacing={12}>
                 <Text variant="heading">{t('dashboard.byKeyword')}</Text>
@@ -148,6 +148,7 @@ export function DashboardPage() {
                   isLoading={keywordPackages.isPending}
                   emptyTitle={t('dashboard.emptyPackagesTitle')}
                   emptyDescription={t('dashboard.emptyPackagesDescription')}
+                  columns={{ sm: 1, md: 2, lg: 3 }}
                 />
               </Box>
             </DashboardGrid.Item>
@@ -168,6 +169,7 @@ export function DashboardPage() {
                   isLoading={scopePackages.isPending}
                   emptyTitle={t('dashboard.emptyPackagesTitle')}
                   emptyDescription={t('dashboard.emptyPackagesDescription')}
+                  columns={{ sm: 1, md: 2, lg: 3 }}
                 />
               </Box>
             </DashboardGrid.Item>
@@ -197,11 +199,13 @@ function PackageGrid({
   isLoading,
   emptyTitle,
   emptyDescription,
+  columns = { sm: 1, md: 2, lg: 3 },
 }: {
   names: string[]
   isLoading: boolean
   emptyTitle: string
   emptyDescription: string
+  columns?: DashboardGridColumns
 }) {
   if (isLoading) {
     return (
@@ -223,7 +227,7 @@ function PackageGrid({
   }
 
   return (
-    <DashboardGrid layout="grid" columns={{ sm: 1, md: 2 }} gap="sm">
+    <DashboardGrid layout="grid" columns={columns} gap="sm">
       {names.map((name) => (
         <DashboardGrid.Item key={name}>
           <PackageCard name={name} />

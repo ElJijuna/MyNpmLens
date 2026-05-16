@@ -59,6 +59,20 @@ body {
   }
 }
 
+/* xl */
+@media (min-width: 1200px) {
+  .page-content {
+    max-width: 1200px;
+  }
+}
+
+/* xxl */
+@media (min-width: 1600px) {
+  .page-content {
+    max-width: 1600px;
+  }
+}
+
 /* ─── Maintainer grid ────────────────────────────────────────────── */
 
 .maintainer-grid {
