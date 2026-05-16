@@ -138,7 +138,7 @@ export function MaintainerPage() {
           <Box spacing={12}>
             <Text variant="heading">{t('maintainer.packages')}</Text>
 
-            <DashboardGrid layout={packagesLayout} columns={{ sm: 1, md: 2 }} gap="md">
+            <DashboardGrid layout={packagesLayout} columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} gap="md">
               {packageNames.map((name) => (
                 <DashboardGrid.Item key={name}>
                   <PackageCard name={name} fromMaintainer={username} />
