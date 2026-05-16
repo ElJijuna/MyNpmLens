@@ -193,6 +193,8 @@ export function useGistSync(): GistSyncState {
       if (!hasDiff) {
         await settingsStorage.set(remoteSettings)
         if (cancelled) return
+        queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
+        queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
         queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY })
         setStatus('done')
       } else {
