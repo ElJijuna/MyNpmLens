@@ -1,3 +1,9 @@
+## [1.18.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.17.0...v1.18.0) (2026-05-20)
+
+### Features
+
+* add <install> element for native PWA install prompt ([1801edc](https://github.com/ElJijuna/MyNpmLens/commit/1801edc2eb92b5fbd7dea5859793136abbec56ae))
+
 ## [1.17.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.16.0...v1.17.0) (2026-05-16)
 
 ### Features
