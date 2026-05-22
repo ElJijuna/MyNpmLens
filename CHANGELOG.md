@@ -1,3 +1,9 @@
+## [1.19.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.18.0...v1.19.0) (2026-05-22)
+
+### Features
+
+* prevent show badge with value 0 ([99bab63](https://github.com/ElJijuna/MyNpmLens/commit/99bab634935b40a0dfeed393742cddd0c8e9fd7c))
+
 ## [1.18.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.17.0...v1.18.0) (2026-05-20)
 
 ### Features
