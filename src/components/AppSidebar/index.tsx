@@ -94,7 +94,7 @@ export function AppSidebar() {
           icon={Applications}
           active={!!matchRoute({ to: '/favorites', fuzzy: false })}
           onClick={() => go('/favorites')}
-          suffix={!isCollapsed ? <Badge variant="neutral">{favorites.length}</Badge> : undefined}
+          suffix={!isCollapsed && favorites.length > 0 ? <Badge variant="neutral">{favorites.length}</Badge> : undefined}
         />
         <SidebarItem
           label={t('sidebar.maintainers')}
