@@ -1,3 +1,9 @@
+## [1.21.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.20.0...v1.21.0) (2026-06-08)
+
+### Features
+
+* enhance analytics tracking across various components and pages ([8bd6dcd](https://github.com/ElJijuna/MyNpmLens/commit/8bd6dcd665e979d1c60f5c45d55ef4e653b53a28))
+
 ## [1.20.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.19.0...v1.20.0) (2026-06-08)
 
 ### Features
