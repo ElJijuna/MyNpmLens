@@ -2,20 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useMatchRoute } from '@tanstack/react-router'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { useTranslation } from 'react-i18next'
-import {
-  Sidebar,
-  SidebarSection,
-  SidebarItem,
-  ActionRow,
-  Avatar,
-  Badge,
-  Button,
-  Icon,
-  Spinner,
-  Text,
-  Box,
-  WrapBox,
-} from '@gnome-ui/react'
+import { Sidebar, SidebarSection, SidebarItem, ActionRow, Avatar, Badge, Button, Icon, Spinner, Text, Box, WrapBox } from '@gnome-ui/react'
 import { GoHome, Star, Information, Settings, OpenMenu, Refresh, Applications } from '@gnome-ui/icons'
 import { useAuth } from '@/modules/auth/AuthProvider'
 import { useSidebar } from '@/context/SidebarContext'
@@ -47,7 +34,9 @@ export function AppSidebar() {
 
   const [checking, setChecking] = useState(false)
   const [upToDate, setUpToDate] = useState(false)
-  const { needRefresh: [needRefresh] } = useRegisterSW()
+  const {
+    needRefresh: [needRefresh],
+  } = useRegisterSW()
 
   async function handleCheckUpdate() {
     setChecking(true)
@@ -64,11 +53,7 @@ export function AppSidebar() {
     }
   }
 
-  const updateLabel = checking
-    ? t('sidebar.checking')
-    : upToDate
-      ? t('sidebar.upToDate')
-      : t('sidebar.checkForUpdates')
+  const updateLabel = checking ? t('sidebar.checking') : upToDate ? t('sidebar.upToDate') : t('sidebar.checkForUpdates')
   const isCollapsed = !sidebarOverlay && sidebarCollapsed
 
   return (
@@ -77,18 +62,11 @@ export function AppSidebar() {
         <Button variant="flat" size="sm" onClick={handleToggle} aria-label={t('sidebar.toggleSidebar')}>
           <Icon icon={OpenMenu} />
         </Button>
-        {(!sidebarCollapsed || sidebarOverlay) && (
-          <Text variant="caption-heading">{t('sidebar.title')}</Text>
-        )}
+        {(!sidebarCollapsed || sidebarOverlay) && <Text variant="caption-heading">{t('sidebar.title')}</Text>}
       </div>
 
       <SidebarSection>
-        <SidebarItem
-          label={t('sidebar.home')}
-          icon={GoHome}
-          active={!!matchRoute({ to: '/', fuzzy: false })}
-          onClick={() => go('/')}
-        />
+        <SidebarItem label={t('sidebar.home')} icon={GoHome} active={!!matchRoute({ to: '/', fuzzy: false })} onClick={() => go('/')} />
         <SidebarItem
           label={t('sidebar.favorites')}
           icon={Applications}
@@ -103,18 +81,8 @@ export function AppSidebar() {
           onClick={() => go('/maintainers')}
           suffix={!isCollapsed && maintainers.length > 0 ? <Badge variant="neutral">{maintainers.length}</Badge> : undefined}
         />
-        <SidebarItem
-          label={t('sidebar.settings')}
-          icon={Settings}
-          active={!!matchRoute({ to: '/settings' })}
-          onClick={() => go('/settings')}
-        />
-        <SidebarItem
-          label={t('sidebar.about')}
-          icon={Information}
-          active={!!matchRoute({ to: '/about' })}
-          onClick={() => go('/about')}
-        />
+        <SidebarItem label={t('sidebar.settings')} icon={Settings} active={!!matchRoute({ to: '/settings' })} onClick={() => go('/settings')} />
+        <SidebarItem label={t('sidebar.about')} icon={Information} active={!!matchRoute({ to: '/about' })} onClick={() => go('/about')} />
       </SidebarSection>
 
       <div className="sidebar-footer" data-collapsed={isCollapsed}>
@@ -122,28 +90,14 @@ export function AppSidebar() {
           <ActionRow
             title={user.displayName ?? user.email ?? 'Profile'}
             subtitle={user.email ?? undefined}
-            leading={
-              <Avatar
-                src={user.photoURL ?? undefined}
-                name={user.displayName ?? user.email ?? '?'}
-                size="sm"
-              />
-            }
+            leading={<Avatar src={user.photoURL ?? undefined} name={user.displayName ?? user.email ?? '?'} size="sm" />}
             interactive
             onClick={() => go('/profile')}
           />
         )}
         {user && isCollapsed && (
-          <Button
-            variant="flat"
-            size="sm"
-            onClick={() => go('/profile')}
-          >
-            <Avatar
-              src={user.photoURL ?? undefined}
-              name={user.displayName ?? user.email ?? '?'}
-              size="sm"
-            />
+          <Button variant="flat" size="sm" onClick={() => go('/profile')}>
+            <Avatar src={user.photoURL ?? undefined} name={user.displayName ?? user.email ?? '?'} size="sm" />
           </Button>
         )}
         <Button
@@ -154,7 +108,7 @@ export function AppSidebar() {
           leadingIcon={isCollapsed ? undefined : checking ? <Spinner size="sm" /> : <Icon icon={Refresh} />}
           aria-label={isCollapsed ? updateLabel : undefined}
         >
-          {isCollapsed ? (checking ? <Spinner size="sm" /> : <Icon icon={Refresh} />) : updateLabel}
+          {isCollapsed ? checking ? <Spinner size="sm" /> : <Icon icon={Refresh} /> : updateLabel}
         </Button>
         <Box align="center">
           <WrapBox justify="center" align="center">

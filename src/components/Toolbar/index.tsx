@@ -23,12 +23,7 @@ export function Toolbar({ onAddClick }: ToolbarProps) {
     <div className="sticky-header">
       <HeaderBar
         flat
-        title={
-          <PathBar
-            segments={segments}
-            onNavigate={(path) => navigate({ to: path })}
-          />
-        }
+        title={<PathBar segments={segments} onNavigate={(path) => navigate({ to: path })} />}
         start={
           sidebarOverlay ? (
             <>

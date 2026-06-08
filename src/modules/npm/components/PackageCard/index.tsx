@@ -9,7 +9,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useNpmPackage, useNpmPackageDownloads } from '@api-hooks/npm'
 import { useGitHubStats } from '@/modules/github/hooks'
 import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug'
-import { getIcon } from 'very-simple-icons';
+import { getIcon } from 'very-simple-icons'
 import { useFormatters } from '@/hooks/useFormatters'
 
 interface PackageCardProps {

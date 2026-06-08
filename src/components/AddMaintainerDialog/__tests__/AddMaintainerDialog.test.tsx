@@ -35,9 +35,6 @@ describe('AddMaintainerDialog', () => {
     })
     fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }))
 
-    await waitFor(() =>
-      expect(Analytics.addMaintainer).toHaveBeenCalledWith('sindresorhus'),
-    )
+    await waitFor(() => expect(Analytics.addMaintainer).toHaveBeenCalledWith('sindresorhus'))
   })
-
 })

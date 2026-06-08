@@ -10,10 +10,7 @@ export function AboutPage() {
   return (
     <Box orientation="vertical" style={{ flex: 1 }}>
       <main className="page-content" style={{ justifyContent: 'center' }}>
-        <StatusPage
-          title={t('about.title')}
-          description={t('about.description', { version: VERSION })}
-        >
+        <StatusPage title={t('about.title')} description={t('about.description', { version: VERSION })}>
           <Box orientation="vertical" spacing={12} align="center">
             <Button variant="default" onClick={() => window.open(REPO_URL, '_blank')}>
               {t('about.githubRepo')}

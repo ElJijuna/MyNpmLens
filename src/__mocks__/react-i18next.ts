@@ -15,10 +15,7 @@ function lookup(obj: NestedRecord, path: string): string {
 function t(key: string, opts?: Record<string, unknown>): string {
   let value = lookup(en as unknown as NestedRecord, key)
   if (opts) {
-    value = Object.entries(opts).reduce(
-      (str, [k, v]) => str.replace(new RegExp(`{{${k}}}`, 'g'), String(v)),
-      value,
-    )
+    value = Object.entries(opts).reduce((str, [k, v]) => str.replace(new RegExp(`{{${k}}}`, 'g'), String(v)), value)
   }
   return value
 }

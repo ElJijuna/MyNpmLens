@@ -7,9 +7,7 @@ describe('parseNpmUrl', () => {
     })
 
     it('parses a scoped package URL', () => {
-      expect(parseNpmUrl('https://www.npmjs.com/package/@tanstack/react-query')).toBe(
-        '@tanstack/react-query',
-      )
+      expect(parseNpmUrl('https://www.npmjs.com/package/@tanstack/react-query')).toBe('@tanstack/react-query')
     })
 
     it('parses without www subdomain', () => {

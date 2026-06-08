@@ -11,7 +11,7 @@
   margin-bottom: var(--gnome-space-1);
 }
 
-.sidebar-header[data-collapsed='true'] {
+.sidebar-header[data-collapsed="true"] {
   justify-content: center;
   padding: var(--gnome-space-1) 0;
 }
@@ -24,7 +24,7 @@
   border-top: 1px solid var(--gnome-borders-color);
 }
 
-.sidebar-footer[data-collapsed='true'] {
+.sidebar-footer[data-collapsed="true"] {
   align-items: center;
   padding: var(--gnome-space-1) 0;
 }

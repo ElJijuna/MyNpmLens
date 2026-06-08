@@ -19,11 +19,7 @@ export function MaintainersPage() {
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <main className="page-content">
         {maintainers.length === 0 ? (
-          <StatusPage
-            icon={Star}
-            title={t('maintainers.emptyTitle')}
-            description={t('maintainers.emptyDescription')}
-          >
+          <StatusPage icon={Star} title={t('maintainers.emptyTitle')} description={t('maintainers.emptyDescription')}>
             <Button variant="suggested" onClick={() => setDialogOpen(true)} leadingIcon={<Icon icon={Add} />}>
               {t('maintainers.addMaintainer')}
             </Button>
@@ -43,12 +39,7 @@ export function MaintainersPage() {
                   <InlineViewSwitcherItem name="grid" label={t('dashboard.gridView')} icon={Applications} />
                   <InlineViewSwitcherItem name="column" label={t('dashboard.columnView')} icon={ViewSidebar} />
                 </InlineViewSwitcher>
-                <Button
-                  variant="suggested"
-                  size="sm"
-                  onClick={() => setDialogOpen(true)}
-                  leadingIcon={<Icon icon={Add} />}
-                >
+                <Button variant="suggested" size="sm" onClick={() => setDialogOpen(true)} leadingIcon={<Icon icon={Add} />}>
                   {t('maintainers.add')}
                 </Button>
               </WrapBox>

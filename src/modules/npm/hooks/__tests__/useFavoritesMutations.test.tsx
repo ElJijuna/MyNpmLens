@@ -28,7 +28,9 @@ describe('useAddFavorite', () => {
     await waitFor(() => expect(favResult.current.isSuccess).toBe(true))
     expect(favResult.current.data).toHaveLength(0)
 
-    act(() => { addResult.current.mutate('react') })
+    act(() => {
+      addResult.current.mutate('react')
+    })
 
     await waitFor(() => expect(favResult.current.data).toHaveLength(1))
     expect(favResult.current.data![0].name).toBe('react')
@@ -39,10 +41,14 @@ describe('useAddFavorite', () => {
     const { result: addResult } = renderHook(() => useAddFavorite(), { wrapper })
     const { result: favResult } = renderHook(() => useFavorites(), { wrapper })
 
-    act(() => { addResult.current.mutate('react') })
+    act(() => {
+      addResult.current.mutate('react')
+    })
     await waitFor(() => expect(favResult.current.data).toHaveLength(1))
 
-    act(() => { addResult.current.mutate('react') })
+    act(() => {
+      addResult.current.mutate('react')
+    })
     await waitFor(() => expect(addResult.current.isSuccess).toBe(true))
     expect(favResult.current.data).toHaveLength(1)
   })
@@ -57,7 +63,9 @@ describe('useRemoveFavorite', () => {
 
     await waitFor(() => expect(favResult.current.data).toHaveLength(1))
 
-    act(() => { removeResult.current.mutate('react') })
+    act(() => {
+      removeResult.current.mutate('react')
+    })
 
     await waitFor(() => expect(favResult.current.data).toHaveLength(0))
   })

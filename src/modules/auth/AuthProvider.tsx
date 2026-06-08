@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { GhClientProvider } from '@api-hooks/gh'
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { onAuthStateChanged, type User } from 'firebase/auth'
 import { auth } from './proxy/firebase'
 import type { AuthUser } from './domain'
@@ -32,6 +33,7 @@ const AuthContext = createContext<AuthContextValue>({
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [authLoading, setAuthLoading] = useState(true)
+  const ghClientOptions = useMemo(() => (user?.githubToken ? { token: user.githubToken } : undefined), [user?.githubToken])
 
   useEffect(() => {
     if (!auth) {
@@ -65,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ user, authLoading, setGithubToken }}>
-      {children}
+      <GhClientProvider options={ghClientOptions}>{children}</GhClientProvider>
     </AuthContext.Provider>
   )
 }

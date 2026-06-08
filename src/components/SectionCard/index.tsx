@@ -24,11 +24,7 @@ export function SectionCard({ title, isLoading, error, children }: SectionCardPr
         </div>
       )}
 
-      {!isLoading && error && (
-        <Banner variant="error">
-          {error.message ?? t('sectionCard.error')}
-        </Banner>
-      )}
+      {!isLoading && error && <Banner variant="error">{error.message ?? t('sectionCard.error')}</Banner>}
 
       {!isLoading && !error && children}
     </Card>

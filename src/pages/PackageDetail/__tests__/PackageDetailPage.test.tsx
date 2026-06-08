@@ -55,16 +55,41 @@ const MOCK_PKG_VERSION = {
 describe('PackageDetailPage', () => {
   beforeEach(() => {
     jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({ isPending: false, data: MOCK_PKG, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackage>)
-    jest.spyOn(npmApiHooks, 'useNpmPackageVersion').mockReturnValue({ isPending: false, data: MOCK_PKG_VERSION, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageVersion>)
-    jest.spyOn(npmApiHooks, 'useNpmPackageVersionDownloads')
-      .mockReturnValue({ isPending: false, data: { downloads: 1_000_000, package: 'react', version: '19.0.0', period: 'last-week' }, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageVersionDownloads>)
-    jest.spyOn(npmApiHooks, 'useNpmPackageScore').mockReturnValue({ isPending: false, data: undefined, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageScore>)
-    jest.spyOn(npmApiHooks, 'useNpmPackageDownloadRange').mockReturnValue({ isPending: false, data: undefined, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloadRange>)
-    jest.spyOn(bpHooks, 'useBpPackageVersionSize').mockReturnValue({ isPending: false, data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false }, error: null } as unknown as ReturnType<typeof bpHooks.useBpPackageVersionSize>)
+    jest
+      .spyOn(npmApiHooks, 'useNpmPackageVersion')
+      .mockReturnValue({ isPending: false, data: MOCK_PKG_VERSION, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageVersion>)
+    jest
+      .spyOn(npmApiHooks, 'useNpmPackageVersionDownloads')
+      .mockReturnValue({ isPending: false, data: { downloads: 1_000_000, package: 'react', version: '19.0.0', period: 'last-week' }, error: null } as unknown as ReturnType<
+        typeof npmApiHooks.useNpmPackageVersionDownloads
+      >)
+    jest
+      .spyOn(npmApiHooks, 'useNpmPackageScore')
+      .mockReturnValue({ isPending: false, data: undefined, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageScore>)
+    jest
+      .spyOn(npmApiHooks, 'useNpmPackageDownloadRange')
+      .mockReturnValue({ isPending: false, data: undefined, error: null } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloadRange>)
+    jest.spyOn(bpHooks, 'useBpPackageVersionSize').mockReturnValue({
+      isPending: false,
+      data: { packageName: 'react', version: '19.0.0', size: 11_000, gzip: 4_200, hasSideEffects: false },
+      error: null,
+    } as unknown as ReturnType<typeof bpHooks.useBpPackageVersionSize>)
     jest.spyOn(npmHooks, 'useRemoveFavorite').mockReturnValue({ mutate: jest.fn() } as unknown as ReturnType<typeof npmHooks.useRemoveFavorite>)
     jest.spyOn(npmHooks, 'useAddFavorite').mockReturnValue({ mutate: jest.fn(), isPending: false } as unknown as ReturnType<typeof npmHooks.useAddFavorite>)
     jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({ data: [] } as unknown as ReturnType<typeof npmHooks.useFavorites>)
-    jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ isPending: false, data: { owner: 'facebook', repo: 'react', stars: 230_000, forks: 47_000, openIssues: 850, lastPushedAt: '2024-12-01T10:00:00Z', htmlUrl: 'https://github.com/facebook/react' }, error: null } as unknown as ReturnType<typeof githubHooks.useGitHubStats>)
+    jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({
+      isPending: false,
+      data: {
+        owner: 'facebook',
+        repo: 'react',
+        stars: 230_000,
+        forks: 47_000,
+        openIssues: 850,
+        lastPushedAt: '2024-12-01T10:00:00Z',
+        htmlUrl: 'https://github.com/facebook/react',
+      },
+      error: null,
+    } as unknown as ReturnType<typeof githubHooks.useGitHubStats>)
     jest.spyOn(osvHooks, 'useOsvQuery').mockReturnValue({ isPending: false, data: { vulns: [] }, error: null } as unknown as ReturnType<typeof osvHooks.useOsvQuery>)
   })
 
@@ -129,7 +154,8 @@ describe('PackageDetailPage', () => {
   })
 
   it('shows error banner in a section when query fails', () => {
-    jest.spyOn(npmApiHooks, 'useNpmPackageVersionDownloads')
+    jest
+      .spyOn(npmApiHooks, 'useNpmPackageVersionDownloads')
       .mockReset()
       .mockReturnValue({
         isPending: false,

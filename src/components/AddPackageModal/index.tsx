@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { Dialog, SearchBar, Banner } from '@gnome-ui/react'
 import { useToast } from '@gnome-ui/layout/components/Toast'
 
-interface Suggestion { id: string; label: string }
+interface Suggestion {
+  id: string
+  label: string
+}
 import { parseNpmUrl } from '@/modules/npm/domain'
 import { useAddFavorite, useFavorites } from '@/modules/npm/hooks'
 import { Analytics } from '@/lib/analytics'

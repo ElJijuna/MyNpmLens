@@ -35,11 +35,7 @@ export function SidebarProvider({
   sidebarCollapsed: boolean
   toggleCollapsed: () => void
 }) {
-  return (
-    <SidebarContext.Provider value={{ sidebarOpen, openSidebar, closeSidebar, sidebarOverlay, sidebarCollapsed, toggleCollapsed }}>
-      {children}
-    </SidebarContext.Provider>
-  )
+  return <SidebarContext.Provider value={{ sidebarOpen, openSidebar, closeSidebar, sidebarOverlay, sidebarCollapsed, toggleCollapsed }}>{children}</SidebarContext.Provider>
 }
 
 export function useSidebar(): SidebarContextValue {

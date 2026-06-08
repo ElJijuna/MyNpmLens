@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Route } from '@/routes/packages.$name';
-import { useRemoveFavorite, useAddFavorite, useFavorites } from '@/modules/npm/hooks';
-import { useNpmPackage } from '@api-hooks/npm';
-import { useNavigate } from '@tanstack/react-router';
-import { Dropdown, Text, Button, Icon, Box, WrapBox, InlineViewSwitcher, InlineViewSwitcherItem } from '@gnome-ui/react';
-import { Delete, StarOutline, Applications, ViewSidebar } from '@gnome-ui/icons';
+import { Route } from '@/routes/packages.$name'
+import { useRemoveFavorite, useAddFavorite, useFavorites } from '@/modules/npm/hooks'
+import { useNpmPackage } from '@api-hooks/npm'
+import { useNavigate } from '@tanstack/react-router'
+import { Dropdown, Text, Button, Icon, Box, WrapBox, InlineViewSwitcher, InlineViewSwitcherItem } from '@gnome-ui/react'
+import { Delete, StarOutline, Applications, ViewSidebar } from '@gnome-ui/icons'
 import { Npm } from '@gnome-ui/icons/third-party'
-import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid';
+import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
 import { IconBadge } from '@gnome-ui/layout/components/IconBadge'
 import { getIcon } from 'very-simple-icons'
-import { PackageInfoSection } from './sections/PackageInfoSection';
-import { DownloadsSection } from './sections/DownloadsSection';
-import { BundleSizeSection } from './sections/BundleSizeSection';
-import { GitHubSection } from './sections/GitHubSection';
-import { VulnerabilitySection } from './sections/VulnerabilitySection';
-import { ScoreSection } from './sections/ScoreSection';
-import { DependenciesSection } from './sections/DependenciesSection';
-import { FilesSection } from './sections/FilesSection';
+import { PackageInfoSection } from './sections/PackageInfoSection'
+import { DownloadsSection } from './sections/DownloadsSection'
+import { BundleSizeSection } from './sections/BundleSizeSection'
+import { GitHubSection } from './sections/GitHubSection'
+import { VulnerabilitySection } from './sections/VulnerabilitySection'
+import { ScoreSection } from './sections/ScoreSection'
+import { DependenciesSection } from './sections/DependenciesSection'
+import { FilesSection } from './sections/FilesSection'
 
 export function PackageDetailPage() {
   const { t } = useTranslation()
@@ -54,23 +54,21 @@ export function PackageDetailPage() {
     addFavorite.mutate(name, { onSuccess: () => navigate({ to: '/' }) })
   }
 
-  const actionButton = fromMaintainer
-    ? isFavorite
-      ? (
-        <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
-          {t('packageDetail.removePackage')}
-        </Button>
-      )
-      : (
-        <Button variant="suggested" size="sm" leadingIcon={<Icon icon={StarOutline} />} onClick={handleAdd} disabled={addFavorite.isPending}>
-          {t('packageDetail.addPackage')}
-        </Button>
-      )
-    : (
+  const actionButton = fromMaintainer ? (
+    isFavorite ? (
       <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
         {t('packageDetail.removePackage')}
       </Button>
+    ) : (
+      <Button variant="suggested" size="sm" leadingIcon={<Icon icon={StarOutline} />} onClick={handleAdd} disabled={addFavorite.isPending}>
+        {t('packageDetail.addPackage')}
+      </Button>
     )
+  ) : (
+    <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
+      {t('packageDetail.removePackage')}
+    </Button>
+  )
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -83,13 +81,10 @@ export function PackageDetailPage() {
               </IconBadge>
               {versionOptions.length > 0 && (
                 <>
-                  <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>{t('packageDetail.version')}</Text>
-                  <Dropdown
-                    aria-label={t('packageDetail.selectVersion')}
-                    options={versionOptions}
-                    value={version || latestVersion}
-                    onChange={handleVersionChange}
-                  />
+                  <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
+                    {t('packageDetail.version')}
+                  </Text>
+                  <Dropdown aria-label={t('packageDetail.selectVersion')} options={versionOptions} value={version || latestVersion} onChange={handleVersionChange} />
                   <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
                     {versionList.length} {t('packageDetail.published')}
                   </Text>

@@ -19,14 +19,16 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
       {data && (
         <Box orientation="vertical" spacing={6}>
           <WrapBox childSpacing={6} align="center">
-            <Text variant="title-2" as="h1">{data.name}</Text>
-            <Text variant="caption" color="dim">v{data.version}</Text>
+            <Text variant="title-2" as="h1">
+              {data.name}
+            </Text>
+            <Text variant="caption" color="dim">
+              v{data.version}
+            </Text>
             {data.license && <Badge variant="neutral">{data.license}</Badge>}
           </WrapBox>
 
-          {data.description && (
-            <Text color="dim">{data.description}</Text>
-          )}
+          {data.description && <Text color="dim">{data.description}</Text>}
 
           {data.homepage && (
             <Text variant="caption">
@@ -38,7 +40,9 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
 
           {maintainers && maintainers.length > 0 && (
             <Box orientation="vertical" spacing={4}>
-              <Text variant="caption-heading" color="dim">{t('packageDetail.maintainers')}</Text>
+              <Text variant="caption-heading" color="dim">
+                {t('packageDetail.maintainers')}
+              </Text>
               <WrapBox childSpacing={8}>
                 {maintainers.map((m) => {
                   const label = m.name ?? m.username ?? m.email ?? '?'
@@ -46,7 +50,9 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
                   return (
                     <WrapBox key={label} align="center" childSpacing={4} style={{ minWidth: 0 }}>
                       <MaintainerAvatar username={username} name={label} size="sm" />
-                      <Text variant="caption" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</Text>
+                      <Text variant="caption" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {label}
+                      </Text>
                     </WrapBox>
                   )
                 })}

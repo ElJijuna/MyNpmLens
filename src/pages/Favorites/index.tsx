@@ -29,9 +29,7 @@ export function FavoritesPage() {
         ) : (
           <Box spacing={24}>
             <WrapBox justify="space-between" align="center">
-              <Text variant="heading">
-                {t('favorites.favoritePackages')}
-              </Text>
+              <Text variant="heading">{t('favorites.favoritePackages')}</Text>
               <WrapBox childSpacing={8} align="center">
                 <InlineViewSwitcher
                   className="layout-switcher-mobile-hidden"
@@ -43,12 +41,7 @@ export function FavoritesPage() {
                   <InlineViewSwitcherItem name="grid" label={t('favorites.gridView')} icon={Applications} />
                   <InlineViewSwitcherItem name="column" label={t('favorites.columnView')} icon={ViewSidebar} />
                 </InlineViewSwitcher>
-                <Button
-                  variant="suggested"
-                  size="sm"
-                  onClick={() => setModalOpen(true)}
-                  leadingIcon={<Icon icon={Add} />}
-                >
+                <Button variant="suggested" size="sm" onClick={() => setModalOpen(true)} leadingIcon={<Icon icon={Add} />}>
                   {t('favorites.add')}
                 </Button>
               </WrapBox>

@@ -31,13 +31,7 @@ export function SettingsPage() {
               <ActionRow
                 title={t('settings.accentColor')}
                 subtitle={t('settings.accentColorSubtitle')}
-                trailing={
-                  <ColorPicker
-                    size="sm"
-                    value={settings.accentColor}
-                    onChange={(color) => updateSettings.mutate({ accentColor: color })}
-                  />
-                }
+                trailing={<ColorPicker size="sm" value={settings.accentColor} onChange={(color) => updateSettings.mutate({ accentColor: color })} />}
               />
             </BoxedList>
           </PreferencesGroup>
@@ -70,12 +64,7 @@ export function SettingsPage() {
 
           <PreferencesGroup title={t('settings.dataGroup')}>
             <BoxedList>
-              <ActionRow
-                title={t('settings.syncTitle')}
-                subtitle={t('settings.syncSubtitle')}
-                interactive
-                onClick={() => void navigate({ to: '/sync' })}
-              />
+              <ActionRow title={t('settings.syncTitle')} subtitle={t('settings.syncSubtitle')} interactive onClick={() => void navigate({ to: '/sync' })} />
             </BoxedList>
           </PreferencesGroup>
         </Box>

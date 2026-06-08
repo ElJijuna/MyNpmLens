@@ -38,13 +38,7 @@ export function MaintainersPackagesChart({ usernames }: MaintainersPackagesChart
       <Text variant="heading" style={{ marginBottom: '1rem' }}>
         {t('maintainer.packages')}
       </Text>
-      <BarChart
-        data={data}
-        xAxisKey="name"
-        series={[{ dataKey: 'packages', name: t('maintainer.packages') }]}
-        showGrid
-        height={260}
-      />
+      <BarChart data={data} xAxisKey="name" series={[{ dataKey: 'packages', name: t('maintainer.packages') }]} showGrid height={260} />
     </Card>
   )
 }

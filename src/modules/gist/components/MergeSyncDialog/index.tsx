@@ -25,7 +25,9 @@ export function MergeSyncDialog({ delta, onKeepAll, onReplaceWithLocal }: MergeS
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {addedInGist.length > 0 && (
           <div>
-            <Text variant="caption" color="dim">{t('mergeSync.packagesAdded')}</Text>
+            <Text variant="caption" color="dim">
+              {t('mergeSync.packagesAdded')}
+            </Text>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.25rem' }}>
               {addedInGist.map((p) => (
                 <Text key={p.name} style={{ color: 'var(--gnome-success-color, green)' }}>
@@ -38,7 +40,9 @@ export function MergeSyncDialog({ delta, onKeepAll, onReplaceWithLocal }: MergeS
 
         {removedInGist.length > 0 && (
           <div>
-            <Text variant="caption" color="dim">{t('mergeSync.packagesRemoved')}</Text>
+            <Text variant="caption" color="dim">
+              {t('mergeSync.packagesRemoved')}
+            </Text>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.25rem' }}>
               {removedInGist.map((p) => (
                 <Text key={p.name} style={{ color: 'var(--gnome-error-color, red)' }}>
@@ -51,7 +55,9 @@ export function MergeSyncDialog({ delta, onKeepAll, onReplaceWithLocal }: MergeS
 
         {addedMaintainersInGist.length > 0 && (
           <div>
-            <Text variant="caption" color="dim">{t('mergeSync.maintainersAdded')}</Text>
+            <Text variant="caption" color="dim">
+              {t('mergeSync.maintainersAdded')}
+            </Text>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.25rem' }}>
               {addedMaintainersInGist.map((m) => (
                 <Text key={m.username} style={{ color: 'var(--gnome-success-color, green)' }}>
@@ -64,7 +70,9 @@ export function MergeSyncDialog({ delta, onKeepAll, onReplaceWithLocal }: MergeS
 
         {removedMaintainersInGist.length > 0 && (
           <div>
-            <Text variant="caption" color="dim">{t('mergeSync.maintainersRemoved')}</Text>
+            <Text variant="caption" color="dim">
+              {t('mergeSync.maintainersRemoved')}
+            </Text>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.25rem' }}>
               {removedMaintainersInGist.map((m) => (
                 <Text key={m.username} style={{ color: 'var(--gnome-error-color, red)' }}>

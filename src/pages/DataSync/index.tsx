@@ -33,15 +33,9 @@ export function DataSyncPage() {
     })
   }
 
-  const allPackages = [
-    ...localFavorites,
-    ...gistFavorites.filter((g) => !localFavorites.find((l) => l.name === g.name)),
-  ]
+  const allPackages = [...localFavorites, ...gistFavorites.filter((g) => !localFavorites.find((l) => l.name === g.name))]
 
-  const allMaintainers = [
-    ...localMaintainers,
-    ...gistMaintainers.filter((g) => !localMaintainers.find((l) => l.username === g.username)),
-  ]
+  const allMaintainers = [...localMaintainers, ...gistMaintainers.filter((g) => !localMaintainers.find((l) => l.username === g.username))]
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -68,12 +62,7 @@ export function DataSyncPage() {
                       isNew ? (
                         <Badge variant="success">{t('sync.badgeNew')}</Badge>
                       ) : isOnlyLocal ? (
-                        <Button
-                          size="sm"
-                          variant="default"
-                          disabled={pushToGist.isPending}
-                          onClick={handleSaveToGist}
-                        >
+                        <Button size="sm" variant="default" disabled={pushToGist.isPending} onClick={handleSaveToGist}>
                           {t('sync.saveToGist')}
                         </Button>
                       ) : undefined
@@ -100,12 +89,7 @@ export function DataSyncPage() {
                       isNew ? (
                         <Badge variant="success">{t('sync.badgeNew')}</Badge>
                       ) : isOnlyLocal ? (
-                        <Button
-                          size="sm"
-                          variant="default"
-                          disabled={pushToGist.isPending}
-                          onClick={handleSaveToGist}
-                        >
+                        <Button size="sm" variant="default" disabled={pushToGist.isPending} onClick={handleSaveToGist}>
                           {t('sync.saveToGist')}
                         </Button>
                       ) : undefined

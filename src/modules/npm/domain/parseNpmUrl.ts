@@ -17,8 +17,7 @@ export function parseNpmUrl(input: string): string | null {
   // Try to parse as URL first
   try {
     const url = new URL(trimmed)
-    const isNpmHost =
-      url.hostname === 'www.npmjs.com' || url.hostname === 'npmjs.com'
+    const isNpmHost = url.hostname === 'www.npmjs.com' || url.hostname === 'npmjs.com'
 
     if (!isNpmHost) return null
 
@@ -39,8 +38,6 @@ export function parseNpmUrl(input: string): string | null {
  */
 function validatePackageName(name: string): string | null {
   // Scoped: @scope/name  or  unscoped: name
-  const valid = /^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(
-    name,
-  )
+  const valid = /^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name)
   return valid ? name : null
 }

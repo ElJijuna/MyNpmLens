@@ -11,20 +11,13 @@ export const GIST_FILENAME = 'mynpmlens.json'
 
 export function usePushToGist() {
   const { user } = useAuth()
-  const client = useMemo(
-    () => new GitHubClient(user?.githubToken ? { token: user.githubToken } : {}),
-    [user?.githubToken],
-  )
+  const client = useMemo(() => new GitHubClient(user?.githubToken ? { token: user.githubToken } : {}), [user?.githubToken])
 
   return useMutation({
     mutationFn: async () => {
       if (!user?.githubToken) return
 
-      const [favorites, maintainers, settings] = await Promise.all([
-        favoritesStorage.getAll(),
-        maintainersStorage.getAll(),
-        settingsStorage.get(),
-      ])
+      const [favorites, maintainers, settings] = await Promise.all([favoritesStorage.getAll(), maintainersStorage.getAll(), settingsStorage.get()])
       const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
       const files = { [GIST_FILENAME]: { content } }
 

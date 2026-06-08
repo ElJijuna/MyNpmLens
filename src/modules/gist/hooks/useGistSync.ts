@@ -27,12 +27,7 @@ interface GistSyncState {
   resolveReplaceWithLocal: () => void
 }
 
-function computeDelta(
-  localFavs: FavoritePackage[],
-  gistFavs: FavoritePackage[],
-  localMaintainers: FollowedMaintainer[],
-  gistMaintainers: FollowedMaintainer[],
-): GistDelta {
+function computeDelta(localFavs: FavoritePackage[], gistFavs: FavoritePackage[], localMaintainers: FollowedMaintainer[], gistMaintainers: FollowedMaintainer[]): GistDelta {
   return {
     addedInGist: gistFavs.filter((g) => !localFavs.find((l) => l.name === g.name)),
     removedInGist: localFavs.filter((l) => !gistFavs.find((g) => g.name === l.name)),
@@ -72,8 +67,8 @@ export function useGistSync(): GistSyncState {
   const [gistMaintainers, setGistMaintainers] = useState<FollowedMaintainer[]>([])
   const [gistSettings, setGistSettings] = useState<AppSettings>(DEFAULT_SETTINGS)
 
-  const createGist = useGhCreateGist({ token: user?.githubToken })
-  const updateGist = useGhUpdateGist(gistId ?? '', { token: user?.githubToken })
+  const createGist = useGhCreateGist()
+  const updateGist = useGhUpdateGist(gistId ?? '')
 
   // Load stored gist id from IndexedDB whenever the logged-in user changes
   useEffect(() => {
@@ -103,7 +98,6 @@ export function useGistSync(): GistSyncState {
     { per_page: 100 },
     {
       enabled: gistIdLoaded && !gistId && status === 'syncing' && !!user?.githubToken,
-      token: user?.githubToken,
     },
   )
 
@@ -119,11 +113,7 @@ export function useGistSync(): GistSyncState {
       setGistId(found.id)
       // useGhGist picks up the new id and handles the rest
     } else {
-      void Promise.all([
-        favoritesStorage.getAll(),
-        maintainersStorage.getAll(),
-        settingsStorage.get(),
-      ])
+      void Promise.all([favoritesStorage.getAll(), maintainersStorage.getAll(), settingsStorage.get()])
         .then(([favorites, maintainers, settings]) => {
           const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
           createGist.mutate(
@@ -143,9 +133,12 @@ export function useGistSync(): GistSyncState {
   }, [listsLoaded, gistId, user?.uid, user?.githubToken])
 
   // Fetch the remote gist content once we have an id
-  const { data: remoteGist, isSuccess: gistLoaded, isError: gistError } = useGhGist(gistId ?? '', {
+  const {
+    data: remoteGist,
+    isSuccess: gistLoaded,
+    isError: gistError,
+  } = useGhGist(gistId ?? '', {
     enabled: !!gistId && !!user?.githubToken && status === 'syncing',
-    token: user?.githubToken,
   })
 
   // Compare remote vs local and decide if there's a conflict
@@ -158,18 +151,15 @@ export function useGistSync(): GistSyncState {
     async function compareGist() {
       const raw = gist.files[GIST_FILENAME]?.content ?? '{}'
       const { favorites: remoteFavs, maintainers: remoteMaintainers, settings: remoteSettings } = parseGistContent(raw)
-      const [localFavs, localMaintainers] = await Promise.all([
-        favoritesStorage.getAll(),
-        maintainersStorage.getAll(),
-      ])
+      const [localFavs, localMaintainers] = await Promise.all([favoritesStorage.getAll(), maintainersStorage.getAll()])
 
       if (cancelled) return
 
       if (localFavs.length === 0 && localMaintainers.length === 0 && (remoteFavs.length > 0 || remoteMaintainers.length > 0)) {
         const now = new Date().toISOString()
         await Promise.all([
-          favoritesStorage.replace(remoteFavs.map(f => ({ ...f, addedAt: f.addedAt ?? now }))),
-          maintainersStorage.replace(remoteMaintainers.map(m => ({ ...m, addedAt: m.addedAt ?? now }))),
+          favoritesStorage.replace(remoteFavs.map((f) => ({ ...f, addedAt: f.addedAt ?? now }))),
+          maintainersStorage.replace(remoteMaintainers.map((m) => ({ ...m, addedAt: m.addedAt ?? now }))),
           settingsStorage.set(remoteSettings),
         ])
         if (cancelled) return
@@ -185,10 +175,7 @@ export function useGistSync(): GistSyncState {
       const computed = computeDelta(localFavs, remoteFavs, localMaintainers, remoteMaintainers)
 
       const hasDiff =
-        computed.addedInGist.length > 0 ||
-        computed.removedInGist.length > 0 ||
-        computed.addedMaintainersInGist.length > 0 ||
-        computed.removedMaintainersInGist.length > 0
+        computed.addedInGist.length > 0 || computed.removedInGist.length > 0 || computed.addedMaintainersInGist.length > 0 || computed.removedMaintainersInGist.length > 0
 
       if (!hasDiff) {
         await settingsStorage.set(remoteSettings)
@@ -222,21 +209,14 @@ export function useGistSync(): GistSyncState {
 
     const localFavs = await favoritesStorage.getAll()
     const now = new Date().toISOString()
-    const mergedFavs = [
-      ...localFavs,
-      ...gistFavs
-        .filter((g) => !localFavs.find((l) => l.name === g.name))
-        .map((g) => ({ ...g, addedAt: g.addedAt ?? now })),
-    ]
+    const mergedFavs = [...localFavs, ...gistFavs.filter((g) => !localFavs.find((l) => l.name === g.name)).map((g) => ({ ...g, addedAt: g.addedAt ?? now }))]
     await favoritesStorage.replace(mergedFavs)
     queryClient.invalidateQueries({ queryKey: FAVORITES_QUERY_KEY })
 
     const localMaintainers = await maintainersStorage.getAll()
     const mergedMaintainers = [
       ...localMaintainers,
-      ...gistMaintainers
-        .filter((g) => !localMaintainers.find((l) => l.username === g.username))
-        .map((g) => ({ ...g, addedAt: g.addedAt ?? now })),
+      ...gistMaintainers.filter((g) => !localMaintainers.find((l) => l.username === g.username)).map((g) => ({ ...g, addedAt: g.addedAt ?? now })),
     ]
     await maintainersStorage.replace(mergedMaintainers)
     queryClient.invalidateQueries({ queryKey: MAINTAINERS_QUERY_KEY })
@@ -251,11 +231,7 @@ export function useGistSync(): GistSyncState {
 
   async function resolveReplaceWithLocal() {
     if (!user?.githubToken || !gistId) return
-    const [favorites, maintainers, settings] = await Promise.all([
-      favoritesStorage.getAll(),
-      maintainersStorage.getAll(),
-      settingsStorage.get(),
-    ])
+    const [favorites, maintainers, settings] = await Promise.all([favoritesStorage.getAll(), maintainersStorage.getAll(), settingsStorage.get()])
     const content = JSON.stringify({ favorites, maintainers, settings }, null, 2)
     updateGist.mutate({ files: { [GIST_FILENAME]: { content } } })
     setStatus('done')

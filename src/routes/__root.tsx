@@ -78,15 +78,8 @@ function RootLayout() {
     >
       {sidebarOverlay ? (
         <div className="app-shell app-shell--overlay" data-sidebar-open={sidebarOpen}>
-          <div className="app-shell__content">
-            {appContent}
-          </div>
-          <button
-            type="button"
-            className="app-shell__backdrop"
-            aria-label="Close sidebar"
-            onClick={() => setSidebarOpen(false)}
-          />
+          <div className="app-shell__content">{appContent}</div>
+          <button type="button" className="app-shell__backdrop" aria-label="Close sidebar" onClick={() => setSidebarOpen(false)} />
           <aside className="app-shell__sidebar" aria-hidden={!sidebarOpen}>
             <AppSidebar />
           </aside>
@@ -94,18 +87,10 @@ function RootLayout() {
       ) : (
         <div className="wide-layout">
           <AppSidebar />
-          <div className="wide-layout__content">
-            {appContent}
-          </div>
+          <div className="wide-layout__content">{appContent}</div>
         </div>
       )}
-      {status === 'conflict' && (
-        <MergeSyncDialog
-          delta={delta}
-          onKeepAll={resolveKeepAll}
-          onReplaceWithLocal={resolveReplaceWithLocal}
-        />
-      )}
+      {status === 'conflict' && <MergeSyncDialog delta={delta} onKeepAll={resolveKeepAll} onReplaceWithLocal={resolveReplaceWithLocal} />}
     </SidebarProvider>
   )
 }

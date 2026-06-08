@@ -38,7 +38,8 @@ describe('DownloadsChart', () => {
   })
 
   it('renders the chart as soon as at least one package has data', () => {
-    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads')
+    jest
+      .spyOn(npmApiHooks, 'useNpmBulkDownloads')
       .mockReturnValueOnce({
         data: {
           react: { downloads: 50_000_000, package: 'react', start: '', end: '' },
@@ -53,7 +54,8 @@ describe('DownloadsChart', () => {
   })
 
   it('shows the Downloads heading', () => {
-    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads')
+    jest
+      .spyOn(npmApiHooks, 'useNpmBulkDownloads')
       .mockReturnValueOnce({
         data: {
           react: { downloads: 1000, package: 'react', start: '', end: '' },
@@ -70,7 +72,8 @@ describe('DownloadsChart', () => {
   })
 
   it('passes correct weekly and monthly values to the chart', () => {
-    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads')
+    jest
+      .spyOn(npmApiHooks, 'useNpmBulkDownloads')
       .mockReturnValueOnce({
         data: {
           react: { downloads: 5000, package: 'react', start: '', end: '' },
@@ -93,7 +96,8 @@ describe('DownloadsChart', () => {
   })
 
   it('defaults missing data to 0 instead of crashing', () => {
-    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads')
+    jest
+      .spyOn(npmApiHooks, 'useNpmBulkDownloads')
       .mockReturnValueOnce({
         data: {
           react: { downloads: 1000, package: 'react', start: '', end: '' },

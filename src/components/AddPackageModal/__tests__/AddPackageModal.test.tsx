@@ -27,7 +27,7 @@ afterEach(() => jest.restoreAllMocks())
 function mockNpmClientGet(resolveValue: unknown) {
   jest.spyOn(npmjsClient.NpmClient.prototype, 'package').mockReturnValue({
     get: () => Promise.resolve(resolveValue),
-  } as unknown as ReturnType<typeof npmjsClient.NpmClient.prototype['package']>)
+  } as unknown as ReturnType<(typeof npmjsClient.NpmClient.prototype)['package']>)
 }
 
 describe('AddPackageModal', () => {

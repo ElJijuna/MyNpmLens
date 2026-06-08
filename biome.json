@@ -1,0 +1,21 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+  "extends": ["super-configs/biome"],
+  "files": {
+    "includes": ["!dist", "!docs", "!coverage", "!node_modules", "!src/routeTree.gen.ts", "!package-lock.json", "!CHANGELOG.md"]
+  },
+  "assist": {
+    "enabled": false
+  },
+  "linter": {
+    "enabled": false
+  },
+  "formatter": {
+    "lineWidth": 180
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded"
+    }
+  }
+}

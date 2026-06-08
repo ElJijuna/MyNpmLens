@@ -32,25 +32,22 @@ export function MaintainerPage() {
   const packageNames = packageObjects.map((o) => o.package.name)
   const total = packagesQuery.data?.pages[0]?.total ?? 0
   const scopedPackages = packageNames.filter((name) => name.startsWith('@')).length
-  const averageScore = packageObjects.length > 0
-    ? Math.round((packageObjects.reduce((sum, o) => sum + o.score.final, 0) / packageObjects.length) * 100)
-    : 0
-  const {
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = packagesQuery
+  const averageScore = packageObjects.length > 0 ? Math.round((packageObjects.reduce((sum, o) => sum + o.score.final, 0) / packageObjects.length) * 100) : 0
+  const { fetchNextPage, hasNextPage, isFetchingNextPage } = packagesQuery
   const canLoadMore = hasNextPage && !isFetchingNextPage
 
   useEffect(() => {
     const node = loadMoreRef.current
     if (!node || !hasNextPage) return
 
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting && canLoadMore) {
-        void fetchNextPage()
-      }
-    }, { rootMargin: '240px' })
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && canLoadMore) {
+          void fetchNextPage()
+        }
+      },
+      { rootMargin: '240px' },
+    )
 
     observer.observe(node)
 
@@ -75,7 +72,11 @@ export function MaintainerPage() {
               <MaintainerAvatar username={username} name={user?.name} size="lg" />
               <Box orientation="vertical" spacing={2}>
                 <Text variant="heading">{user?.name ?? username}</Text>
-                {user?.email && <Text variant="caption" color="dim">{user.email}</Text>}
+                {user?.email && (
+                  <Text variant="caption" color="dim">
+                    {user.email}
+                  </Text>
+                )}
               </Box>
             </Box>
             <WrapBox childSpacing={8} align="center">
@@ -89,13 +90,7 @@ export function MaintainerPage() {
                 <InlineViewSwitcherItem name="grid" label={t('dashboard.gridView')} icon={Applications} />
                 <InlineViewSwitcherItem name="column" label={t('dashboard.columnView')} icon={ViewSidebar} />
               </InlineViewSwitcher>
-              <Button
-                variant="destructive"
-                size="sm"
-                leadingIcon={<Icon icon={Delete} />}
-                onClick={handleUnfollow}
-                disabled={removeMaintainer.isPending}
-              >
+              <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleUnfollow} disabled={removeMaintainer.isPending}>
                 {t('maintainer.unfollow')}
               </Button>
             </WrapBox>
@@ -121,19 +116,11 @@ export function MaintainerPage() {
               />
             </DashboardGrid.Item>
             <DashboardGrid.Item>
-              <StatCard
-                label={t('maintainer.averageScore')}
-                value={averageScore}
-                unit="%"
-                icon={<Icon icon={Star} size="sm" />}
-                loading={packagesQuery.isPending}
-              />
+              <StatCard label={t('maintainer.averageScore')} value={averageScore} unit="%" icon={<Icon icon={Star} size="sm" />} loading={packagesQuery.isPending} />
             </DashboardGrid.Item>
           </DashboardGrid>
 
-          {packageNames.length > 0 && (
-            <DownloadsChart packageNames={packageNames} />
-          )}
+          {packageNames.length > 0 && <DownloadsChart packageNames={packageNames} />}
 
           <Box spacing={12}>
             <Text variant="heading">{t('maintainer.packages')}</Text>

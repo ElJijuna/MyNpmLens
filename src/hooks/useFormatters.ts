@@ -26,11 +26,14 @@ export function useFormatters() {
     maximumFractionDigits: 2,
   })
 
-  const formatBytes = useCallback((bytes: number) => {
-    if (bytes >= 1024 * 1024) return `${twoDecimalFormatter.format(bytes / (1024 * 1024))} MB`
-    if (bytes >= 1024) return `${oneDecimalFormatter.format(bytes / 1024)} kB`
-    return `${numberFormatter.format(bytes)} B`
-  }, [numberFormatter, oneDecimalFormatter, twoDecimalFormatter])
+  const formatBytes = useCallback(
+    (bytes: number) => {
+      if (bytes >= 1024 * 1024) return `${twoDecimalFormatter.format(bytes / (1024 * 1024))} MB`
+      if (bytes >= 1024) return `${oneDecimalFormatter.format(bytes / 1024)} kB`
+      return `${numberFormatter.format(bytes)} B`
+    },
+    [numberFormatter, oneDecimalFormatter, twoDecimalFormatter],
+  )
 
   return {
     formatNumber: useCallback((value: number) => numberFormatter.format(value), [numberFormatter]),

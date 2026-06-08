@@ -44,12 +44,12 @@
   transition: transform 180ms ease;
 }
 
-.app-shell[data-sidebar-open='true'] .app-shell__backdrop {
+.app-shell[data-sidebar-open="true"] .app-shell__backdrop {
   opacity: 1;
   pointer-events: auto;
 }
 
-.app-shell[data-sidebar-open='true'] .app-shell__sidebar {
+.app-shell[data-sidebar-open="true"] .app-shell__sidebar {
   transform: translateX(0);
 }
 

@@ -5,12 +5,7 @@ const DEFAULT_TIMEOUT_MS = 8_000
 /**
  * Thin wrapper around fetch that aborts after `timeoutMs` and throws a ProxyError.
  */
-export async function fetchWithTimeout(
-  url: string,
-  service: string,
-  timeoutMs = DEFAULT_TIMEOUT_MS,
-  init: RequestInit = {},
-): Promise<Response> {
+export async function fetchWithTimeout(url: string, service: string, timeoutMs = DEFAULT_TIMEOUT_MS, init: RequestInit = {}): Promise<Response> {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
 

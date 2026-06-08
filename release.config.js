@@ -47,10 +47,7 @@ export default {
       },
     ],
     '@semantic-release/changelog',
-    [
-      '@semantic-release/npm',
-      { npmPublish: false },
-    ],
+    ['@semantic-release/npm', { npmPublish: false }],
     [
       '@semantic-release/git',
       {

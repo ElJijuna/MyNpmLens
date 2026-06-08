@@ -7,8 +7,7 @@ jest.mock('@/modules/auth/proxy/firebase', () => ({ analytics: {} }))
 const mockPathname = jest.fn()
 
 jest.mock('@tanstack/react-router', () => ({
-  useRouterState: ({ select }: { select: (s: { location: { pathname: string } }) => string }) =>
-    select({ location: { pathname: mockPathname() } }),
+  useRouterState: ({ select }: { select: (s: { location: { pathname: string } }) => string }) => select({ location: { pathname: mockPathname() } }),
 }))
 
 afterEach(() => jest.clearAllMocks())

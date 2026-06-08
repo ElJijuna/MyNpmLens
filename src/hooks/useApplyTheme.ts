@@ -2,9 +2,7 @@ import { useEffect } from 'react'
 import { useSettings } from '@/modules/settings/hooks'
 
 function getHeaderbarColor() {
-  return getComputedStyle(document.documentElement)
-    .getPropertyValue('--gnome-headerbar-bg-color')
-    .trim()
+  return getComputedStyle(document.documentElement).getPropertyValue('--gnome-headerbar-bg-color').trim()
 }
 
 function setThemeColor(theme: 'light' | 'dark' | 'system') {

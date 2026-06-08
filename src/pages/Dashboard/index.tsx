@@ -9,15 +9,7 @@ import { PackageCard } from '@/modules/npm/components/PackageCard'
 import { AuthSection } from '@/modules/auth/components/AuthSection'
 import { useFavorites, useMaintainers } from '@/modules/npm/hooks'
 import { useNativeEvent } from '@gnome-ui/hooks'
-import {
-  useNpmBulkDownloads,
-  useNpmTopByKeyword,
-  useNpmTopByMaintenance,
-  useNpmTopByPopularity,
-  useNpmTopByQuality,
-  useNpmTopByScope,
-  useNpmTopPackages,
-} from '@api-hooks/npm'
+import { useNpmBulkDownloads, useNpmTopByKeyword, useNpmTopByMaintenance, useNpmTopByPopularity, useNpmTopByQuality, useNpmTopByScope, useNpmTopPackages } from '@api-hooks/npm'
 import { useFormatters } from '@/hooks/useFormatters'
 
 type RankingView = 'top' | 'popularity' | 'quality' | 'maintenance'
@@ -60,10 +52,7 @@ export function DashboardPage() {
     maintenance: maintenancePackages.isPending,
   }[rankingView]
 
-  const weeklyDownloads = Object.values(favoriteDownloads ?? {}).reduce(
-    (total, item) => total + (item?.downloads ?? 0),
-    0,
-  )
+  const weeklyDownloads = Object.values(favoriteDownloads ?? {}).reduce((total, item) => total + (item?.downloads ?? 0), 0)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -75,20 +64,10 @@ export function DashboardPage() {
               <Text color="dim">{t('dashboard.description')}</Text>
             </Box>
             <WrapBox childSpacing={8} align="center">
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => navigate({ to: '/favorites' })}
-                leadingIcon={<Icon icon={Star} />}
-              >
+              <Button variant="default" size="sm" onClick={() => navigate({ to: '/favorites' })} leadingIcon={<Icon icon={Star} />}>
                 {t('dashboard.viewFavorites')}
               </Button>
-              <Button
-                variant="suggested"
-                size="sm"
-                onClick={() => setModalOpen(true)}
-                leadingIcon={<Icon icon={Add} />}
-              >
+              <Button variant="suggested" size="sm" onClick={() => setModalOpen(true)} leadingIcon={<Icon icon={Add} />}>
                 {t('dashboard.add')}
               </Button>
             </WrapBox>
@@ -216,14 +195,7 @@ function PackageGrid({
   }
 
   if (names.length === 0) {
-    return (
-      <StatusPage
-        compact
-        icon={Applications}
-        title={emptyTitle}
-        description={emptyDescription}
-      />
-    )
+    return <StatusPage compact icon={Applications} title={emptyTitle} description={emptyDescription} />
   }
 
   return (

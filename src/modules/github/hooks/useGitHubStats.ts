@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { useGhRepo } from '@api-hooks/gh'
-import { useAuth } from '@/modules/auth/AuthProvider'
 import type { GitHubStats } from '@/modules/github/domain'
 
 /**
@@ -10,10 +9,7 @@ import type { GitHubStats } from '@/modules/github/domain'
  * raising the rate limit from 60 → 5,000 req/h.
  */
 export function useGitHubStats(owner: string | null, repo: string | null) {
-  const { user } = useAuth()
-
   const query = useGhRepo(owner ?? '', repo ?? '', {
-    token: user?.githubToken,
     enabled: owner !== null && repo !== null,
   })
 
