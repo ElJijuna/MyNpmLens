@@ -1,3 +1,13 @@
+## [1.20.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.19.0...v1.20.0) (2026-06-08)
+
+### Features
+
+* implement npm token management in settings page and add NpmAuthProvider ([5067832](https://github.com/ElJijuna/MyNpmLens/commit/506783285bedeb7d4460aff42c39576e472f2209))
+
+### Refactoring
+
+* clean up imports and improve code formatting across PackageDetail and related sections ([a13a3b2](https://github.com/ElJijuna/MyNpmLens/commit/a13a3b2886786828e93bb0d2996575e1b8f9253b))
+
 ## [1.19.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.18.0...v1.19.0) (2026-05-22)
 
 ### Features
