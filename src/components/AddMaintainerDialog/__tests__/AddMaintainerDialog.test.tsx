@@ -2,6 +2,14 @@ jest.mock('@/lib/analytics', () => ({
   Analytics: { addMaintainer: jest.fn() },
 }));
 
+jest.mock('@/modules/npm/hooks', () => ({
+  useMaintainers: jest.fn(() => ({ data: [] })),
+  useAddMaintainer: jest.fn(() => ({
+    isPending: false,
+    mutate: (_username: string, options?: { onSuccess?: () => void }) => options?.onSuccess?.(),
+  })),
+}));
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';

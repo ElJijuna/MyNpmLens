@@ -67,9 +67,9 @@ export const AddPackageModal = ({ open, onClose }: AddPackageModalProps) => {
     }
     setIsValidating(false);
 
-    Analytics.addPackage(name);
     addFavorite.mutate(name, {
       onSuccess: () => {
+        Analytics.addPackage(name);
         toast.show({ title: t('addPackage.toastSuccess', { name }), type: 'success' });
         setInput('');
         setError(undefined);

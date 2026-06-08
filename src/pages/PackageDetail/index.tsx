@@ -17,6 +17,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getIcon } from 'very-simple-icons';
+import { Analytics } from '@/lib/analytics';
 import { useAddFavorite, useFavorites, useRemoveFavorite } from '@/modules/npm/hooks';
 import { Route } from '@/routes/packages.$name';
 import { BundleSizeSection } from './sections/BundleSizeSection';
@@ -52,6 +53,7 @@ export const PackageDetailPage = () => {
   const addFavorite = useAddFavorite();
 
   function handleVersionChange(v: string) {
+    Analytics.packageVersionSelected(name, v);
     void navigate({
       to: '/packages/$name',
       params: { name },
@@ -60,11 +62,21 @@ export const PackageDetailPage = () => {
   }
 
   function handleRemove() {
-    removeFavorite.mutate(name, { onSuccess: () => navigate({ to: '/' }) });
+    removeFavorite.mutate(name, {
+      onSuccess: () => {
+        Analytics.removePackage(name);
+        void navigate({ to: '/' });
+      },
+    });
   }
 
   function handleAdd() {
-    addFavorite.mutate(name, { onSuccess: () => navigate({ to: '/' }) });
+    addFavorite.mutate(name, {
+      onSuccess: () => {
+        Analytics.addPackage(name, 'package_detail');
+        void navigate({ to: '/' });
+      },
+    });
   }
 
   const actionButton = fromMaintainer ? (
@@ -129,7 +141,10 @@ export const PackageDetailPage = () => {
               <InlineViewSwitcher
                 className="layout-switcher-mobile-hidden"
                 value={sectionsLayout}
-                onValueChange={(value) => setSectionsLayout(value as DashboardGridLayout)}
+                onValueChange={(value) => {
+                  Analytics.layoutChanged('package_detail_sections', value);
+                  setSectionsLayout(value as DashboardGridLayout);
+                }}
                 variant="pill"
                 aria-label={t('dashboard.packageLayout')}
               >

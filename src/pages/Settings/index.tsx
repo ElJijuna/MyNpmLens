@@ -15,8 +15,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Analytics } from '@/lib/analytics';
 import { useNpmAuth } from '@/modules/npm/NpmAuthProvider';
-import { DEFAULT_SETTINGS } from '@/modules/settings/domain';
+import { type AppSettings, DEFAULT_SETTINGS, type Language } from '@/modules/settings/domain';
 import { useSettings, useUpdateSettings } from '@/modules/settings/hooks';
 
 export const SettingsPage = () => {
@@ -45,11 +46,28 @@ export const SettingsPage = () => {
     }
     refreshNpmQueries();
     setNpmToken(trimmedNpmToken);
+    Analytics.npmTokenSaved(hasNpmToken ? 'replace' : 'create');
   }
 
   function handleClearNpmToken() {
     refreshNpmQueries();
     clearNpmToken();
+    Analytics.npmTokenRevoked();
+  }
+
+  function handleThemeChange(theme: AppSettings['theme']) {
+    updateSettings.mutate({ theme });
+    Analytics.settingsChanged('theme', theme);
+  }
+
+  function handleAccentColorChange(accentColor: string) {
+    updateSettings.mutate({ accentColor });
+    Analytics.settingsChanged('accent_color', accentColor);
+  }
+
+  function handleLanguageChange(language: Language) {
+    updateSettings.mutate({ language });
+    Analytics.settingsChanged('language', language);
   }
 
   const npmAuthSubtitle = hasNpmToken
@@ -78,7 +96,7 @@ export const SettingsPage = () => {
                   { value: 'dark', label: t('settings.themeDark') },
                 ]}
                 value={settings.theme}
-                onValueChange={(theme) => updateSettings.mutate({ theme })}
+                onValueChange={handleThemeChange}
               />
               <ActionRow
                 title={t('settings.accentColor')}
@@ -87,7 +105,7 @@ export const SettingsPage = () => {
                   <ColorPicker
                     size="sm"
                     value={settings.accentColor}
-                    onChange={(color) => updateSettings.mutate({ accentColor: color })}
+                    onChange={handleAccentColorChange}
                   />
                 }
               />
@@ -115,7 +133,7 @@ export const SettingsPage = () => {
                   { value: 'zh-CN', label: '中文 (简体)' },
                 ]}
                 value={settings.language}
-                onValueChange={(language) => updateSettings.mutate({ language })}
+                onValueChange={handleLanguageChange}
               />
             </BoxedList>
           </PreferencesGroup>
@@ -168,7 +186,7 @@ export const SettingsPage = () => {
                 title={t('settings.npmTokenHelpTitle')}
                 subtitle={t('settings.npmTokenHelpSubtitle')}
                 trailing={
-                  <Link href="https://www.npmjs.com/" external>
+                  <Link href="https://www.npmjs.com/settings/tokens" external>
                     <Text variant="caption">{t('settings.npmTokenHelpLink')}</Text>
                   </Link>
                 }

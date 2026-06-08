@@ -12,6 +12,7 @@ import { PreferencesGroup } from '@gnome-ui/react/components/PreferencesGroup';
 import { useTranslation } from 'react-i18next';
 import { getIcon } from 'very-simple-icons';
 import { useFormatters } from '@/hooks/useFormatters';
+import { Analytics } from '@/lib/analytics';
 import { useGistSync } from '@/modules/gist/hooks/useGistSync';
 import { usePushToGist } from '@/modules/gist/hooks/usePushToGist';
 import { useFavorites } from '@/modules/npm/hooks/useFavorites';
@@ -28,7 +29,10 @@ export const DataSyncPage = () => {
 
   function handleSaveToGist() {
     pushToGist.mutate(undefined, {
-      onSuccess: () => toast.show({ title: t('sync.toastSuccess'), type: 'success' }),
+      onSuccess: () => {
+        Analytics.syncToGist('data_sync');
+        toast.show({ title: t('sync.toastSuccess'), type: 'success' });
+      },
       onError: () => toast.show({ title: t('sync.toastError'), type: 'error' }),
     });
   }

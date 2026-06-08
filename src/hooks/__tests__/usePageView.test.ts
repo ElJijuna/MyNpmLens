@@ -1,8 +1,12 @@
 import { renderHook } from '@testing-library/react';
-import { logEvent } from 'firebase/analytics';
 import { usePageView } from '@/hooks/usePageView';
+import { Analytics } from '@/lib/analytics';
 
-jest.mock('@/modules/auth/proxy/firebase', () => ({ analytics: {} }));
+jest.mock('@/lib/analytics', () => ({
+  Analytics: {
+    pageView: jest.fn(),
+  },
+}));
 
 const mockPathname = jest.fn();
 
@@ -19,9 +23,7 @@ describe('usePageView', () => {
 
     renderHook(() => usePageView());
 
-    expect(logEvent).toHaveBeenCalledWith(expect.anything(), 'page_view', {
-      page_path: '/packages/react',
-    });
+    expect(Analytics.pageView).toHaveBeenCalledWith('/packages/react');
   });
 
   it('logs page_view again when pathname changes', () => {
@@ -31,9 +33,7 @@ describe('usePageView', () => {
     mockPathname.mockReturnValue('/about');
     rerender();
 
-    expect(logEvent).toHaveBeenCalledTimes(2);
-    expect(logEvent).toHaveBeenLastCalledWith(expect.anything(), 'page_view', {
-      page_path: '/about',
-    });
+    expect(Analytics.pageView).toHaveBeenCalledTimes(2);
+    expect(Analytics.pageView).toHaveBeenLastCalledWith('/about');
   });
 });

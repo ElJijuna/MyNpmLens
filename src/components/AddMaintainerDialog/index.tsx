@@ -30,9 +30,9 @@ export const AddMaintainerDialog = ({ open, onClose }: AddMaintainerDialogProps)
       return;
     }
 
-    Analytics.addMaintainer(username);
     addMaintainer.mutate(username, {
       onSuccess: () => {
+        Analytics.addMaintainer(username);
         toast.show({ title: t('addMaintainer.toastSuccess', { username }), type: 'success' });
         setInput('');
         setError(undefined);

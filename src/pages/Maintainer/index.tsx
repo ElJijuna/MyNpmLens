@@ -16,6 +16,7 @@ import {
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Analytics } from '@/lib/analytics';
 import { DownloadsChart } from '@/modules/npm/components/DownloadsChart';
 import { MaintainerAvatar } from '@/modules/npm/components/MaintainerAvatar';
 import { PackageCard } from '@/modules/npm/components/PackageCard';
@@ -73,6 +74,7 @@ export const MaintainerPage = () => {
   function handleUnfollow() {
     removeMaintainer.mutate(username, {
       onSuccess: () => {
+        Analytics.removeMaintainer(username);
         toast.show({ title: t('maintainer.toastUnfollowed', { username }), type: 'info' });
         void navigate({ to: '/maintainers' });
       },
@@ -99,7 +101,10 @@ export const MaintainerPage = () => {
               <InlineViewSwitcher
                 className="layout-switcher-mobile-hidden"
                 value={packagesLayout}
-                onValueChange={(value) => setPackagesLayout(value as DashboardGridLayout)}
+                onValueChange={(value) => {
+                  Analytics.layoutChanged('maintainer_packages', value);
+                  setPackagesLayout(value as DashboardGridLayout);
+                }}
                 variant="pill"
                 aria-label={t('dashboard.packageLayout')}
               >
