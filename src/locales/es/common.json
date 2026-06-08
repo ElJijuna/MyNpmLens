@@ -39,7 +39,22 @@
     "accentColorSubtitle": "Elige un color de resaltado para la interfaz",
     "dataGroup": "Datos",
     "syncTitle": "Sincronización",
-    "syncSubtitle": "Administrar la sincronización de datos con Gist"
+    "syncSubtitle": "Administrar la sincronización de datos con Gist",
+    "npmRegistryGroup": "Registro npm",
+    "npmTokenStatus": "Token de acceso de npm",
+    "npmTokenNotConfigured": "No hay token configurado. Las consultas públicas al registro seguirán sin autenticación.",
+    "npmTokenChecking": "Verificando token…",
+    "npmTokenSaved": "Token guardado localmente.",
+    "npmTokenSignedInAs": "Usando npm como @{{username}}.",
+    "npmTokenInvalid": "No se pudo validar el token guardado. Reemplázalo o revócalo.",
+    "npmTokenPlaceholder": "Token de npm de solo lectura",
+    "npmTokenReplacePlaceholder": "Nuevo token de npm de solo lectura",
+    "npmTokenSave": "Guardar",
+    "npmTokenReplace": "Reemplazar",
+    "npmTokenRevoke": "Revocar",
+    "npmTokenHelpTitle": "Crear un token de solo lectura",
+    "npmTokenHelpSubtitle": "Abre los tokens de acceso de npm, crea un token clásico de solo lectura y pégalo aquí. Se guarda solo en este dispositivo.",
+    "npmTokenHelpLink": "Abrir tokens de npm"
   },
   "dashboard": {
     "title": "Dashboard",

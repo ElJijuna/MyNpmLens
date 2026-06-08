@@ -39,7 +39,22 @@
     "accentColorSubtitle": "Choose a highlight color for the interface",
     "dataGroup": "Data",
     "syncTitle": "Sync",
-    "syncSubtitle": "Manage data synchronization with Gist"
+    "syncSubtitle": "Manage data synchronization with Gist",
+    "npmRegistryGroup": "npm registry",
+    "npmTokenStatus": "npm access token",
+    "npmTokenNotConfigured": "No token configured. Public registry requests will continue without authentication.",
+    "npmTokenChecking": "Checking token…",
+    "npmTokenSaved": "Token saved locally.",
+    "npmTokenSignedInAs": "Using npm as @{{username}}.",
+    "npmTokenInvalid": "The saved token could not be validated. Replace it or revoke it.",
+    "npmTokenPlaceholder": "Read-only npm token",
+    "npmTokenReplacePlaceholder": "New read-only npm token",
+    "npmTokenSave": "Save",
+    "npmTokenReplace": "Replace",
+    "npmTokenRevoke": "Revoke",
+    "npmTokenHelpTitle": "Create a read-only token",
+    "npmTokenHelpSubtitle": "Open npm access tokens, create a classic read-only token, then paste it here. It is stored only on this device.",
+    "npmTokenHelpLink": "Open npm tokens"
   },
   "dashboard": {
     "title": "Dashboard",

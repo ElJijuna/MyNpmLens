@@ -9,12 +9,12 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
-import { NpmClientProvider } from '@api-hooks/npm'
 import { ToastProvider } from '@gnome-ui/layout/components/Toast'
 import { queryClient } from '@/lib/queryClient'
 import { getDb } from '@/lib/db'
 import { routeTree } from './routeTree.gen'
 import { AuthProvider } from '@/modules/auth/AuthProvider'
+import { NpmAuthProvider } from '@/modules/npm/NpmAuthProvider'
 import { GnomeLocaleProvider } from '@/components/GnomeLocaleProvider'
 
 const db = await getDb()
@@ -44,7 +44,7 @@ const rootElement = document.getElementById('root')!
 createRoot(rootElement).render(
   <StrictMode>
     <PersistQueryClientProvider client={queryClient} persistOptions={{ persister, maxAge: 1000 * 60 * 60 * 24 * 7 }}>
-      <NpmClientProvider>
+      <NpmAuthProvider>
         <GnomeLocaleProvider>
           <ToastProvider>
             <AuthProvider>
@@ -52,7 +52,7 @@ createRoot(rootElement).render(
             </AuthProvider>
           </ToastProvider>
         </GnomeLocaleProvider>
-      </NpmClientProvider>
+      </NpmAuthProvider>
     </PersistQueryClientProvider>
   </StrictMode>,
 )

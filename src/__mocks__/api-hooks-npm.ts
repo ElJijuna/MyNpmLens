@@ -35,6 +35,7 @@ export const useNpmOrgPackages = jest.fn(() => defaultQuery)
 export const useNpmOrgTeams = jest.fn(() => defaultQuery)
 export const useNpmOrgMembers = jest.fn(() => defaultQuery)
 export const useNpmOrgTeamMembers = jest.fn(() => defaultQuery)
+export const useNpmWhoami = jest.fn(() => defaultQuery)
 export const useNpmClient = jest.fn(() => ({
   package: jest.fn(() => ({
     get: jest.fn(),
@@ -78,4 +79,5 @@ export const npmQueryKeys = {
   orgTeams: (org: string) => ['npm', 'org', org, 'teams'] as const,
   orgMembers: (org: string) => ['npm', 'org', org, 'members'] as const,
   orgTeamMembers: (org: string, team: string) => ['npm', 'org', org, 'team', team, 'members'] as const,
+  whoami: () => ['npm', 'whoami'] as const,
 }
