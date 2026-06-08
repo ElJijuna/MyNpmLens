@@ -1,24 +1,28 @@
-import { useTranslation } from 'react-i18next'
-import { Text, Badge, Box, WrapBox } from '@gnome-ui/react'
-import { SectionCard } from '@/components/SectionCard'
-import { useBpPackageVersionSize } from '@api-hooks/bp'
-import { useNpmPackageVersionSize } from '@api-hooks/npm'
-import { useFormatters } from '@/hooks/useFormatters'
+import { useBpPackageVersionSize } from '@api-hooks/bp';
+import { useNpmPackageVersionSize } from '@api-hooks/npm';
+import { Badge, Box, Text, WrapBox } from '@gnome-ui/react';
+import { useTranslation } from 'react-i18next';
+import { SectionCard } from '@/components/SectionCard';
+import { useFormatters } from '@/hooks/useFormatters';
 
 interface BundleSizeSectionProps {
-  name: string
-  version?: string
+  name: string;
+  version?: string;
 }
 
-export function BundleSizeSection({ name, version = '' }: BundleSizeSectionProps) {
-  const { t } = useTranslation()
-  const { formatBytes, formatNumber } = useFormatters()
-  const enabled = name.length > 0 && version.length > 0
-  const { data, isPending, error } = useBpPackageVersionSize(name, version, { enabled })
-  const { data: sizeData } = useNpmPackageVersionSize(name, version, { enabled })
+export const BundleSizeSection = ({ name, version = '' }: BundleSizeSectionProps) => {
+  const { t } = useTranslation();
+  const { formatBytes, formatNumber } = useFormatters();
+  const enabled = name.length > 0 && version.length > 0;
+  const { data, isPending, error } = useBpPackageVersionSize(name, version, { enabled });
+  const { data: sizeData } = useNpmPackageVersionSize(name, version, { enabled });
 
   return (
-    <SectionCard title={t('packageDetail.bundleSize')} isLoading={isPending} error={error as Error | null}>
+    <SectionCard
+      title={t('packageDetail.bundleSize')}
+      isLoading={isPending}
+      error={error as Error | null}
+    >
       {data && (
         <Box orientation="vertical" spacing={12}>
           <WrapBox childSpacing={24}>
@@ -45,7 +49,11 @@ export function BundleSizeSection({ name, version = '' }: BundleSizeSectionProps
             <Text variant="caption" color="dim">
               v{data.version}
             </Text>
-            <Badge variant={data.hasSideEffects ? 'warning' : 'success'}>{data.hasSideEffects ? t('packageDetail.hasSideEffects') : t('packageDetail.sideEffectFree')}</Badge>
+            <Badge variant={data.hasSideEffects ? 'warning' : 'success'}>
+              {data.hasSideEffects
+                ? t('packageDetail.hasSideEffects')
+                : t('packageDetail.sideEffectFree')}
+            </Badge>
           </WrapBox>
 
           {sizeData && (
@@ -77,5 +85,5 @@ export function BundleSizeSection({ name, version = '' }: BundleSizeSectionProps
         </Box>
       )}
     </SectionCard>
-  )
-}
+  );
+};

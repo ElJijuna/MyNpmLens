@@ -3,6 +3,6 @@
  * This is the shape stored in localStorage.
  */
 export interface FavoritePackage {
-  name: string
-  addedAt: string
+  name: string;
+  addedAt: string;
 }

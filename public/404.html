@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <script>
@@ -11,13 +11,13 @@
         l.protocol +
           '//' +
           l.hostname +
-          (l.port ? ':' + l.port : '') +
+          (l.port ? `:${l.port}` : '') +
           l.pathname.split('/').slice(0, 2).join('/') +
           '/?p=' +
           encodeURIComponent(
             l.pathname.slice(l.pathname.split('/').slice(0, 2).join('/').length),
           ) +
-          (l.search ? '&q=' + encodeURIComponent(l.search.slice(1)) : '') +
+          (l.search ? `&q=${encodeURIComponent(l.search.slice(1))}` : '') +
           l.hash,
       );
     </script>

@@ -1,4 +1,4 @@
 export interface FollowedMaintainer {
-  username: string
-  addedAt?: string
+  username: string;
+  addedAt?: string;
 }

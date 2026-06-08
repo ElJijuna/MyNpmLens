@@ -1,1 +1,1 @@
-export { useGitHubStats } from './useGitHubStats'
+export { useGitHubStats } from './useGitHubStats';

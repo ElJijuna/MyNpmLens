@@ -1,32 +1,38 @@
-import { useTranslation } from 'react-i18next'
-import { Text, Badge, Link, Icon } from '@gnome-ui/react'
-import { Star, Share } from '@gnome-ui/icons'
-import { SectionCard } from '@/components/SectionCard'
-import { useGitHubStats } from '@/modules/github/hooks'
-import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug'
-import { useNpmPackage } from '@api-hooks/npm'
-import { useFormatters } from '@/hooks/useFormatters'
-import { useGhRepoLatestRelease } from '@api-hooks/gh'
+import { useGhRepoLatestRelease } from '@api-hooks/gh';
+import { useNpmPackage } from '@api-hooks/npm';
+import { Share, Star } from '@gnome-ui/icons';
+import { Badge, Icon, Link, Text } from '@gnome-ui/react';
+import { useTranslation } from 'react-i18next';
+import { SectionCard } from '@/components/SectionCard';
+import { useFormatters } from '@/hooks/useFormatters';
+import { useGitHubStats } from '@/modules/github/hooks';
+import { parseGitHubSlug } from '@/modules/github/utils/parseGitHubSlug';
 
 interface GitHubSectionProps {
-  packageName: string
+  packageName: string;
 }
 
-export function GitHubSection({ packageName }: GitHubSectionProps) {
-  const { t } = useTranslation()
-  const { formatCompactNumber, formatDate, formatNumber } = useFormatters()
-  const { data: pkg } = useNpmPackage(packageName)
-  const slug = pkg?.repository?.url ? parseGitHubSlug(pkg.repository.url) : null
-  const { data, isPending, error } = useGitHubStats(slug?.owner ?? null, slug?.repo ?? null)
+export const GitHubSection = ({ packageName }: GitHubSectionProps) => {
+  const { t } = useTranslation();
+  const { formatCompactNumber, formatDate, formatNumber } = useFormatters();
+  const { data: pkg } = useNpmPackage(packageName);
+  const slug = pkg?.repository?.url ? parseGitHubSlug(pkg.repository.url) : null;
+  const { data, isPending, error } = useGitHubStats(slug?.owner ?? null, slug?.repo ?? null);
 
   const { data: release } = useGhRepoLatestRelease(slug?.owner ?? '', slug?.repo ?? '', {
     enabled: slug !== null,
-  })
+  });
 
-  if (!isPending && !slug) return null
+  if (!isPending && !slug) {
+    return null;
+  }
 
   return (
-    <SectionCard title={t('packageDetail.github')} isLoading={isPending} error={error as Error | null}>
+    <SectionCard
+      title={t('packageDetail.github')}
+      isLoading={isPending}
+      error={error as Error | null}
+    >
       {data && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
@@ -51,7 +57,9 @@ export function GitHubSection({ packageName }: GitHubSectionProps) {
               <Text variant="caption-heading" color="dim">
                 {t('packageDetail.openIssues')}
               </Text>
-              <Badge variant={data.openIssues > 100 ? 'warning' : 'neutral'}>{formatNumber(data.openIssues)}</Badge>
+              <Badge variant={data.openIssues > 100 ? 'warning' : 'neutral'}>
+                {formatNumber(data.openIssues)}
+              </Badge>
             </div>
           </div>
 
@@ -90,7 +98,12 @@ export function GitHubSection({ packageName }: GitHubSectionProps) {
           )}
 
           <Text variant="caption">
-            <Link href={data.htmlUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            <Link
+              href={data.htmlUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}
+            >
               <Icon icon={Share} size="sm" />
               {data.htmlUrl}
             </Link>
@@ -98,5 +111,5 @@ export function GitHubSection({ packageName }: GitHubSectionProps) {
         </div>
       )}
     </SectionCard>
-  )
-}
+  );
+};

@@ -1,12 +1,12 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { tanstackRouter } from '@tanstack/router-plugin/vite'
-import { VitePWA } from 'vite-plugin-pwa'
-import type { ManifestOptions } from 'vite-plugin-pwa'
-import path from 'path'
+import path from 'node:path';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import type { ManifestOptions } from 'vite-plugin-pwa';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({ command }) => {
-  const base = command === 'build' ? (process.env.VITE_BASE_PATH ?? '/') : '/'
+  const base = command === 'build' ? (process.env.VITE_BASE_PATH ?? '/') : '/';
   return {
     base,
     plugins: [
@@ -132,5 +132,5 @@ export default defineConfig(({ command }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
-  }
-})
+  };
+});

@@ -1,32 +1,40 @@
-import { render, screen } from '@testing-library/react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { type ReactNode } from 'react'
-import { PackageCard } from '../index'
-import * as npmApiHooks from '@api-hooks/npm'
-import * as githubHooks from '@/modules/github/hooks'
+import * as npmApiHooks from '@api-hooks/npm';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import * as githubHooks from '@/modules/github/hooks';
+import { PackageCard } from '../index';
 
 jest.mock('@tanstack/react-router', () => ({
   useNavigate: () => jest.fn(),
-}))
+}));
 
 function wrapper({ children }: { children: ReactNode }) {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }
 
-afterEach(() => jest.restoreAllMocks())
+afterEach(() => jest.restoreAllMocks());
 
 /** Locale-agnostic download text match: ignores whitespace between number and unit */
 
 describe('PackageCard', () => {
   it('shows a spinner while loading', () => {
-    jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({ isPending: true } as ReturnType<typeof npmApiHooks.useNpmPackage>)
-    jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({ data: undefined } as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
-    jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>)
+    jest
+      .spyOn(npmApiHooks, 'useNpmPackage')
+      .mockReturnValue({ isPending: true } as ReturnType<typeof npmApiHooks.useNpmPackage>);
+    jest
+      .spyOn(npmApiHooks, 'useNpmPackageDownloads')
+      .mockReturnValue({ data: undefined } as ReturnType<
+        typeof npmApiHooks.useNpmPackageDownloads
+      >);
+    jest
+      .spyOn(githubHooks, 'useGitHubStats')
+      .mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>);
 
-    const { container } = render(<PackageCard name="react" />, { wrapper })
-    expect(container.firstChild).toBeTruthy()
-  })
+    const { container } = render(<PackageCard name="react" />, { wrapper });
+    expect(container.firstChild).toBeTruthy();
+  });
 
   it('renders package info when loaded', () => {
     jest.spyOn(npmApiHooks, 'useNpmPackage').mockReturnValue({
@@ -41,18 +49,20 @@ describe('PackageCard', () => {
         repository: null,
         time: {},
       },
-    } as unknown as ReturnType<typeof npmApiHooks.useNpmPackage>)
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmPackage>);
     jest.spyOn(npmApiHooks, 'useNpmPackageDownloads').mockReturnValue({
       data: { downloads: 50_000_000, start: '', end: '', package: 'react' },
-    } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>)
-    jest.spyOn(githubHooks, 'useGitHubStats').mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>)
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmPackageDownloads>);
+    jest
+      .spyOn(githubHooks, 'useGitHubStats')
+      .mockReturnValue({ data: undefined } as ReturnType<typeof githubHooks.useGitHubStats>);
 
-    render(<PackageCard name="react" />, { wrapper })
+    render(<PackageCard name="react" />, { wrapper });
 
-    expect(screen.getByText('react')).toBeInTheDocument()
-    expect(screen.getByText('MIT')).toBeInTheDocument()
-    expect(screen.getByText('v19.0.0 · 3 versions')).toBeInTheDocument()
-    expect(screen.getByText('A JavaScript library.')).toBeInTheDocument()
-    expect(screen.getByText((c) => c.replace(/\s/g, '') === '↓50M/wk')).toBeInTheDocument()
-  })
-})
+    expect(screen.getByText('react')).toBeInTheDocument();
+    expect(screen.getByText('MIT')).toBeInTheDocument();
+    expect(screen.getByText('v19.0.0 · 3 versions')).toBeInTheDocument();
+    expect(screen.getByText('A JavaScript library.')).toBeInTheDocument();
+    expect(screen.getByText((c) => c.replace(/\s/g, '') === '↓50M/wk')).toBeInTheDocument();
+  });
+});

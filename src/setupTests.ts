@@ -1,10 +1,11 @@
-import '@testing-library/jest-dom'
-import { TextEncoder, TextDecoder } from 'util'
-Object.assign(global, { TextEncoder, TextDecoder })
+import '@testing-library/jest-dom';
+import { TextDecoder, TextEncoder } from 'node:util';
+
+Object.assign(global, { TextEncoder, TextDecoder });
 
 // Firebase requires fetch to be defined in the Node/jsdom test environment
 if (!global.fetch) {
-  global.fetch = jest.fn() as unknown as typeof fetch
+  global.fetch = jest.fn() as unknown as typeof fetch;
 }
 
 if (typeof window !== 'undefined') {
@@ -20,5 +21,5 @@ if (typeof window !== 'undefined') {
       removeEventListener: jest.fn(),
       dispatchEvent: jest.fn(),
     })),
-  })
+  });
 }

@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
-import { useGhRepo } from '@api-hooks/gh'
-import type { GitHubStats } from '@/modules/github/domain'
+import { useGhRepo } from '@api-hooks/gh';
+import { useMemo } from 'react';
+import type { GitHubStats } from '@/modules/github/domain';
 
 /**
  * Fetches and caches GitHub repository statistics via useGhRepo.
@@ -11,22 +11,24 @@ import type { GitHubStats } from '@/modules/github/domain'
 export function useGitHubStats(owner: string | null, repo: string | null) {
   const query = useGhRepo(owner ?? '', repo ?? '', {
     enabled: owner !== null && repo !== null,
-  })
+  });
 
   const data = useMemo<GitHubStats | undefined>(() => {
-    if (!query.data) return undefined
-    const r = query.data
+    if (!query.data || !owner || !repo) {
+      return undefined;
+    }
+    const r = query.data;
     return {
-      owner: owner!,
-      repo: repo!,
+      owner,
+      repo,
       stars: r.stargazers_count,
       forks: r.forks_count,
       openIssues: r.open_issues_count,
       lastPushedAt: r.pushed_at ?? '',
       htmlUrl: r.html_url,
       topics: r.topics,
-    }
-  }, [query.data, owner, repo])
+    };
+  }, [query.data, owner, repo]);
 
-  return { ...query, data }
+  return { ...query, data };
 }

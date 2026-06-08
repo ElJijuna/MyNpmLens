@@ -1,125 +1,131 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { type ReactNode } from 'react'
-import { AuthSection } from '../index'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent, render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import { AuthSection } from '../index';
 
 jest.mock('@/lib/analytics', () => ({
   Analytics: { signIn: jest.fn(), signOut: jest.fn() },
-}))
+}));
 
 jest.mock('@/modules/auth/AuthProvider', () => ({
   useAuth: jest.fn(),
   persistGithubToken: jest.fn(),
   clearGithubToken: jest.fn(),
-}))
+}));
 
 jest.mock('@/modules/auth/hooks', () => ({
   useSignIn: jest.fn(),
   useSignOut: jest.fn(),
-}))
+}));
 
-import { useAuth } from '@/modules/auth/AuthProvider'
-import { useSignIn, useSignOut } from '@/modules/auth/hooks'
-import { Analytics } from '@/lib/analytics'
+import { Analytics } from '@/lib/analytics';
+import { useAuth } from '@/modules/auth/AuthProvider';
+import { useSignIn, useSignOut } from '@/modules/auth/hooks';
 
-const mockUseAuth = useAuth as jest.Mock
-const mockUseSignIn = useSignIn as jest.Mock
-const mockUseSignOut = useSignOut as jest.Mock
+const mockUseAuth = useAuth as jest.Mock;
+const mockUseSignIn = useSignIn as jest.Mock;
+const mockUseSignOut = useSignOut as jest.Mock;
 
 function wrapper({ children }: { children: ReactNode }) {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }
 
 beforeEach(() => {
-  mockUseSignIn.mockReturnValue({ mutate: jest.fn(), isPending: false })
-  mockUseSignOut.mockReturnValue({ mutate: jest.fn(), isPending: false })
-})
+  mockUseSignIn.mockReturnValue({ mutate: jest.fn(), isPending: false });
+  mockUseSignOut.mockReturnValue({ mutate: jest.fn(), isPending: false });
+});
 
-afterEach(() => jest.clearAllMocks())
+afterEach(() => jest.clearAllMocks());
 
 describe('AuthSection', () => {
   it('renders nothing while auth is loading', () => {
-    mockUseAuth.mockReturnValue({ user: null, authLoading: true })
+    mockUseAuth.mockReturnValue({ user: null, authLoading: true });
 
-    const { container } = render(<AuthSection />, { wrapper })
-    expect(container.firstChild).toBeNull()
-  })
+    const { container } = render(<AuthSection />, { wrapper });
+    expect(container.firstChild).toBeNull();
+  });
 
   it('shows Sign in with GitHub button when not authenticated', () => {
-    mockUseAuth.mockReturnValue({ user: null, authLoading: false })
+    mockUseAuth.mockReturnValue({ user: null, authLoading: false });
 
-    render(<AuthSection />, { wrapper })
-    expect(screen.getByText('Sign in with GitHub')).toBeInTheDocument()
-  })
+    render(<AuthSection />, { wrapper });
+    expect(screen.getByText('Sign in with GitHub')).toBeInTheDocument();
+  });
 
   it('calls signIn.mutate when Sign in button is clicked', () => {
-    const mutate = jest.fn()
-    mockUseAuth.mockReturnValue({ user: null, authLoading: false })
-    mockUseSignIn.mockReturnValue({ mutate, isPending: false })
+    const mutate = jest.fn();
+    mockUseAuth.mockReturnValue({ user: null, authLoading: false });
+    mockUseSignIn.mockReturnValue({ mutate, isPending: false });
 
-    render(<AuthSection />, { wrapper })
-    fireEvent.click(screen.getByText('Sign in with GitHub'))
-    expect(mutate).toHaveBeenCalledTimes(1)
-  })
+    render(<AuthSection />, { wrapper });
+    fireEvent.click(screen.getByText('Sign in with GitHub'));
+    expect(mutate).toHaveBeenCalledTimes(1);
+  });
 
   it('disables Sign in button while pending', () => {
-    mockUseAuth.mockReturnValue({ user: null, authLoading: false })
-    mockUseSignIn.mockReturnValue({ mutate: jest.fn(), isPending: true })
+    mockUseAuth.mockReturnValue({ user: null, authLoading: false });
+    mockUseSignIn.mockReturnValue({ mutate: jest.fn(), isPending: true });
 
-    render(<AuthSection />, { wrapper })
-    expect(screen.getByText('Sign in with GitHub').closest('button')).toBeDisabled()
-  })
+    render(<AuthSection />, { wrapper });
+    expect(screen.getByText('Sign in with GitHub').closest('button')).toBeDisabled();
+  });
 
   it('shows display name when authenticated', () => {
     mockUseAuth.mockReturnValue({
-      user: { uid: '1', displayName: 'El Jijuna', email: 'a@b.com', photoURL: null, githubToken: 'tok' },
+      user: {
+        uid: '1',
+        displayName: 'El Jijuna',
+        email: 'a@b.com',
+        photoURL: null,
+        githubToken: 'tok',
+      },
       authLoading: false,
-    })
+    });
 
-    render(<AuthSection />, { wrapper })
-    expect(screen.getByText('El Jijuna')).toBeInTheDocument()
-  })
+    render(<AuthSection />, { wrapper });
+    expect(screen.getByText('El Jijuna')).toBeInTheDocument();
+  });
 
   it('shows Sign out button when authenticated', () => {
     mockUseAuth.mockReturnValue({
       user: { uid: '1', displayName: 'El Jijuna', email: null, photoURL: null, githubToken: 'tok' },
       authLoading: false,
-    })
+    });
 
-    render(<AuthSection />, { wrapper })
-    expect(screen.getByText('Sign out')).toBeInTheDocument()
-  })
+    render(<AuthSection />, { wrapper });
+    expect(screen.getByText('Sign out')).toBeInTheDocument();
+  });
 
   it('calls signOut.mutate when Sign out is clicked', () => {
-    const mutate = jest.fn()
+    const mutate = jest.fn();
     mockUseAuth.mockReturnValue({
       user: { uid: '1', displayName: 'User', email: null, photoURL: null, githubToken: 'tok' },
       authLoading: false,
-    })
-    mockUseSignOut.mockReturnValue({ mutate, isPending: false })
+    });
+    mockUseSignOut.mockReturnValue({ mutate, isPending: false });
 
-    render(<AuthSection />, { wrapper })
-    fireEvent.click(screen.getByText('Sign out'))
-    expect(mutate).toHaveBeenCalledTimes(1)
-  })
+    render(<AuthSection />, { wrapper });
+    fireEvent.click(screen.getByText('Sign out'));
+    expect(mutate).toHaveBeenCalledTimes(1);
+  });
 
   it('logs Analytics.signIn when Sign in button is clicked', () => {
-    mockUseAuth.mockReturnValue({ user: null, authLoading: false })
+    mockUseAuth.mockReturnValue({ user: null, authLoading: false });
 
-    render(<AuthSection />, { wrapper })
-    fireEvent.click(screen.getByText('Sign in with GitHub'))
-    expect(Analytics.signIn).toHaveBeenCalledTimes(1)
-  })
+    render(<AuthSection />, { wrapper });
+    fireEvent.click(screen.getByText('Sign in with GitHub'));
+    expect(Analytics.signIn).toHaveBeenCalledTimes(1);
+  });
 
   it('logs Analytics.signOut when Sign out button is clicked', () => {
     mockUseAuth.mockReturnValue({
       user: { uid: '1', displayName: 'User', email: null, photoURL: null, githubToken: 'tok' },
       authLoading: false,
-    })
+    });
 
-    render(<AuthSection />, { wrapper })
-    fireEvent.click(screen.getByText('Sign out'))
-    expect(Analytics.signOut).toHaveBeenCalledTimes(1)
-  })
-})
+    render(<AuthSection />, { wrapper });
+    fireEvent.click(screen.getByText('Sign out'));
+    expect(Analytics.signOut).toHaveBeenCalledTimes(1);
+  });
+});

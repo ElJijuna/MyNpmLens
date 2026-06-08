@@ -1,4 +1,4 @@
-import type { Language } from '@/modules/settings/domain'
+import type { Language } from '@/modules/settings/domain';
 
 const LOCALE_FALLBACKS: Record<Language, string> = {
   en: 'en-US',
@@ -14,9 +14,9 @@ const LOCALE_FALLBACKS: Record<Language, string> = {
   'pt-BR': 'pt-BR',
   qu: 'es-PE',
   'zh-CN': 'zh-CN',
-}
+};
 
 export function resolveIntlLocale(language: Language): string {
-  const locale = LOCALE_FALLBACKS[language] ?? 'en-US'
-  return Intl.DateTimeFormat.supportedLocalesOf(locale)[0] ?? 'en-US'
+  const locale = LOCALE_FALLBACKS[language] ?? 'en-US';
+  return Intl.DateTimeFormat.supportedLocalesOf(locale)[0] ?? 'en-US';
 }

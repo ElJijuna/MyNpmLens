@@ -1,37 +1,43 @@
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from '@tanstack/react-router'
-import { Avatar, Box, Button, Card, ContributionGraph, Icon, Text, WrapBox } from '@gnome-ui/react'
-import { Delete, Star } from '@gnome-ui/icons'
-import { DashboardGrid } from '@gnome-ui/layout/components/DashboardGrid'
-import { StatCard } from '@gnome-ui/layout/components/StatCard'
-import { useGhCurrentUser, useGhUserContributionMap, useGhUserRepos } from '@api-hooks/gh'
-import type { GitHubRepository } from 'gh-api-client'
-import { useAuth } from '@/modules/auth/AuthProvider'
-import { useSignOut } from '@/modules/auth/hooks'
+import { useGhCurrentUser, useGhUserContributionMap, useGhUserRepos } from '@api-hooks/gh';
+import { Delete, Star } from '@gnome-ui/icons';
+import { DashboardGrid } from '@gnome-ui/layout/components/DashboardGrid';
+import { StatCard } from '@gnome-ui/layout/components/StatCard';
+import { Avatar, Box, Button, Card, ContributionGraph, Icon, Text, WrapBox } from '@gnome-ui/react';
+import { useNavigate } from '@tanstack/react-router';
+import type { GitHubRepository } from 'gh-api-client';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/modules/auth/AuthProvider';
+import { useSignOut } from '@/modules/auth/hooks';
 
-export function ProfilePage() {
-  const { t } = useTranslation()
-  const { user } = useAuth()
-  const navigate = useNavigate()
-  const signOut = useSignOut()
+export const ProfilePage = () => {
+  const { t } = useTranslation();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const signOut = useSignOut();
 
   const { data: ghUser, isPending: userPending } = useGhCurrentUser({
     enabled: !!user?.githubToken,
-  })
+  });
 
-  const login = ghUser?.login ?? ''
-  const hookOpts = { enabled: !!login && !!user?.githubToken }
+  const login = ghUser?.login ?? '';
+  const hookOpts = { enabled: !!login && !!user?.githubToken };
 
-  const { data: contributions } = useGhUserContributionMap(login, {}, hookOpts)
-  const { data: reposData } = useGhUserRepos(login, { sort: 'pushed', per_page: 6, type: 'public' }, hookOpts)
+  const { data: contributions } = useGhUserContributionMap(login, {}, hookOpts);
+  const { data: reposData } = useGhUserRepos(
+    login,
+    { sort: 'pushed', per_page: 6, type: 'public' },
+    hookOpts,
+  );
 
-  if (!user) return null
+  if (!user) {
+    return null;
+  }
 
-  const repos = (reposData?.values ?? []).filter((r) => !r.fork)
-  const memberYear = ghUser?.created_at ? new Date(ghUser.created_at).getFullYear() : null
+  const repos = (reposData?.values ?? []).filter((r) => !r.fork);
+  const memberYear = ghUser?.created_at ? new Date(ghUser.created_at).getFullYear() : null;
 
   function handleSignOut() {
-    signOut.mutate(undefined, { onSuccess: () => navigate({ to: '/' }) })
+    signOut.mutate(undefined, { onSuccess: () => navigate({ to: '/' }) });
   }
 
   return (
@@ -40,7 +46,11 @@ export function ProfilePage() {
         <Box spacing={24}>
           <WrapBox justify="space-between" align="start">
             <Box orientation="horizontal" spacing={16} style={{ alignItems: 'flex-start' }}>
-              <Avatar src={user.photoURL ?? undefined} name={user.displayName ?? user.email ?? '?'} size="lg" />
+              <Avatar
+                src={user.photoURL ?? undefined}
+                name={user.displayName ?? user.email ?? '?'}
+                size="lg"
+              />
               <Box spacing={4}>
                 <Text variant="heading">{ghUser?.name ?? user.displayName ?? user.email}</Text>
                 {ghUser?.login && (
@@ -68,23 +78,45 @@ export function ProfilePage() {
                 </WrapBox>
               </Box>
             </Box>
-            <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleSignOut} disabled={signOut.isPending}>
+            <Button
+              variant="destructive"
+              size="sm"
+              leadingIcon={<Icon icon={Delete} />}
+              onClick={handleSignOut}
+              disabled={signOut.isPending}
+            >
               {t('profile.signOut')}
             </Button>
           </WrapBox>
 
           <DashboardGrid layout="grid" columns={{ sm: 2, md: 4 }} gap="sm">
             <DashboardGrid.Item>
-              <StatCard label={t('profile.repositories')} value={ghUser?.public_repos ?? 0} loading={userPending} />
+              <StatCard
+                label={t('profile.repositories')}
+                value={ghUser?.public_repos ?? 0}
+                loading={userPending}
+              />
             </DashboardGrid.Item>
             <DashboardGrid.Item>
-              <StatCard label={t('profile.gists')} value={ghUser?.public_gists ?? 0} loading={userPending} />
+              <StatCard
+                label={t('profile.gists')}
+                value={ghUser?.public_gists ?? 0}
+                loading={userPending}
+              />
             </DashboardGrid.Item>
             <DashboardGrid.Item>
-              <StatCard label={t('profile.followers')} value={ghUser?.followers ?? 0} loading={userPending} />
+              <StatCard
+                label={t('profile.followers')}
+                value={ghUser?.followers ?? 0}
+                loading={userPending}
+              />
             </DashboardGrid.Item>
             <DashboardGrid.Item>
-              <StatCard label={t('profile.following')} value={ghUser?.following ?? 0} loading={userPending} />
+              <StatCard
+                label={t('profile.following')}
+                value={ghUser?.following ?? 0}
+                loading={userPending}
+              />
             </DashboardGrid.Item>
           </DashboardGrid>
 
@@ -94,7 +126,14 @@ export function ProfilePage() {
                 <Text variant="heading">
                   {contributions.totalContributions.toLocaleString()} {t('profile.contributions')}
                 </Text>
-                <ContributionGraph data={contributions.weeks.flatMap((week) => week.contributionDays.map((day) => ({ date: day.date, count: day.contributionCount })))} />
+                <ContributionGraph
+                  data={contributions.weeks.flatMap((week) =>
+                    week.contributionDays.map((day) => ({
+                      date: day.date,
+                      count: day.contributionCount,
+                    })),
+                  )}
+                />
               </Box>
             </Card>
           )}
@@ -114,15 +153,20 @@ export function ProfilePage() {
         </Box>
       </main>
     </div>
-  )
-}
+  );
+};
 
-function RepoCard({ repo }: { repo: GitHubRepository }) {
+const RepoCard = ({ repo }: { repo: GitHubRepository }) => {
   return (
     <Card padding="md">
       <Box spacing={6}>
         <WrapBox justify="space-between" align="start" childSpacing={8}>
-          <a href={repo.html_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit', minWidth: 0 }}>
+          <a
+            href={repo.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none', color: 'inherit', minWidth: 0 }}
+          >
             <Text variant="body" style={{ wordBreak: 'break-word' }}>
               {repo.name}
             </Text>
@@ -155,5 +199,5 @@ function RepoCard({ repo }: { repo: GitHubRepository }) {
         )}
       </Box>
     </Card>
-  )
-}
+  );
+};

@@ -1,1 +1,1 @@
-export type { GitHubStats } from './GitHubStats'
+export type { GitHubStats } from './GitHubStats';

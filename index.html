@@ -13,16 +13,16 @@
     <title>Npm Lens</title>
     <script>
       // Decode the path redirect from 404.html and restore it before the router mounts.
-      (function () {
-        var params = new URLSearchParams(window.location.search);
-        var p = params.get('p');
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const p = params.get('p');
+        const q = params.get('q');
+        const hash = window.location.hash;
         if (p) {
-          var q = params.get('q');
-          var hash = window.location.hash;
-          var newUrl =
+          const newUrl =
             window.location.pathname +
             decodeURIComponent(p) +
-            (q ? '?' + decodeURIComponent(q) : '') +
+            (q ? `?${decodeURIComponent(q)}` : '') +
             hash;
           window.history.replaceState(null, '', newUrl);
         }

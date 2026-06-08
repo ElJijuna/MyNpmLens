@@ -1,58 +1,87 @@
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from '@tanstack/react-router'
-import { Box, Button, Card, Icon, InlineViewSwitcher, InlineViewSwitcherItem, SearchBar, Spinner, StatusPage, Text, WrapBox } from '@gnome-ui/react'
-import { Add, Applications, Star, ViewSidebar } from '@gnome-ui/icons'
-import { DashboardGrid, type DashboardGridColumns } from '@gnome-ui/layout/components/DashboardGrid'
-import { AddPackageModal } from '@/components/AddPackageModal'
-import { PackageCard } from '@/modules/npm/components/PackageCard'
-import { AuthSection } from '@/modules/auth/components/AuthSection'
-import { useFavorites, useMaintainers } from '@/modules/npm/hooks'
-import { useNativeEvent } from '@gnome-ui/hooks'
-import { useNpmBulkDownloads, useNpmTopByKeyword, useNpmTopByMaintenance, useNpmTopByPopularity, useNpmTopByQuality, useNpmTopByScope, useNpmTopPackages } from '@api-hooks/npm'
-import { useFormatters } from '@/hooks/useFormatters'
+import {
+  useNpmBulkDownloads,
+  useNpmTopByKeyword,
+  useNpmTopByMaintenance,
+  useNpmTopByPopularity,
+  useNpmTopByQuality,
+  useNpmTopByScope,
+  useNpmTopPackages,
+} from '@api-hooks/npm';
+import { useNativeEvent } from '@gnome-ui/hooks';
+import { Add, Applications, Star, ViewSidebar } from '@gnome-ui/icons';
+import {
+  DashboardGrid,
+  type DashboardGridColumns,
+} from '@gnome-ui/layout/components/DashboardGrid';
+import {
+  Box,
+  Button,
+  Card,
+  Icon,
+  InlineViewSwitcher,
+  InlineViewSwitcherItem,
+  SearchBar,
+  Spinner,
+  StatusPage,
+  Text,
+  WrapBox,
+} from '@gnome-ui/react';
+import { useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AddPackageModal } from '@/components/AddPackageModal';
+import { useFormatters } from '@/hooks/useFormatters';
+import { AuthSection } from '@/modules/auth/components/AuthSection';
+import { PackageCard } from '@/modules/npm/components/PackageCard';
+import { useFavorites, useMaintainers } from '@/modules/npm/hooks';
 
-type RankingView = 'top' | 'popularity' | 'quality' | 'maintenance'
+type RankingView = 'top' | 'popularity' | 'quality' | 'maintenance';
 
-export function DashboardPage() {
-  const { t } = useTranslation()
-  const navigate = useNavigate()
-  const { formatCompactNumber } = useFormatters()
-  const [modalOpen, setModalOpen] = useState(false)
-  const [rankingView, setRankingView] = useState<RankingView>('top')
-  const [keyword, setKeyword] = useState('react')
-  const [scope, setScope] = useState('@types')
-  const { data: favorites = [] } = useFavorites()
-  const { data: maintainers = [] } = useMaintainers()
+export const DashboardPage = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { formatCompactNumber } = useFormatters();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [rankingView, setRankingView] = useState<RankingView>('top');
+  const [keyword, setKeyword] = useState('react');
+  const [scope, setScope] = useState('@types');
+  const { data: favorites = [] } = useFavorites();
+  const { data: maintainers = [] } = useMaintainers();
 
-  useNativeEvent('open-dialog-addpackage', () => setModalOpen(true))
+  useNativeEvent('open-dialog-addpackage', () => setModalOpen(true));
 
-  const packageNames = favorites.map((fav) => fav.name)
+  const packageNames = favorites.map((fav) => fav.name);
   const { data: favoriteDownloads } = useNpmBulkDownloads(packageNames, {
     period: 'last-week',
     enabled: packageNames.length > 0,
-  })
-  const topPackages = useNpmTopPackages({ n: 6, enabled: rankingView === 'top' })
-  const popularPackages = useNpmTopByPopularity({ n: 6, enabled: rankingView === 'popularity' })
-  const qualityPackages = useNpmTopByQuality({ n: 6, enabled: rankingView === 'quality' })
-  const maintenancePackages = useNpmTopByMaintenance({ n: 6, enabled: rankingView === 'maintenance' })
-  const keywordPackages = useNpmTopByKeyword(keyword, { n: 4, enabled: keyword.trim().length > 0 })
-  const scopePackages = useNpmTopByScope(scope, { n: 4, enabled: scope.trim().length > 0 })
+  });
+  const topPackages = useNpmTopPackages({ n: 6, enabled: rankingView === 'top' });
+  const popularPackages = useNpmTopByPopularity({ n: 6, enabled: rankingView === 'popularity' });
+  const qualityPackages = useNpmTopByQuality({ n: 6, enabled: rankingView === 'quality' });
+  const maintenancePackages = useNpmTopByMaintenance({
+    n: 6,
+    enabled: rankingView === 'maintenance',
+  });
+  const keywordPackages = useNpmTopByKeyword(keyword, { n: 4, enabled: keyword.trim().length > 0 });
+  const scopePackages = useNpmTopByScope(scope, { n: 4, enabled: scope.trim().length > 0 });
 
   const rankingData = {
     top: topPackages.data,
     popularity: popularPackages.data,
     quality: qualityPackages.data,
     maintenance: maintenancePackages.data,
-  }[rankingView]
+  }[rankingView];
   const rankingIsLoading = {
     top: topPackages.isPending,
     popularity: popularPackages.isPending,
     quality: qualityPackages.isPending,
     maintenance: maintenancePackages.isPending,
-  }[rankingView]
+  }[rankingView];
 
-  const weeklyDownloads = Object.values(favoriteDownloads ?? {}).reduce((total, item) => total + (item?.downloads ?? 0), 0)
+  const weeklyDownloads = Object.values(favoriteDownloads ?? {}).reduce(
+    (total, item) => total + (item?.downloads ?? 0),
+    0,
+  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -64,10 +93,20 @@ export function DashboardPage() {
               <Text color="dim">{t('dashboard.description')}</Text>
             </Box>
             <WrapBox childSpacing={8} align="center">
-              <Button variant="default" size="sm" onClick={() => navigate({ to: '/favorites' })} leadingIcon={<Icon icon={Star} />}>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => navigate({ to: '/favorites' })}
+                leadingIcon={<Icon icon={Star} />}
+              >
                 {t('dashboard.viewFavorites')}
               </Button>
-              <Button variant="suggested" size="sm" onClick={() => setModalOpen(true)} leadingIcon={<Icon icon={Add} />}>
+              <Button
+                variant="suggested"
+                size="sm"
+                onClick={() => setModalOpen(true)}
+                leadingIcon={<Icon icon={Add} />}
+              >
                 {t('dashboard.add')}
               </Button>
             </WrapBox>
@@ -81,7 +120,10 @@ export function DashboardPage() {
               <MetricCard label={t('dashboard.followedMaintainers')} value={maintainers.length} />
             </DashboardGrid.Item>
             <DashboardGrid.Item>
-              <MetricCard label={t('dashboard.weeklyDownloads')} value={formatCompactNumber(weeklyDownloads)} />
+              <MetricCard
+                label={t('dashboard.weeklyDownloads')}
+                value={formatCompactNumber(weeklyDownloads)}
+              />
             </DashboardGrid.Item>
           </DashboardGrid>
 
@@ -95,10 +137,26 @@ export function DashboardPage() {
                 variant="pill"
                 aria-label={t('dashboard.ranking')}
               >
-                <InlineViewSwitcherItem name="top" label={t('dashboard.topPackages')} icon={Applications} />
-                <InlineViewSwitcherItem name="popularity" label={t('dashboard.popularity')} icon={Star} />
-                <InlineViewSwitcherItem name="quality" label={t('dashboard.quality')} icon={Applications} />
-                <InlineViewSwitcherItem name="maintenance" label={t('dashboard.maintenance')} icon={ViewSidebar} />
+                <InlineViewSwitcherItem
+                  name="top"
+                  label={t('dashboard.topPackages')}
+                  icon={Applications}
+                />
+                <InlineViewSwitcherItem
+                  name="popularity"
+                  label={t('dashboard.popularity')}
+                  icon={Star}
+                />
+                <InlineViewSwitcherItem
+                  name="quality"
+                  label={t('dashboard.quality')}
+                  icon={Applications}
+                />
+                <InlineViewSwitcherItem
+                  name="maintenance"
+                  label={t('dashboard.maintenance')}
+                  icon={ViewSidebar}
+                />
               </InlineViewSwitcher>
             </div>
             <PackageGrid
@@ -159,10 +217,10 @@ export function DashboardPage() {
 
       <AddPackageModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </div>
-  )
-}
+  );
+};
 
-function MetricCard({ label, value }: { label: string; value: string | number }) {
+const MetricCard = ({ label, value }: { label: string; value: string | number }) => {
   return (
     <Card padding="md">
       <Text variant="caption" color="dim">
@@ -170,32 +228,34 @@ function MetricCard({ label, value }: { label: string; value: string | number })
       </Text>
       <Text variant="title-2">{value}</Text>
     </Card>
-  )
-}
+  );
+};
 
-function PackageGrid({
+const PackageGrid = ({
   names,
   isLoading,
   emptyTitle,
   emptyDescription,
   columns = { sm: 1, md: 2, lg: 3 },
 }: {
-  names: string[]
-  isLoading: boolean
-  emptyTitle: string
-  emptyDescription: string
-  columns?: DashboardGridColumns
-}) {
+  names: string[];
+  isLoading: boolean;
+  emptyTitle: string;
+  emptyDescription: string;
+  columns?: DashboardGridColumns;
+}) => {
   if (isLoading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem' }}>
         <Spinner size="md" />
       </div>
-    )
+    );
   }
 
   if (names.length === 0) {
-    return <StatusPage compact icon={Applications} title={emptyTitle} description={emptyDescription} />
+    return (
+      <StatusPage compact icon={Applications} title={emptyTitle} description={emptyDescription} />
+    );
   }
 
   return (
@@ -206,5 +266,5 @@ function PackageGrid({
         </DashboardGrid.Item>
       ))}
     </DashboardGrid>
-  )
-}
+  );
+};

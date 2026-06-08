@@ -1,41 +1,55 @@
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from '@tanstack/react-router'
-import { useQueryClient } from '@tanstack/react-query'
-import { useNpmWhoami } from '@api-hooks/npm'
-import { PreferencesGroup, BoxedList, ComboRow, ActionRow, ColorPicker, Box, Button, Link, PasswordEntryRow, Text } from '@gnome-ui/react'
-import { useSettings, useUpdateSettings } from '@/modules/settings/hooks'
-import { DEFAULT_SETTINGS } from '@/modules/settings/domain'
-import { useNpmAuth } from '@/modules/npm/NpmAuthProvider'
+import { useNpmWhoami } from '@api-hooks/npm';
+import {
+  ActionRow,
+  Box,
+  BoxedList,
+  Button,
+  ColorPicker,
+  ComboRow,
+  Link,
+  PasswordEntryRow,
+  PreferencesGroup,
+  Text,
+} from '@gnome-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNpmAuth } from '@/modules/npm/NpmAuthProvider';
+import { DEFAULT_SETTINGS } from '@/modules/settings/domain';
+import { useSettings, useUpdateSettings } from '@/modules/settings/hooks';
 
-export function SettingsPage() {
-  const { t } = useTranslation()
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
-  const { data: settings = DEFAULT_SETTINGS } = useSettings()
-  const updateSettings = useUpdateSettings()
-  const { npmToken, hasNpmToken, setNpmToken, clearNpmToken } = useNpmAuth()
-  const [npmTokenDraft, setNpmTokenDraft] = useState('')
-  const trimmedNpmToken = npmTokenDraft.trim()
-  const npmWhoami = useNpmWhoami({ enabled: hasNpmToken })
+export const SettingsPage = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { data: settings = DEFAULT_SETTINGS } = useSettings();
+  const updateSettings = useUpdateSettings();
+  const { npmToken, hasNpmToken, setNpmToken, clearNpmToken } = useNpmAuth();
+  const [npmTokenDraft, setNpmTokenDraft] = useState('');
+  const trimmedNpmToken = npmTokenDraft.trim();
+  const npmWhoami = useNpmWhoami({ enabled: hasNpmToken });
 
   useEffect(() => {
-    setNpmTokenDraft('')
-  }, [npmToken])
+    void npmToken;
+    setNpmTokenDraft('');
+  }, [npmToken]);
 
   function refreshNpmQueries() {
-    queryClient.removeQueries({ queryKey: ['npm'] })
+    queryClient.removeQueries({ queryKey: ['npm'] });
   }
 
   function handleSaveNpmToken() {
-    if (!trimmedNpmToken) return
-    refreshNpmQueries()
-    setNpmToken(trimmedNpmToken)
+    if (!trimmedNpmToken) {
+      return;
+    }
+    refreshNpmQueries();
+    setNpmToken(trimmedNpmToken);
   }
 
   function handleClearNpmToken() {
-    refreshNpmQueries()
-    clearNpmToken()
+    refreshNpmQueries();
+    clearNpmToken();
   }
 
   const npmAuthSubtitle = hasNpmToken
@@ -46,7 +60,7 @@ export function SettingsPage() {
         : npmWhoami.isError
           ? t('settings.npmTokenInvalid')
           : t('settings.npmTokenSaved')
-    : t('settings.npmTokenNotConfigured')
+    : t('settings.npmTokenNotConfigured');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -69,7 +83,13 @@ export function SettingsPage() {
               <ActionRow
                 title={t('settings.accentColor')}
                 subtitle={t('settings.accentColorSubtitle')}
-                trailing={<ColorPicker size="sm" value={settings.accentColor} onChange={(color) => updateSettings.mutate({ accentColor: color })} />}
+                trailing={
+                  <ColorPicker
+                    size="sm"
+                    value={settings.accentColor}
+                    onChange={(color) => updateSettings.mutate({ accentColor: color })}
+                  />
+                }
               />
             </BoxedList>
           </PreferencesGroup>
@@ -102,7 +122,12 @@ export function SettingsPage() {
 
           <PreferencesGroup title={t('settings.dataGroup')}>
             <BoxedList>
-              <ActionRow title={t('settings.syncTitle')} subtitle={t('settings.syncSubtitle')} interactive onClick={() => void navigate({ to: '/sync' })} />
+              <ActionRow
+                title={t('settings.syncTitle')}
+                subtitle={t('settings.syncSubtitle')}
+                interactive
+                onClick={() => void navigate({ to: '/sync' })}
+              />
             </BoxedList>
           </PreferencesGroup>
 
@@ -120,12 +145,21 @@ export function SettingsPage() {
                 }
               />
               <PasswordEntryRow
-                title={hasNpmToken ? t('settings.npmTokenReplacePlaceholder') : t('settings.npmTokenPlaceholder')}
+                title={
+                  hasNpmToken
+                    ? t('settings.npmTokenReplacePlaceholder')
+                    : t('settings.npmTokenPlaceholder')
+                }
                 value={npmTokenDraft}
                 autoComplete="off"
                 onValueChange={setNpmTokenDraft}
                 trailing={
-                  <Button size="sm" variant="suggested" disabled={!trimmedNpmToken} onClick={handleSaveNpmToken}>
+                  <Button
+                    size="sm"
+                    variant="suggested"
+                    disabled={!trimmedNpmToken}
+                    onClick={handleSaveNpmToken}
+                  >
                     {hasNpmToken ? t('settings.npmTokenReplace') : t('settings.npmTokenSave')}
                   </Button>
                 }
@@ -144,5 +178,5 @@ export function SettingsPage() {
         </Box>
       </main>
     </div>
-  )
-}
+  );
+};

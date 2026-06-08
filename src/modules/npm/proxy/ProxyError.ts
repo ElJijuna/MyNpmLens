@@ -8,7 +8,7 @@ export class ProxyError extends Error {
     public readonly status: number | 'timeout' | 'network',
     message: string,
   ) {
-    super(message)
-    this.name = 'ProxyError'
+    super(message);
+    this.name = 'ProxyError';
   }
 }

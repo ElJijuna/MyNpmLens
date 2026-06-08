@@ -1,25 +1,33 @@
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Box, Button, Icon, InlineViewSwitcher, InlineViewSwitcherItem, WrapBox, Text } from '@gnome-ui/react'
-import { Add, Applications, ViewSidebar } from '@gnome-ui/icons'
-import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
-import { AddPackageModal } from '@/components/AddPackageModal'
-import { EmptyState } from '@/components/EmptyState'
-import { PackageCard } from '@/modules/npm/components/PackageCard'
-import { DownloadsChart } from '@/modules/npm/components/DownloadsChart'
-import { AuthSection } from '@/modules/auth/components/AuthSection'
-import { useFavorites } from '@/modules/npm/hooks'
-import { useNativeEvent } from '@gnome-ui/hooks'
+import { useNativeEvent } from '@gnome-ui/hooks';
+import { Add, Applications, ViewSidebar } from '@gnome-ui/icons';
+import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid';
+import {
+  Box,
+  Button,
+  Icon,
+  InlineViewSwitcher,
+  InlineViewSwitcherItem,
+  Text,
+  WrapBox,
+} from '@gnome-ui/react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AddPackageModal } from '@/components/AddPackageModal';
+import { EmptyState } from '@/components/EmptyState';
+import { AuthSection } from '@/modules/auth/components/AuthSection';
+import { DownloadsChart } from '@/modules/npm/components/DownloadsChart';
+import { PackageCard } from '@/modules/npm/components/PackageCard';
+import { useFavorites } from '@/modules/npm/hooks';
 
-export function FavoritesPage() {
-  const { t } = useTranslation()
-  const [modalOpen, setModalOpen] = useState(false)
-  const [packagesLayout, setPackagesLayout] = useState<DashboardGridLayout>('grid')
-  const { data: favorites = [] } = useFavorites()
+export const FavoritesPage = () => {
+  const { t } = useTranslation();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [packagesLayout, setPackagesLayout] = useState<DashboardGridLayout>('grid');
+  const { data: favorites = [] } = useFavorites();
 
-  useNativeEvent('open-dialog-addpackage', () => setModalOpen(true))
+  useNativeEvent('open-dialog-addpackage', () => setModalOpen(true));
 
-  const packageNames = favorites.map((fav) => fav.name)
+  const packageNames = favorites.map((fav) => fav.name);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -38,17 +46,34 @@ export function FavoritesPage() {
                   variant="pill"
                   aria-label={t('favorites.packageLayout')}
                 >
-                  <InlineViewSwitcherItem name="grid" label={t('favorites.gridView')} icon={Applications} />
-                  <InlineViewSwitcherItem name="column" label={t('favorites.columnView')} icon={ViewSidebar} />
+                  <InlineViewSwitcherItem
+                    name="grid"
+                    label={t('favorites.gridView')}
+                    icon={Applications}
+                  />
+                  <InlineViewSwitcherItem
+                    name="column"
+                    label={t('favorites.columnView')}
+                    icon={ViewSidebar}
+                  />
                 </InlineViewSwitcher>
-                <Button variant="suggested" size="sm" onClick={() => setModalOpen(true)} leadingIcon={<Icon icon={Add} />}>
+                <Button
+                  variant="suggested"
+                  size="sm"
+                  onClick={() => setModalOpen(true)}
+                  leadingIcon={<Icon icon={Add} />}
+                >
                   {t('favorites.add')}
                 </Button>
               </WrapBox>
             </WrapBox>
             <DownloadsChart packageNames={packageNames} />
 
-            <DashboardGrid layout={packagesLayout} columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} gap="md">
+            <DashboardGrid
+              layout={packagesLayout}
+              columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
+              gap="md"
+            >
               {favorites.map((fav) => (
                 <DashboardGrid.Item key={fav.name}>
                   <PackageCard name={fav.name} />
@@ -62,5 +87,5 @@ export function FavoritesPage() {
 
       <AddPackageModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </div>
-  )
-}
+  );
+};

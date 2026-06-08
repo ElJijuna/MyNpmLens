@@ -11,24 +11,30 @@
  * Returns null if the input cannot be resolved to a valid package name.
  */
 export function parseNpmUrl(input: string): string | null {
-  const trimmed = input.trim()
-  if (!trimmed) return null
+  const trimmed = input.trim();
+  if (!trimmed) {
+    return null;
+  }
 
   // Try to parse as URL first
   try {
-    const url = new URL(trimmed)
-    const isNpmHost = url.hostname === 'www.npmjs.com' || url.hostname === 'npmjs.com'
+    const url = new URL(trimmed);
+    const isNpmHost = url.hostname === 'www.npmjs.com' || url.hostname === 'npmjs.com';
 
-    if (!isNpmHost) return null
+    if (!isNpmHost) {
+      return null;
+    }
 
     // pathname: /package/react  or  /package/@tanstack/react-query
-    const match = url.pathname.match(/^\/package\/(@?[^/]+(?:\/[^/]+)?)/)
-    if (!match) return null
+    const match = url.pathname.match(/^\/package\/(@?[^/]+(?:\/[^/]+)?)/);
+    if (!match) {
+      return null;
+    }
 
-    return validatePackageName(decodeURIComponent(match[1]))
+    return validatePackageName(decodeURIComponent(match[1]));
   } catch {
     // Not a URL — treat as a raw package name
-    return validatePackageName(trimmed)
+    return validatePackageName(trimmed);
   }
 }
 
@@ -38,6 +44,6 @@ export function parseNpmUrl(input: string): string | null {
  */
 function validatePackageName(name: string): string | null {
   // Scoped: @scope/name  or  unscoped: name
-  const valid = /^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name)
-  return valid ? name : null
+  const valid = /^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name);
+  return valid ? name : null;
 }

@@ -1,74 +1,103 @@
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Route } from '@/routes/packages.$name'
-import { useRemoveFavorite, useAddFavorite, useFavorites } from '@/modules/npm/hooks'
-import { useNpmPackage } from '@api-hooks/npm'
-import { useNavigate } from '@tanstack/react-router'
-import { Dropdown, Text, Button, Icon, Box, WrapBox, InlineViewSwitcher, InlineViewSwitcherItem } from '@gnome-ui/react'
-import { Delete, StarOutline, Applications, ViewSidebar } from '@gnome-ui/icons'
-import { Npm } from '@gnome-ui/icons/third-party'
-import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid'
-import { IconBadge } from '@gnome-ui/layout/components/IconBadge'
-import { getIcon } from 'very-simple-icons'
-import { PackageInfoSection } from './sections/PackageInfoSection'
-import { DownloadsSection } from './sections/DownloadsSection'
-import { BundleSizeSection } from './sections/BundleSizeSection'
-import { GitHubSection } from './sections/GitHubSection'
-import { VulnerabilitySection } from './sections/VulnerabilitySection'
-import { ScoreSection } from './sections/ScoreSection'
-import { DependenciesSection } from './sections/DependenciesSection'
-import { FilesSection } from './sections/FilesSection'
+import { useNpmPackage } from '@api-hooks/npm';
+import { Applications, Delete, StarOutline, ViewSidebar } from '@gnome-ui/icons';
+import { Npm } from '@gnome-ui/icons/third-party';
+import { DashboardGrid, type DashboardGridLayout } from '@gnome-ui/layout/components/DashboardGrid';
+import { IconBadge } from '@gnome-ui/layout/components/IconBadge';
+import {
+  Box,
+  Button,
+  Dropdown,
+  Icon,
+  InlineViewSwitcher,
+  InlineViewSwitcherItem,
+  Text,
+  WrapBox,
+} from '@gnome-ui/react';
+import { useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { getIcon } from 'very-simple-icons';
+import { useAddFavorite, useFavorites, useRemoveFavorite } from '@/modules/npm/hooks';
+import { Route } from '@/routes/packages.$name';
+import { BundleSizeSection } from './sections/BundleSizeSection';
+import { DependenciesSection } from './sections/DependenciesSection';
+import { DownloadsSection } from './sections/DownloadsSection';
+import { FilesSection } from './sections/FilesSection';
+import { GitHubSection } from './sections/GitHubSection';
+import { PackageInfoSection } from './sections/PackageInfoSection';
+import { ScoreSection } from './sections/ScoreSection';
+import { VulnerabilitySection } from './sections/VulnerabilitySection';
 
-export function PackageDetailPage() {
-  const { t } = useTranslation()
-  const [sectionsLayout, setSectionsLayout] = useState<DashboardGridLayout>('grid')
-  const { name } = Route.useParams()
-  const { version: searchVersion, fromMaintainer } = Route.useSearch()
-  const { data: pkg } = useNpmPackage(name)
-  const { data: favorites = [] } = useFavorites()
-  const navigate = useNavigate()
-  const iconData = getIcon(name)
+export const PackageDetailPage = () => {
+  const { t } = useTranslation();
+  const [sectionsLayout, setSectionsLayout] = useState<DashboardGridLayout>('grid');
+  const { name } = Route.useParams();
+  const { version: searchVersion, fromMaintainer } = Route.useSearch();
+  const { data: pkg } = useNpmPackage(name);
+  const { data: favorites = [] } = useFavorites();
+  const navigate = useNavigate();
+  const iconData = getIcon(name);
 
-  const latestVersion = pkg?.['dist-tags']?.latest ?? ''
-  const version = searchVersion ?? latestVersion
+  const latestVersion = pkg?.['dist-tags']?.latest ?? '';
+  const version = searchVersion ?? latestVersion;
 
-  const versionList = pkg ? Object.keys(pkg.versions).reverse() : []
+  const versionList = pkg ? Object.keys(pkg.versions).reverse() : [];
   const versionOptions = versionList.map((v) => {
-    const tag = Object.entries(pkg?.['dist-tags'] ?? {}).find(([, val]) => val === v)?.[0]
-    return { value: v, label: tag ? `${v} (${tag})` : v }
-  })
+    const tag = Object.entries(pkg?.['dist-tags'] ?? {}).find(([, val]) => val === v)?.[0];
+    return { value: v, label: tag ? `${v} (${tag})` : v };
+  });
 
-  const isFavorite = favorites.some((f) => f.name === name)
-  const removeFavorite = useRemoveFavorite()
-  const addFavorite = useAddFavorite()
+  const isFavorite = favorites.some((f) => f.name === name);
+  const removeFavorite = useRemoveFavorite();
+  const addFavorite = useAddFavorite();
 
   function handleVersionChange(v: string) {
-    void navigate({ to: '/packages/$name', params: { name }, search: { version: v, fromMaintainer } })
+    void navigate({
+      to: '/packages/$name',
+      params: { name },
+      search: { version: v, fromMaintainer },
+    });
   }
 
   function handleRemove() {
-    removeFavorite.mutate(name, { onSuccess: () => navigate({ to: '/' }) })
+    removeFavorite.mutate(name, { onSuccess: () => navigate({ to: '/' }) });
   }
 
   function handleAdd() {
-    addFavorite.mutate(name, { onSuccess: () => navigate({ to: '/' }) })
+    addFavorite.mutate(name, { onSuccess: () => navigate({ to: '/' }) });
   }
 
   const actionButton = fromMaintainer ? (
     isFavorite ? (
-      <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
+      <Button
+        variant="destructive"
+        size="sm"
+        leadingIcon={<Icon icon={Delete} />}
+        onClick={handleRemove}
+      >
         {t('packageDetail.removePackage')}
       </Button>
     ) : (
-      <Button variant="suggested" size="sm" leadingIcon={<Icon icon={StarOutline} />} onClick={handleAdd} disabled={addFavorite.isPending}>
+      <Button
+        variant="suggested"
+        size="sm"
+        leadingIcon={<Icon icon={StarOutline} />}
+        onClick={handleAdd}
+        disabled={addFavorite.isPending}
+      >
         {t('packageDetail.addPackage')}
       </Button>
     )
   ) : (
-    <Button variant="destructive" size="sm" leadingIcon={<Icon icon={Delete} />} onClick={handleRemove}>
+    <Button
+      variant="destructive"
+      size="sm"
+      leadingIcon={<Icon icon={Delete} />}
+      onClick={handleRemove}
+    >
       {t('packageDetail.removePackage')}
     </Button>
-  )
+  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -84,7 +113,12 @@ export function PackageDetailPage() {
                   <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
                     {t('packageDetail.version')}
                   </Text>
-                  <Dropdown aria-label={t('packageDetail.selectVersion')} options={versionOptions} value={version || latestVersion} onChange={handleVersionChange} />
+                  <Dropdown
+                    aria-label={t('packageDetail.selectVersion')}
+                    options={versionOptions}
+                    value={version || latestVersion}
+                    onChange={handleVersionChange}
+                  />
                   <Text variant="caption" color="dim" style={{ whiteSpace: 'nowrap' }}>
                     {versionList.length} {t('packageDetail.published')}
                   </Text>
@@ -99,8 +133,16 @@ export function PackageDetailPage() {
                 variant="pill"
                 aria-label={t('dashboard.packageLayout')}
               >
-                <InlineViewSwitcherItem name="grid" label={t('dashboard.gridView')} icon={Applications} />
-                <InlineViewSwitcherItem name="column" label={t('dashboard.columnView')} icon={ViewSidebar} />
+                <InlineViewSwitcherItem
+                  name="grid"
+                  label={t('dashboard.gridView')}
+                  icon={Applications}
+                />
+                <InlineViewSwitcherItem
+                  name="column"
+                  label={t('dashboard.columnView')}
+                  icon={ViewSidebar}
+                />
               </InlineViewSwitcher>
               {actionButton}
             </WrapBox>
@@ -135,5 +177,5 @@ export function PackageDetailPage() {
         </Box>
       </main>
     </div>
-  )
-}
+  );
+};

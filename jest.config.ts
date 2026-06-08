@@ -1,6 +1,8 @@
-import type { Config } from 'jest'
+import type { Config } from 'jest';
+import superJestConfig from 'super-configs/jest';
 
 const config: Config = {
+  ...superJestConfig,
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
@@ -28,7 +30,12 @@ const config: Config = {
     '^.+\\.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.app.json' }],
   },
   testMatch: ['**/__tests__/**/*.{ts,tsx}', '**/*.{spec,test}.{ts,tsx}'],
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts', '!src/routeTree.gen.ts', '!src/main.tsx'],
-}
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/routeTree.gen.ts',
+    '!src/main.tsx',
+  ],
+};
 
-export default config
+export default config;

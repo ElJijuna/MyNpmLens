@@ -1,5 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { PackageDetailPage } from '@/pages/PackageDetail'
+import { createFileRoute } from '@tanstack/react-router';
+import { PackageDetailPage } from '@/pages/PackageDetail';
 
 export const Route = createFileRoute('/packages/$name')({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -7,4 +7,4 @@ export const Route = createFileRoute('/packages/$name')({
     fromMaintainer: typeof search.fromMaintainer === 'string' ? search.fromMaintainer : undefined,
   }),
   component: PackageDetailPage,
-})
+});

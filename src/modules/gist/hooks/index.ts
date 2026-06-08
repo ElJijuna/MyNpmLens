@@ -1,2 +1,2 @@
-export { useGistSync } from './useGistSync'
-export { usePushToGist } from './usePushToGist'
+export { useGistSync } from './useGistSync';
+export { usePushToGist } from './usePushToGist';

@@ -1,1 +1,1 @@
-export { useSettings, useUpdateSettings, SETTINGS_QUERY_KEY } from './useSettings'
+export { SETTINGS_QUERY_KEY, useSettings, useUpdateSettings } from './useSettings';

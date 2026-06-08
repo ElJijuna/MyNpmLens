@@ -6,4 +6,4 @@ export const npmQueryKeys = {
   package: (name: string) => ['npm', 'package', name] as const,
   downloads: (name: string) => ['npm', 'downloads', name] as const,
   bundleSize: (name: string) => ['npm', 'bundleSize', name] as const,
-}
+};

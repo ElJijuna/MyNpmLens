@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next'
-import { useRegisterSW } from 'virtual:pwa-register/react'
-import { Dialog } from '@gnome-ui/react'
-import { Analytics } from '@/lib/analytics'
+import { useRegisterSW } from 'virtual:pwa-register/react';
+import { Dialog } from '@gnome-ui/react';
+import { useTranslation } from 'react-i18next';
+import { Analytics } from '@/lib/analytics';
 
-export function OfflineBanner() {
-  const { t } = useTranslation()
+export const OfflineBanner = () => {
+  const { t } = useTranslation();
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
-  } = useRegisterSW()
+  } = useRegisterSW();
 
   return (
     <Dialog
@@ -21,14 +21,14 @@ export function OfflineBanner() {
           label: t('offline.update'),
           variant: 'suggested',
           onClick: () => {
-            Analytics.appUpdate()
-            setNeedRefresh(false)
-            updateServiceWorker(true)
+            Analytics.appUpdate();
+            setNeedRefresh(false);
+            updateServiceWorker(true);
           },
         },
       ]}
     >
       {t('offline.description')}
     </Dialog>
-  )
-}
+  );
+};

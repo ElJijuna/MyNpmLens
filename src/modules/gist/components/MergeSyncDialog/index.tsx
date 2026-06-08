@@ -1,16 +1,16 @@
-import { useTranslation } from 'react-i18next'
-import { Dialog, Text } from '@gnome-ui/react'
-import type { GistDelta } from '@/modules/gist/domain'
+import { Dialog, Text } from '@gnome-ui/react';
+import { useTranslation } from 'react-i18next';
+import type { GistDelta } from '@/modules/gist/domain';
 
 interface MergeSyncDialogProps {
-  delta: GistDelta
-  onKeepAll: () => void
-  onReplaceWithLocal: () => void
+  delta: GistDelta;
+  onKeepAll: () => void;
+  onReplaceWithLocal: () => void;
 }
 
-export function MergeSyncDialog({ delta, onKeepAll, onReplaceWithLocal }: MergeSyncDialogProps) {
-  const { t } = useTranslation()
-  const { addedInGist, removedInGist, addedMaintainersInGist, removedMaintainersInGist } = delta
+export const MergeSyncDialog = ({ delta, onKeepAll, onReplaceWithLocal }: MergeSyncDialogProps) => {
+  const { t } = useTranslation();
+  const { addedInGist, removedInGist, addedMaintainersInGist, removedMaintainersInGist } = delta;
 
   return (
     <Dialog
@@ -84,5 +84,5 @@ export function MergeSyncDialog({ delta, onKeepAll, onReplaceWithLocal }: MergeS
         )}
       </div>
     </Dialog>
-  )
-}
+  );
+};

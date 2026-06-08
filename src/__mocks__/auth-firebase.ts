@@ -1,3 +1,3 @@
-export const app = {}
-export const auth = {}
-export const analytics = {}
+export const app = {};
+export const auth = {};
+export const analytics = {};

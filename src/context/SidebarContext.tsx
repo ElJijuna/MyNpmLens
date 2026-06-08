@@ -1,12 +1,12 @@
-import { createContext, useContext, type ReactNode } from 'react'
+import { createContext, type ReactNode, useContext } from 'react';
 
 interface SidebarContextValue {
-  sidebarOpen: boolean
-  openSidebar: () => void
-  closeSidebar: () => void
-  sidebarOverlay: boolean
-  sidebarCollapsed: boolean
-  toggleCollapsed: () => void
+  sidebarOpen: boolean;
+  openSidebar: () => void;
+  closeSidebar: () => void;
+  sidebarOverlay: boolean;
+  sidebarCollapsed: boolean;
+  toggleCollapsed: () => void;
 }
 
 const SidebarContext = createContext<SidebarContextValue>({
@@ -16,9 +16,9 @@ const SidebarContext = createContext<SidebarContextValue>({
   sidebarOverlay: false,
   sidebarCollapsed: false,
   toggleCollapsed: () => {},
-})
+});
 
-export function SidebarProvider({
+export const SidebarProvider = ({
   children,
   sidebarOpen,
   openSidebar,
@@ -27,17 +27,30 @@ export function SidebarProvider({
   sidebarCollapsed,
   toggleCollapsed,
 }: {
-  children: ReactNode
-  sidebarOpen: boolean
-  openSidebar: () => void
-  closeSidebar: () => void
-  sidebarOverlay: boolean
-  sidebarCollapsed: boolean
-  toggleCollapsed: () => void
-}) {
-  return <SidebarContext.Provider value={{ sidebarOpen, openSidebar, closeSidebar, sidebarOverlay, sidebarCollapsed, toggleCollapsed }}>{children}</SidebarContext.Provider>
-}
+  children: ReactNode;
+  sidebarOpen: boolean;
+  openSidebar: () => void;
+  closeSidebar: () => void;
+  sidebarOverlay: boolean;
+  sidebarCollapsed: boolean;
+  toggleCollapsed: () => void;
+}) => {
+  return (
+    <SidebarContext.Provider
+      value={{
+        sidebarOpen,
+        openSidebar,
+        closeSidebar,
+        sidebarOverlay,
+        sidebarCollapsed,
+        toggleCollapsed,
+      }}
+    >
+      {children}
+    </SidebarContext.Provider>
+  );
+};
 
 export function useSidebar(): SidebarContextValue {
-  return useContext(SidebarContext)
+  return useContext(SidebarContext);
 }

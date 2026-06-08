@@ -3,4 +3,4 @@ export default {
   init: jest.fn().mockResolvedValue(undefined),
   changeLanguage: jest.fn().mockResolvedValue(undefined),
   language: 'en',
-}
+};

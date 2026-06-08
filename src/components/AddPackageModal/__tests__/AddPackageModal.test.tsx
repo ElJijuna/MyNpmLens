@@ -1,17 +1,17 @@
 jest.mock('@/lib/analytics', () => ({
   Analytics: { addPackage: jest.fn() },
-}))
+}));
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { type ReactNode } from 'react'
-import { AddPackageModal } from '../index'
-import * as npmjsClient from 'npmjs-api-client'
-import { Analytics } from '@/lib/analytics'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import * as npmjsClient from 'npmjs-api-client';
+import type { ReactNode } from 'react';
+import { Analytics } from '@/lib/analytics';
+import { AddPackageModal } from '../index';
 
 function wrapper({ children }: { children: ReactNode }) {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }
 
 const MOCK_PACKUMENT = {
@@ -19,76 +19,76 @@ const MOCK_PACKUMENT = {
   'dist-tags': { latest: '19.0.0' },
   versions: {},
   time: {},
-}
+};
 
-beforeEach(() => localStorage.clear())
-afterEach(() => jest.restoreAllMocks())
+beforeEach(() => localStorage.clear());
+afterEach(() => jest.restoreAllMocks());
 
 function mockNpmClientGet(resolveValue: unknown) {
   jest.spyOn(npmjsClient.NpmClient.prototype, 'package').mockReturnValue({
     get: () => Promise.resolve(resolveValue),
-  } as unknown as ReturnType<(typeof npmjsClient.NpmClient.prototype)['package']>)
+  } as unknown as ReturnType<(typeof npmjsClient.NpmClient.prototype)['package']>);
 }
 
 describe('AddPackageModal', () => {
   it('renders when open', () => {
-    render(<AddPackageModal open={true} onClose={() => {}} />, { wrapper })
-    expect(screen.getByText('Add package')).toBeInTheDocument()
-  })
+    render(<AddPackageModal open={true} onClose={() => {}} />, { wrapper });
+    expect(screen.getByText('Add package')).toBeInTheDocument();
+  });
 
   it('does not render when closed', () => {
-    render(<AddPackageModal open={false} onClose={() => {}} />, { wrapper })
-    expect(screen.queryByText('Add package')).not.toBeInTheDocument()
-  })
+    render(<AddPackageModal open={false} onClose={() => {}} />, { wrapper });
+    expect(screen.queryByText('Add package')).not.toBeInTheDocument();
+  });
 
   it('shows validation error for invalid input', async () => {
-    render(<AddPackageModal open={true} onClose={() => {}} />, { wrapper })
+    render(<AddPackageModal open={true} onClose={() => {}} />, { wrapper });
 
     fireEvent.change(screen.getByPlaceholderText(/npmjs\.com\/package/i), {
       target: { value: 'Invalid Package Name!' },
-    })
-    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }))
+    });
+    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }));
 
     await waitFor(() => {
-      expect(screen.getByText(/valid package name/i)).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText(/valid package name/i)).toBeInTheDocument();
+    });
+  });
 
   it('calls onClose after adding a valid package name', async () => {
-    mockNpmClientGet(MOCK_PACKUMENT)
-    const onClose = jest.fn()
-    render(<AddPackageModal open={true} onClose={onClose} />, { wrapper })
+    mockNpmClientGet(MOCK_PACKUMENT);
+    const onClose = jest.fn();
+    render(<AddPackageModal open={true} onClose={onClose} />, { wrapper });
 
     fireEvent.change(screen.getByPlaceholderText(/npmjs\.com\/package/i), {
       target: { value: 'react' },
-    })
-    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }))
+    });
+    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }));
 
-    await waitFor(() => expect(onClose).toHaveBeenCalled())
-  })
+    await waitFor(() => expect(onClose).toHaveBeenCalled());
+  });
 
   it('logs Analytics.addPackage with package name on success', async () => {
-    mockNpmClientGet(MOCK_PACKUMENT)
-    render(<AddPackageModal open={true} onClose={() => {}} />, { wrapper })
+    mockNpmClientGet(MOCK_PACKUMENT);
+    render(<AddPackageModal open={true} onClose={() => {}} />, { wrapper });
 
     fireEvent.change(screen.getByPlaceholderText(/npmjs\.com\/package/i), {
       target: { value: 'react' },
-    })
-    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }))
+    });
+    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }));
 
-    await waitFor(() => expect(Analytics.addPackage).toHaveBeenCalledWith('react'))
-  })
+    await waitFor(() => expect(Analytics.addPackage).toHaveBeenCalledWith('react'));
+  });
 
   it('accepts a full npmjs.com URL', async () => {
-    mockNpmClientGet(MOCK_PACKUMENT)
-    const onClose = jest.fn()
-    render(<AddPackageModal open={true} onClose={onClose} />, { wrapper })
+    mockNpmClientGet(MOCK_PACKUMENT);
+    const onClose = jest.fn();
+    render(<AddPackageModal open={true} onClose={onClose} />, { wrapper });
 
     fireEvent.change(screen.getByPlaceholderText(/npmjs\.com\/package/i), {
       target: { value: 'https://www.npmjs.com/package/@tanstack/react-query' },
-    })
-    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }))
+    });
+    fireEvent.click(screen.getByRole('button', { hidden: true, name: 'Add' }));
 
-    await waitFor(() => expect(onClose).toHaveBeenCalled())
-  })
-})
+    await waitFor(() => expect(onClose).toHaveBeenCalled());
+  });
+});

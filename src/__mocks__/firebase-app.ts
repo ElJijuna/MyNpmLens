@@ -1,1 +1,1 @@
-export const initializeApp = jest.fn(() => ({}))
+export const initializeApp = jest.fn(() => ({}));

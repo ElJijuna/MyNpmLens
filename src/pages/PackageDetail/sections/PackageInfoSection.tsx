@@ -1,21 +1,25 @@
-import { useTranslation } from 'react-i18next'
-import { Text, Badge, Link, Box, WrapBox } from '@gnome-ui/react'
-import { SectionCard } from '@/components/SectionCard'
-import { useNpmPackageVersion, useNpmPackageMaintainers } from '@api-hooks/npm'
-import { MaintainerAvatar } from '@/modules/npm/components/MaintainerAvatar'
+import { useNpmPackageMaintainers, useNpmPackageVersion } from '@api-hooks/npm';
+import { Badge, Box, Link, Text, WrapBox } from '@gnome-ui/react';
+import { useTranslation } from 'react-i18next';
+import { SectionCard } from '@/components/SectionCard';
+import { MaintainerAvatar } from '@/modules/npm/components/MaintainerAvatar';
 
 interface PackageInfoSectionProps {
-  name: string
-  version: string
+  name: string;
+  version: string;
 }
 
-export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
-  const { t } = useTranslation()
-  const { data, isPending, error } = useNpmPackageVersion(name, version)
-  const { data: maintainers } = useNpmPackageMaintainers(name)
+export const PackageInfoSection = ({ name, version }: PackageInfoSectionProps) => {
+  const { t } = useTranslation();
+  const { data, isPending, error } = useNpmPackageVersion(name, version);
+  const { data: maintainers } = useNpmPackageMaintainers(name);
 
   return (
-    <SectionCard title={t('packageDetail.packageInfo')} isLoading={isPending} error={error as Error | null}>
+    <SectionCard
+      title={t('packageDetail.packageInfo')}
+      isLoading={isPending}
+      error={error as Error | null}
+    >
       {data && (
         <Box orientation="vertical" spacing={6}>
           <WrapBox childSpacing={6} align="center">
@@ -45,16 +49,23 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
               </Text>
               <WrapBox childSpacing={8}>
                 {maintainers.map((m) => {
-                  const label = m.name ?? m.username ?? m.email ?? '?'
-                  const username = m.username ?? m.name ?? label
+                  const label = m.name ?? m.username ?? m.email ?? '?';
+                  const username = m.username ?? m.name ?? label;
                   return (
                     <WrapBox key={label} align="center" childSpacing={4} style={{ minWidth: 0 }}>
                       <MaintainerAvatar username={username} name={label} size="sm" />
-                      <Text variant="caption" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <Text
+                        variant="caption"
+                        style={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
                         {label}
                       </Text>
                     </WrapBox>
-                  )
+                  );
                 })}
               </WrapBox>
             </Box>
@@ -62,5 +73,5 @@ export function PackageInfoSection({ name, version }: PackageInfoSectionProps) {
         </Box>
       )}
     </SectionCard>
-  )
-}
+  );
+};

@@ -1,1 +1,1 @@
-export { ProxyError } from './ProxyError'
+export { ProxyError } from './ProxyError';

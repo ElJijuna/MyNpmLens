@@ -1,1 +1,1 @@
-export type { GistSync, GistDelta } from './GistSync'
+export type { GistDelta, GistSync } from './GistSync';

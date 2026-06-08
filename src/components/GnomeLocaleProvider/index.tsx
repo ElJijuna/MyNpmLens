@@ -1,19 +1,22 @@
-import { GnomeProvider } from '@gnome-ui/react'
-import { DEFAULT_SETTINGS } from '@/modules/settings/domain'
-import { useSettings } from '@/modules/settings/hooks'
-import { resolveIntlLocale } from '@/lib/locale'
-import type { ReactNode } from 'react'
+import { GnomeProvider } from '@gnome-ui/react';
+import type { ReactNode } from 'react';
+import { resolveIntlLocale } from '@/lib/locale';
+import { DEFAULT_SETTINGS } from '@/modules/settings/domain';
+import { useSettings } from '@/modules/settings/hooks';
 
 interface GnomeLocaleProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
-export function GnomeLocaleProvider({ children }: GnomeLocaleProviderProps) {
-  const { data: settings = DEFAULT_SETTINGS } = useSettings()
+export const GnomeLocaleProvider = ({ children }: GnomeLocaleProviderProps) => {
+  const { data: settings = DEFAULT_SETTINGS } = useSettings();
 
   return (
-    <GnomeProvider locale={resolveIntlLocale(settings.language)} numberFormat={{ notation: 'compact', compactDisplay: 'short' }}>
+    <GnomeProvider
+      locale={resolveIntlLocale(settings.language)}
+      numberFormat={{ notation: 'compact', compactDisplay: 'short' }}
+    >
       {children}
     </GnomeProvider>
-  )
-}
+  );
+};
