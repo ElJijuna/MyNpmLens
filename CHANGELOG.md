@@ -1,3 +1,9 @@
+## [1.22.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.22.0...v1.22.1) (2026-06-15)
+
+### Bug Fixes
+
+* use local uid variable for saving gist ID instead of userUid ([a18b3e5](https://github.com/ElJijuna/MyNpmLens/commit/a18b3e5005db22045c6052295040b91aa9c32978))
+
 ## [1.22.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.21.0...v1.22.0) (2026-06-15)
 
 ### Features
