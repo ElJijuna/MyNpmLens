@@ -168,6 +168,7 @@ export const SettingsPage = () => {
                     ? t('settings.npmTokenReplacePlaceholder')
                     : t('settings.npmTokenPlaceholder')
                 }
+                disabled
                 value={npmTokenDraft}
                 autoComplete="off"
                 onValueChange={setNpmTokenDraft}

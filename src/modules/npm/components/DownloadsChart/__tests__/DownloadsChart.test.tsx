@@ -1,4 +1,5 @@
 import * as npmApiHooks from '@api-hooks/npm';
+import { GnomeProvider } from '@gnome-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
@@ -40,7 +41,13 @@ jest.mock('@gnome-ui/charts', () => ({
 
 function wrapper({ children }: { children: ReactNode }) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={client}>
+      <GnomeProvider numberFormat={{ notation: 'compact', compactDisplay: 'short' }}>
+        {children}
+      </GnomeProvider>
+    </QueryClientProvider>
+  );
 }
 
 function mockPackageData({
@@ -134,6 +141,18 @@ describe('DownloadsChart', () => {
       'Weekly downloads',
     );
     expect(screen.getByTestId('series-versions')).toHaveAttribute('data-name', 'Versions');
+  });
+
+  it('formats visible totals with compact notation', async () => {
+    mockPackageData({
+      downloads: { react: 1_500_000 },
+      versions: { react: 1_200 },
+    });
+
+    render(<DownloadsChart packageNames={['react']} />, { wrapper });
+
+    expect(await screen.findByText('1.5M')).toBeInTheDocument();
+    expect(screen.getByText('1.2K')).toBeInTheDocument();
   });
 
   it('ignores missing data instead of crashing', async () => {

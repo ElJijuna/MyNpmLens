@@ -2,7 +2,7 @@ import { npmQueryKeys, useNpmClient } from '@api-hooks/npm';
 import { BarChart } from '@gnome-ui/charts';
 import { PanelCard } from '@gnome-ui/layout/components/PanelCard';
 import { LoadingStatus } from '@gnome-ui/layout';
-import { Box, Spinner, Text, WrapBox } from '@gnome-ui/react';
+import { Box, Spinner, Text, WrapBox, useNumberFormatter } from '@gnome-ui/react';
 import { useQueries } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
@@ -11,10 +11,9 @@ interface DownloadsChartProps {
 }
 
 const DOWNLOADS_CHART_LIMIT = 12;
-const downloadsFormatter = new Intl.NumberFormat(undefined, { notation: 'compact' });
-
 export const DownloadsChart = ({ packageNames }: DownloadsChartProps) => {
   const { t } = useTranslation();
+  const numberFormatter = useNumberFormatter();
   const chartPackageNames = packageNames.slice(0, DOWNLOADS_CHART_LIMIT);
   const client = useNpmClient();
 
@@ -93,13 +92,13 @@ export const DownloadsChart = ({ packageNames }: DownloadsChartProps) => {
           <Text variant="caption" color="dim">
             {t('downloadsChart.weeklyTotal')}
           </Text>
-          <Text variant="numeric">{downloadsFormatter.format(weeklyDownloads)}</Text>
+          <Text variant="numeric">{numberFormatter.format(weeklyDownloads)}</Text>
         </Box>
         <Box spacing={2}>
           <Text variant="caption" color="dim">
             {t('downloadsChart.versionsTotal')}
           </Text>
-          <Text variant="numeric">{downloadsFormatter.format(versionsTotal)}</Text>
+          <Text variant="numeric">{numberFormatter.format(versionsTotal)}</Text>
         </Box>
       </WrapBox>
     </PanelCard>

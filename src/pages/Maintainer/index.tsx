@@ -37,7 +37,6 @@ export const MaintainerPage = () => {
     enabled: username.length > 0,
   });
   const removeMaintainer = useRemoveMaintainer();
-
   const packageObjects = packagesQuery.data?.pages.flatMap((page) => page.objects) ?? [];
   const packageNames = packageObjects.map((o) => o.package.name);
   const total = packagesQuery.data?.pages[0]?.total ?? 0;
@@ -45,8 +44,8 @@ export const MaintainerPage = () => {
   const averageScore =
     packageObjects.length > 0
       ? Math.round(
-          (packageObjects.reduce((sum, o) => sum + o.score.final, 0) / packageObjects.length) * 100,
-        )
+        (packageObjects.reduce((sum, o) => sum + o.score.final, 0) / packageObjects.length) * 100,
+      )
       : 0;
   const { fetchNextPage, hasNextPage, isFetchingNextPage } = packagesQuery;
   const canLoadMore = hasNextPage && !isFetchingNextPage;
