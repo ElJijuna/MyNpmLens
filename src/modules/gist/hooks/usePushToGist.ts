@@ -3,6 +3,7 @@ import { GitHubClient } from 'gh-api-client';
 import { useMemo } from 'react';
 import { getGistId, saveGistId } from '@/lib/db';
 import { useAuth } from '@/modules/auth/AuthProvider';
+import { stringifyGistContent } from '@/modules/gist/domain/gistContent';
 import { favoritesStorage } from '@/store/favorites';
 import { maintainersStorage } from '@/store/maintainers';
 import { settingsStorage } from '@/store/settings';
@@ -27,7 +28,7 @@ export function usePushToGist() {
         maintainersStorage.getAll(),
         settingsStorage.get(),
       ]);
-      const content = JSON.stringify({ favorites, maintainers, settings }, null, 2);
+      const content = stringifyGistContent({ favorites, maintainers, settings });
       const files = { [GIST_FILENAME]: { content } };
 
       const storedId = await getGistId(user.uid);

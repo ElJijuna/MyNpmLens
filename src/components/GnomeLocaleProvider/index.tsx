@@ -1,7 +1,7 @@
 import { GnomeProvider } from '@gnome-ui/react';
 import type { ReactNode } from 'react';
 import { resolveIntlLocale } from '@/lib/locale';
-import { DEFAULT_SETTINGS } from '@/modules/settings/domain';
+import { DEFAULT_SETTINGS, resolveNumberFormatOptions } from '@/modules/settings/domain';
 import { useSettings } from '@/modules/settings/hooks';
 
 interface GnomeLocaleProviderProps {
@@ -14,7 +14,7 @@ export const GnomeLocaleProvider = ({ children }: GnomeLocaleProviderProps) => {
   return (
     <GnomeProvider
       locale={resolveIntlLocale(settings.language)}
-      numberFormat={{ notation: 'compact', compactDisplay: 'short' }}
+      numberFormat={resolveNumberFormatOptions(settings.numberFormat)}
     >
       {children}
     </GnomeProvider>

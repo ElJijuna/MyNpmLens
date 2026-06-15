@@ -1,2 +1,2 @@
-export type { AppSettings, Language } from './AppSettings';
-export { DEFAULT_SETTINGS } from './AppSettings';
+export type { AppSettings, Language, NumberFormatMode } from './AppSettings';
+export { DEFAULT_SETTINGS, resolveNumberFormatOptions } from './AppSettings';

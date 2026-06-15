@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getGistId, saveGistId } from '@/lib/db';
 import { useAuth } from '@/modules/auth/AuthProvider';
 import type { GistDelta } from '@/modules/gist/domain';
+import { parseGistContent, stringifyGistContent } from '@/modules/gist/domain/gistContent';
 import type { FavoritePackage, FollowedMaintainer } from '@/modules/npm/domain';
 import { FAVORITES_QUERY_KEY } from '@/modules/npm/hooks/useFavorites';
 import { MAINTAINERS_QUERY_KEY } from '@/modules/npm/hooks/useMaintainers';
@@ -42,27 +43,6 @@ function computeDelta(
       (l) => !gistMaintainers.find((g) => g.username === l.username),
     ),
   };
-}
-
-function parseGistContent(content: string): {
-  favorites: FavoritePackage[];
-  maintainers: FollowedMaintainer[];
-  settings: AppSettings;
-} {
-  try {
-    const parsed = JSON.parse(content) as {
-      favorites?: FavoritePackage[];
-      maintainers?: FollowedMaintainer[];
-      settings?: AppSettings;
-    };
-    return {
-      favorites: parsed.favorites ?? [],
-      maintainers: parsed.maintainers ?? [],
-      settings: parsed.settings ? { ...DEFAULT_SETTINGS, ...parsed.settings } : DEFAULT_SETTINGS,
-    };
-  } catch {
-    return { favorites: [], maintainers: [], settings: DEFAULT_SETTINGS };
-  }
 }
 
 export function useGistSync(): GistSyncState {
@@ -154,7 +134,7 @@ export function useGistSync(): GistSyncState {
           return;
         }
 
-        const content = JSON.stringify({ favorites, maintainers, settings }, null, 2);
+        const content = stringifyGistContent({ favorites, maintainers, settings });
         createGist.mutate(
           { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
           {
@@ -315,11 +295,11 @@ export function useGistSync(): GistSyncState {
     await settingsStorage.set(gistSettings);
     queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY });
 
-    const content = JSON.stringify(
-      { favorites: mergedFavs, maintainers: mergedMaintainers, settings: gistSettings },
-      null,
-      2,
-    );
+    const content = stringifyGistContent({
+      favorites: mergedFavs,
+      maintainers: mergedMaintainers,
+      settings: gistSettings,
+    });
     updateGist.mutate({ files: { [GIST_FILENAME]: { content } } });
     setStatus('done');
   }
@@ -333,7 +313,7 @@ export function useGistSync(): GistSyncState {
       maintainersStorage.getAll(),
       settingsStorage.get(),
     ]);
-    const content = JSON.stringify({ favorites, maintainers, settings }, null, 2);
+    const content = stringifyGistContent({ favorites, maintainers, settings });
     updateGist.mutate({ files: { [GIST_FILENAME]: { content } } });
     setStatus('done');
   }

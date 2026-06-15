@@ -17,7 +17,12 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Analytics } from '@/lib/analytics';
 import { useNpmAuth } from '@/modules/npm/NpmAuthProvider';
-import { type AppSettings, DEFAULT_SETTINGS, type Language } from '@/modules/settings/domain';
+import {
+  type AppSettings,
+  DEFAULT_SETTINGS,
+  type Language,
+  type NumberFormatMode,
+} from '@/modules/settings/domain';
 import { useSettings, useUpdateSettings } from '@/modules/settings/hooks';
 
 export const SettingsPage = () => {
@@ -68,6 +73,11 @@ export const SettingsPage = () => {
   function handleLanguageChange(language: Language) {
     updateSettings.mutate({ language });
     Analytics.settingsChanged('language', language);
+  }
+
+  function handleNumberFormatChange(numberFormat: NumberFormatMode) {
+    updateSettings.mutate({ numberFormat });
+    Analytics.settingsChanged('number_format', numberFormat);
   }
 
   const npmAuthSubtitle = hasNpmToken
@@ -134,6 +144,17 @@ export const SettingsPage = () => {
                 ]}
                 value={settings.language}
                 onValueChange={handleLanguageChange}
+              />
+              <ComboRow
+                className="settings-combo-row"
+                title={t('settings.numberFormat')}
+                subtitle={t('settings.numberFormatSubtitle')}
+                options={[
+                  { value: 'compact', label: t('settings.numberFormatCompact') },
+                  { value: 'standard', label: t('settings.numberFormatStandard') },
+                ]}
+                value={settings.numberFormat}
+                onValueChange={handleNumberFormatChange}
               />
             </BoxedList>
           </PreferencesGroup>

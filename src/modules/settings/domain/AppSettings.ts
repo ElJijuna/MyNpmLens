@@ -13,13 +13,25 @@ export type Language =
   | 'qu'
   | 'zh-CN';
 
+export type NumberFormatMode = 'compact' | 'standard';
+
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system';
   language: Language;
+  numberFormat: NumberFormatMode;
   accentColor?: string;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
   theme: 'system',
   language: 'en',
+  numberFormat: 'compact',
 };
+
+export function resolveNumberFormatOptions(
+  numberFormat: NumberFormatMode,
+): Intl.NumberFormatOptions {
+  return numberFormat === 'compact'
+    ? { notation: 'compact', compactDisplay: 'short' }
+    : { notation: 'standard' };
+}
