@@ -13,7 +13,7 @@ function setThemeColor(theme: 'light' | 'dark' | 'system') {
     el.remove();
   });
 
-  const head = document.head;
+  const { head } = document;
 
   if (theme === 'system') {
     // Can't read both light and dark tokens simultaneously — use known hex values

@@ -48,6 +48,7 @@ function computeDelta(
 export function useGistSync(): GistSyncState {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const userUid = user?.uid;
 
   const [status, setStatus] = useState<SyncStatus>('idle');
   const [delta, setDelta] = useState<GistDelta>({
@@ -114,12 +115,11 @@ export function useGistSync(): GistSyncState {
 
   // When the gists list arrives, either reuse the existing gist or create a new one
   useEffect(() => {
-    if (!listsLoaded || gistId || !user?.githubToken) {
+    if (!listsLoaded || gistId || !user?.githubToken || !userUid) {
       return;
     }
 
     let cancelled = false;
-    const uid = user.uid;
     const found = gistsList?.values.find((g) => GIST_FILENAME in g.files);
 
     async function createSyncGist() {
@@ -139,7 +139,7 @@ export function useGistSync(): GistSyncState {
           { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
           {
             onSuccess: (created) => {
-              saveGistId(uid, created.id);
+              saveGistId(userUid, created.id);
               setGistId(created.id);
               setStatus('done');
             },
@@ -152,7 +152,7 @@ export function useGistSync(): GistSyncState {
     }
 
     if (found) {
-      saveGistId(uid, found.id);
+      saveGistId(userUid, found.id);
       setGistId(found.id);
       // useGhGist picks up the new id and handles the rest
     } else {
@@ -162,7 +162,7 @@ export function useGistSync(): GistSyncState {
     return () => {
       cancelled = true;
     };
-  }, [createGist, gistsList?.values, gistId, listsLoaded, user?.githubToken, user?.uid]);
+  }, [createGist, gistsList?.values, gistId, listsLoaded, user?.githubToken, userUid]);
 
   // Fetch the remote gist content once we have an id
   const {

@@ -136,10 +136,7 @@ describe('DownloadsChart', () => {
     expect(await screen.findByTestId('bar-chart')).toHaveAttribute('data-show-legend', 'true');
     expect(screen.getByTestId('series-downloads')).toHaveAttribute('data-color', '#3584e4');
     expect(screen.getByTestId('series-versions')).toHaveAttribute('data-color', '#33d17a');
-    expect(screen.getByTestId('series-downloads')).toHaveAttribute(
-      'data-name',
-      'Weekly downloads',
-    );
+    expect(screen.getByTestId('series-downloads')).toHaveAttribute('data-name', 'Weekly downloads');
     expect(screen.getByTestId('series-versions')).toHaveAttribute('data-name', 'Versions');
   });
 

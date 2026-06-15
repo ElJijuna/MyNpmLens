@@ -1,8 +1,8 @@
 import { npmQueryKeys, useNpmClient } from '@api-hooks/npm';
 import { BarChart } from '@gnome-ui/charts';
-import { PanelCard } from '@gnome-ui/layout/components/PanelCard';
 import { LoadingStatus } from '@gnome-ui/layout';
-import { Box, Spinner, Text, WrapBox, useNumberFormatter } from '@gnome-ui/react';
+import { PanelCard } from '@gnome-ui/layout/components/PanelCard';
+import { Box, Spinner, Text, useNumberFormatter, WrapBox } from '@gnome-ui/react';
 import { useQueries } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 

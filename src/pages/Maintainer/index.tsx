@@ -44,8 +44,8 @@ export const MaintainerPage = () => {
   const averageScore =
     packageObjects.length > 0
       ? Math.round(
-        (packageObjects.reduce((sum, o) => sum + o.score.final, 0) / packageObjects.length) * 100,
-      )
+          (packageObjects.reduce((sum, o) => sum + o.score.final, 0) / packageObjects.length) * 100,
+        )
       : 0;
   const { fetchNextPage, hasNextPage, isFetchingNextPage } = packagesQuery;
   const canLoadMore = hasNextPage && !isFetchingNextPage;

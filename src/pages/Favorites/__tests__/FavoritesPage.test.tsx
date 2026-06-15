@@ -76,7 +76,7 @@ describe('FavoritesPage', () => {
     } as unknown as ReturnType<typeof npmHooks.useFavorites>);
 
     render(<FavoritesPage />, { wrapper });
-    const addBtn = screen.getAllByText(/add package/i)[0];
+    const [addBtn] = screen.getAllByText(/add package/i);
     const addButton = addBtn.closest('button');
     if (!addButton) {
       throw new Error('Add button not found');

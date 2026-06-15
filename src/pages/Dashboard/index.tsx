@@ -9,11 +9,11 @@ import {
 } from '@api-hooks/npm';
 import { useNativeEvent } from '@gnome-ui/hooks';
 import { Add, Applications, Star, ViewSidebar } from '@gnome-ui/icons';
+import { LoadingStatus } from '@gnome-ui/layout';
 import {
   DashboardGrid,
   type DashboardGridColumns,
 } from '@gnome-ui/layout/components/DashboardGrid';
-import { LoadingStatus } from '@gnome-ui/layout';
 import {
   Box,
   Button,
