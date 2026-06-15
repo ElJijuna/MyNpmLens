@@ -1,3 +1,13 @@
+## [1.22.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.21.0...v1.22.0) (2026-06-15)
+
+### Features
+
+* add number format settings and update GnomeLocaleProvider to use dynamic formatting options ([4303833](https://github.com/ElJijuna/MyNpmLens/commit/43038331d786034974b777db9993cf9e54d68018))
+* integrate GnomeProvider for compact number formatting in tests and update ProfilePage to use formatters ([536b5b0](https://github.com/ElJijuna/MyNpmLens/commit/536b5b06faf418c7b3ca7dae60f1361b1b5d9b97))
+* integrate GnomeProvider for number formatting in DownloadsChart and add test for compact notation ([292d598](https://github.com/ElJijuna/MyNpmLens/commit/292d5980553a9dc8b9df8324c2da20435e024c3a))
+* update package versions and enhance loading states in components ([65d2e2d](https://github.com/ElJijuna/MyNpmLens/commit/65d2e2d934ef5415d08343848b769b7c3e34d8e3))
+* update super-configs to version 1.14.0 and improve code structure in various components ([e24eb18](https://github.com/ElJijuna/MyNpmLens/commit/e24eb182a2b76ff89b7fc01aaa55ce1a56d8bb28))
+
 ## [1.21.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.20.0...v1.21.0) (2026-06-08)
 
 ### Features
