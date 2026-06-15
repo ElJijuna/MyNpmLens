@@ -6,11 +6,13 @@ import { Avatar, Box, Button, Card, ContributionGraph, Icon, Text, WrapBox } fro
 import { useNavigate } from '@tanstack/react-router';
 import type { GitHubRepository } from 'gh-api-client';
 import { useTranslation } from 'react-i18next';
+import { useFormatters } from '@/hooks/useFormatters';
 import { useAuth } from '@/modules/auth/AuthProvider';
 import { useSignOut } from '@/modules/auth/hooks';
 
 export const ProfilePage = () => {
   const { t } = useTranslation();
+  const { formatNumber } = useFormatters();
   const { user } = useAuth();
   const navigate = useNavigate();
   const signOut = useSignOut();
@@ -124,7 +126,7 @@ export const ProfilePage = () => {
             <Card padding="md">
               <Box spacing={12}>
                 <Text variant="heading">
-                  {contributions.totalContributions.toLocaleString()} {t('profile.contributions')}
+                  {formatNumber(contributions.totalContributions)} {t('profile.contributions')}
                 </Text>
                 <ContributionGraph
                   data={contributions.weeks.flatMap((week) =>
@@ -157,6 +159,8 @@ export const ProfilePage = () => {
 };
 
 const RepoCard = ({ repo }: { repo: GitHubRepository }) => {
+  const { formatNumber } = useFormatters();
+
   return (
     <Card padding="md">
       <Box spacing={6}>
@@ -174,7 +178,7 @@ const RepoCard = ({ repo }: { repo: GitHubRepository }) => {
           {repo.stargazers_count > 0 && (
             <WrapBox childSpacing={4} align="center" style={{ flexShrink: 0 }}>
               <Icon icon={Star} size="sm" />
-              <Text variant="caption">{repo.stargazers_count.toLocaleString()}</Text>
+              <Text variant="caption">{formatNumber(repo.stargazers_count)}</Text>
             </WrapBox>
           )}
         </WrapBox>

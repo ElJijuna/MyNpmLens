@@ -1,4 +1,5 @@
 import * as npmApiHooks from '@api-hooks/npm';
+import { GnomeProvider } from '@gnome-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
@@ -11,7 +12,11 @@ jest.mock('@tanstack/react-router', () => ({
 
 function wrapper({ children }: { children: ReactNode }) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+  return (
+    <GnomeProvider numberFormat={{ notation: 'compact', compactDisplay: 'short' }}>
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    </GnomeProvider>
+  );
 }
 
 afterEach(() => jest.restoreAllMocks());

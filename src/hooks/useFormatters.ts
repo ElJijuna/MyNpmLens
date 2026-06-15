@@ -3,11 +3,6 @@ import { useCallback } from 'react';
 
 export function useFormatters() {
   const numberFormatter = useNumberFormatter();
-  const compactNumberFormatter = useNumberFormatter({
-    notation: 'compact',
-    compactDisplay: 'short',
-    maximumFractionDigits: 1,
-  });
   const dateFormatter = useDateTimeFormatter({
     year: 'numeric',
     month: 'short',
@@ -42,8 +37,8 @@ export function useFormatters() {
   return {
     formatNumber: useCallback((value: number) => numberFormatter.format(value), [numberFormatter]),
     formatCompactNumber: useCallback(
-      (value: number) => compactNumberFormatter.format(value),
-      [compactNumberFormatter],
+      (value: number) => numberFormatter.format(value),
+      [numberFormatter],
     ),
     formatDate: useCallback(
       (value: string | number | Date) => dateFormatter.format(new Date(value)),
