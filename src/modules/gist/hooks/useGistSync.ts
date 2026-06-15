@@ -119,6 +119,7 @@ export function useGistSync(): GistSyncState {
       return;
     }
 
+    const uid = userUid;
     let cancelled = false;
     const found = gistsList?.values.find((g) => GIST_FILENAME in g.files);
 
@@ -139,7 +140,7 @@ export function useGistSync(): GistSyncState {
           { description: 'MyNpmLens sync', public: false, files: { [GIST_FILENAME]: { content } } },
           {
             onSuccess: (created) => {
-              saveGistId(userUid, created.id);
+              saveGistId(uid, created.id);
               setGistId(created.id);
               setStatus('done');
             },
@@ -152,7 +153,7 @@ export function useGistSync(): GistSyncState {
     }
 
     if (found) {
-      saveGistId(userUid, found.id);
+      saveGistId(uid, found.id);
       setGistId(found.id);
       // useGhGist picks up the new id and handles the rest
     } else {
