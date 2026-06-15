@@ -137,6 +137,15 @@
     "latestRelease": "Última release",
     "topics": "Temas"
   },
+  "downloadsChart": {
+    "title": "Descargas",
+    "weeklySeries": "Descargas semanales",
+    "versionsSeries": "Versiones",
+    "weeklyTotal": "Total semanal",
+    "versionsTotal": "Total de versiones",
+    "packages": "Paquetes",
+    "unavailable": "Totales de descargas no disponibles"
+  },
   "maintainers": {
     "title": "Mantenedores",
     "emptyTitle": "Sin mantenedores aún",

@@ -137,6 +137,15 @@
     "latestRelease": "Latest release",
     "topics": "Topics"
   },
+  "downloadsChart": {
+    "title": "Downloads",
+    "weeklySeries": "Weekly downloads",
+    "versionsSeries": "Versions",
+    "weeklyTotal": "Weekly total",
+    "versionsTotal": "Versions total",
+    "packages": "Packages",
+    "unavailable": "Download totals unavailable"
+  },
   "maintainers": {
     "title": "Maintainers",
     "emptyTitle": "No maintainers yet",

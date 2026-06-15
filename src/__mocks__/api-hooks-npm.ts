@@ -51,8 +51,8 @@ export const useNpmOrgTeamMembers = jest.fn(() => defaultQuery);
 export const useNpmWhoami = jest.fn(() => defaultQuery);
 export const useNpmClient = jest.fn(() => ({
   package: jest.fn(() => ({
-    get: jest.fn(),
-    downloads: jest.fn(),
+    get: jest.fn(async () => ({ versions: {} })),
+    downloads: jest.fn(async () => ({ downloads: 0, package: '', start: '', end: '' })),
   })),
   maintainer: jest.fn(() => ({
     packages: jest.fn(),

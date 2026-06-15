@@ -13,6 +13,7 @@ import {
   DashboardGrid,
   type DashboardGridColumns,
 } from '@gnome-ui/layout/components/DashboardGrid';
+import { LoadingStatus } from '@gnome-ui/layout';
 import {
   Box,
   Button,
@@ -247,7 +248,8 @@ const PackageGrid = ({
   if (isLoading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem' }}>
-        <Spinner size="md" />
+        <LoadingStatus />
+        <Spinner size="md" label="" />
       </div>
     );
   }

@@ -99,6 +99,15 @@
     "latestRelease": "Qhipa largarisqa",
     "topics": "Lliw rimay"
   },
+  "downloadsChart": {
+    "title": "Uraykachiykuna",
+    "weeklySeries": "Sapa semana uraykachiykuna",
+    "versionsSeries": "Versiónkuna",
+    "weeklyTotal": "Semanal llapan",
+    "versionsTotal": "Llapan versiónkuna",
+    "packages": "Paquetekuna",
+    "unavailable": "Uraykachiy yupaykuna mana kachkanchu"
+  },
   "maintainers": {
     "title": "Waqaychaqkuna",
     "emptyTitle": "Manaraq waqaychaqkuna kanchu",

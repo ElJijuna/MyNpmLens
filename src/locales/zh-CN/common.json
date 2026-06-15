@@ -99,6 +99,15 @@
     "latestRelease": "最新发布",
     "topics": "话题"
   },
+  "downloadsChart": {
+    "title": "下载量",
+    "weeklySeries": "每周下载量",
+    "versionsSeries": "版本数",
+    "weeklyTotal": "每周总计",
+    "versionsTotal": "版本总数",
+    "packages": "包",
+    "unavailable": "下载总数不可用"
+  },
   "maintainers": {
     "title": "维护者",
     "emptyTitle": "暂无维护者",

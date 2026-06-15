@@ -99,6 +99,15 @@
     "latestRelease": "Neueste Version",
     "topics": "Themen"
   },
+  "downloadsChart": {
+    "title": "Downloads",
+    "weeklySeries": "Wöchentliche Downloads",
+    "versionsSeries": "Versionen",
+    "weeklyTotal": "Wochensumme",
+    "versionsTotal": "Versionen gesamt",
+    "packages": "Pakete",
+    "unavailable": "Download-Summen nicht verfügbar"
+  },
   "maintainers": {
     "title": "Betreuer",
     "emptyTitle": "Noch keine Betreuer",

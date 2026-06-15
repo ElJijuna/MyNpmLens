@@ -9,12 +9,22 @@ jest.mock('@gnome-ui/charts', () => ({
     data,
     xAxisKey,
     series,
+    showLegend,
   }: {
     data: Record<string, unknown>[];
     xAxisKey: string;
-    series: { dataKey: string; name: string }[];
+    series: { dataKey: string; name: string; color?: string }[];
+    showLegend?: boolean;
   }) => (
-    <div data-testid="bar-chart">
+    <div data-testid="bar-chart" data-show-legend={String(showLegend)}>
+      {series.map((s) => (
+        <span
+          key={s.dataKey}
+          data-testid={`series-${s.dataKey}`}
+          data-color={s.color}
+          data-name={s.name}
+        />
+      ))}
       {data.map((row) => (
         <div key={String(row[xAxisKey])} data-testid={`row-${String(row[xAxisKey])}`}>
           {series.map((s) => (
@@ -33,112 +43,121 @@ function wrapper({ children }: { children: ReactNode }) {
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }
 
+function mockPackageData({
+  downloads,
+  versions = {},
+}: {
+  downloads: Record<string, number | undefined>;
+  versions?: Record<string, number | undefined>;
+}) {
+  jest.spyOn(npmApiHooks, 'useNpmClient').mockReturnValue({
+    package: jest.fn((name: string) => ({
+      get: jest.fn(async () => ({
+        versions: Object.fromEntries(
+          Array.from({ length: versions[name] ?? 0 }, (_, index) => [`${index}.0.0`, {}]),
+        ),
+      })),
+      downloads: jest.fn(async () => {
+        const value = downloads[name];
+        return { downloads: value ?? 0, package: name, start: '', end: '' };
+      }),
+    })),
+  } as unknown as ReturnType<typeof npmApiHooks.useNpmClient>);
+}
+
 afterEach(() => jest.restoreAllMocks());
 
 describe('DownloadsChart', () => {
-  it('renders nothing when no package has data yet', () => {
-    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads').mockReturnValue({
-      data: undefined,
-    } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>);
-
-    const { container } = render(<DownloadsChart packageNames={['react', 'lodash']} />, {
-      wrapper,
-    });
-    expect(container.firstChild).toBeNull();
-  });
-
-  it('renders the chart as soon as at least one package has data', () => {
-    jest
-      .spyOn(npmApiHooks, 'useNpmBulkDownloads')
-      .mockReturnValueOnce({
-        data: {
-          react: { downloads: 50_000_000, package: 'react', start: '', end: '' },
-        },
-      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
-      .mockReturnValueOnce({
-        data: undefined,
-      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>);
+  it('keeps a stable card when download totals are unavailable', async () => {
+    mockPackageData({ downloads: {} });
 
     render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
-    expect(screen.getByTestId('bar-chart')).toBeInTheDocument();
+
+    expect(await screen.findByText('Download totals unavailable')).toBeInTheDocument();
+    expect(screen.queryByTestId('bar-chart')).not.toBeInTheDocument();
   });
 
-  it('shows the Downloads heading', () => {
-    jest
-      .spyOn(npmApiHooks, 'useNpmBulkDownloads')
-      .mockReturnValueOnce({
-        data: {
-          react: { downloads: 1000, package: 'react', start: '', end: '' },
-        },
-      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
-      .mockReturnValueOnce({
-        data: {
-          react: { downloads: 4000, package: 'react', start: '', end: '' },
-        },
-      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>);
+  it('announces loading while download data is pending', () => {
+    jest.spyOn(npmApiHooks, 'useNpmClient').mockReturnValue({
+      package: jest.fn(() => ({
+        get: jest.fn(() => new Promise(() => {})),
+        downloads: jest.fn(() => new Promise(() => {})),
+      })),
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmClient>);
+
+    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
+
+    expect(screen.getByRole('status')).toHaveTextContent('Loading');
+  });
+
+  it('renders the bar chart as soon as at least one package has data', async () => {
+    mockPackageData({ downloads: { react: 50_000_000 } });
+
+    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
+    expect(await screen.findByTestId('bar-chart')).toBeInTheDocument();
+  });
+
+  it('shows the Downloads heading', async () => {
+    mockPackageData({ downloads: { react: 1000 } });
 
     render(<DownloadsChart packageNames={['react']} />, { wrapper });
-    expect(screen.getByText('Downloads')).toBeInTheDocument();
+    expect(await screen.findByText('Downloads')).toBeInTheDocument();
   });
 
-  it('passes correct weekly and monthly values to the chart', () => {
-    jest
-      .spyOn(npmApiHooks, 'useNpmBulkDownloads')
-      .mockReturnValueOnce({
-        data: {
-          react: { downloads: 5000, package: 'react', start: '', end: '' },
-          lodash: { downloads: 3000, package: 'lodash', start: '', end: '' },
-        },
-      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
-      .mockReturnValueOnce({
-        data: {
-          react: { downloads: 20000, package: 'react', start: '', end: '' },
-          lodash: { downloads: 12000, package: 'lodash', start: '', end: '' },
-        },
-      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>);
-
-    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
-
-    expect(screen.getByTestId('react-weekly').textContent).toBe('5000');
-    expect(screen.getByTestId('react-monthly').textContent).toBe('20000');
-    expect(screen.getByTestId('lodash-weekly').textContent).toBe('3000');
-    expect(screen.getByTestId('lodash-monthly').textContent).toBe('12000');
-  });
-
-  it('defaults missing data to 0 instead of crashing', () => {
-    jest
-      .spyOn(npmApiHooks, 'useNpmBulkDownloads')
-      .mockReturnValueOnce({
-        data: {
-          react: { downloads: 1000, package: 'react', start: '', end: '' },
-        },
-      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>)
-      .mockReturnValueOnce({
-        data: {
-          react: { downloads: 4000, package: 'react', start: '', end: '' },
-        },
-      } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>);
-
-    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
-
-    expect(screen.getByTestId('lodash-weekly').textContent).toBe('0');
-    expect(screen.getByTestId('lodash-monthly').textContent).toBe('0');
-  });
-
-  it('requests weekly and monthly downloads in bulk', () => {
-    const bulkSpy = jest.spyOn(npmApiHooks, 'useNpmBulkDownloads').mockReturnValue({
-      data: undefined,
-    } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>);
-
-    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
-
-    expect(bulkSpy).toHaveBeenNthCalledWith(1, ['react', 'lodash'], {
-      period: 'last-week',
-      enabled: true,
+  it('passes per-package weekly download and version values to the bar chart', async () => {
+    mockPackageData({
+      downloads: { react: 5000, lodash: 3000 },
+      versions: { react: 19, lodash: 4 },
     });
-    expect(bulkSpy).toHaveBeenNthCalledWith(2, ['react', 'lodash'], {
-      period: 'last-month',
-      enabled: true,
+
+    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
+
+    expect(await screen.findByTestId('react-downloads')).toHaveTextContent('5000');
+    expect(screen.getByTestId('react-versions')).toHaveTextContent('19');
+    expect(screen.getByTestId('lodash-downloads')).toHaveTextContent('3000');
+    expect(screen.getByTestId('lodash-versions')).toHaveTextContent('4');
+  });
+
+  it('uses separate colors and shows the legend for downloads and versions', async () => {
+    mockPackageData({
+      downloads: { react: 5000 },
+      versions: { react: 19 },
     });
+
+    render(<DownloadsChart packageNames={['react']} />, { wrapper });
+
+    expect(await screen.findByTestId('bar-chart')).toHaveAttribute('data-show-legend', 'true');
+    expect(screen.getByTestId('series-downloads')).toHaveAttribute('data-color', '#3584e4');
+    expect(screen.getByTestId('series-versions')).toHaveAttribute('data-color', '#33d17a');
+    expect(screen.getByTestId('series-downloads')).toHaveAttribute(
+      'data-name',
+      'Weekly downloads',
+    );
+    expect(screen.getByTestId('series-versions')).toHaveAttribute('data-name', 'Versions');
+  });
+
+  it('ignores missing data instead of crashing', async () => {
+    mockPackageData({ downloads: { react: 1000 } });
+
+    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
+
+    expect(await screen.findByTestId('react-downloads')).toHaveTextContent('1000');
+    expect(screen.queryByTestId('lodash-downloads')).not.toBeInTheDocument();
+  });
+
+  it('requests weekly downloads per package so the chart shares package-card cache keys', async () => {
+    const packageSpy = jest.fn((name: string) => ({
+      get: jest.fn(async () => ({ versions: { '1.0.0': {} } })),
+      downloads: jest.fn(async () => ({ downloads: 100, package: name, start: '', end: '' })),
+    }));
+    jest.spyOn(npmApiHooks, 'useNpmClient').mockReturnValue({
+      package: packageSpy,
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmClient>);
+
+    render(<DownloadsChart packageNames={['react', 'lodash']} />, { wrapper });
+
+    expect(await screen.findByTestId('react-downloads')).toBeInTheDocument();
+    expect(packageSpy).toHaveBeenCalledWith('react');
+    expect(packageSpy).toHaveBeenCalledWith('lodash');
   });
 });

@@ -21,6 +21,15 @@ describe('SectionCard', () => {
     expect(screen.queryByText('content')).not.toBeInTheDocument();
   });
 
+  it('announces loading with an accessible status', () => {
+    render(
+      <SectionCard title="Downloads" isLoading={true}>
+        <p>content</p>
+      </SectionCard>,
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('Loading');
+  });
+
   it('shows error banner when error is provided', () => {
     render(
       <SectionCard title="GitHub" isLoading={false} error={new Error('rate limit exceeded')}>

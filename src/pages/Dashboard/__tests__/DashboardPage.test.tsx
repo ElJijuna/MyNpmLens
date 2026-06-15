@@ -50,6 +50,28 @@ describe('DashboardPage', () => {
     expect(screen.getByText('Discover packages')).toBeInTheDocument();
   });
 
+  it('announces package grid loading accessibly', () => {
+    jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
+      data: [],
+      isSuccess: true,
+    } as unknown as ReturnType<typeof npmHooks.useFavorites>);
+    jest.spyOn(npmHooks, 'useMaintainers').mockReturnValue({
+      data: [],
+      isSuccess: true,
+    } as unknown as ReturnType<typeof npmHooks.useMaintainers>);
+    jest.spyOn(npmApiHooks, 'useNpmBulkDownloads').mockReturnValue({
+      data: undefined,
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmBulkDownloads>);
+    jest.spyOn(npmApiHooks, 'useNpmTopPackages').mockReturnValue({
+      data: undefined,
+      isPending: true,
+    } as unknown as ReturnType<typeof npmApiHooks.useNpmTopPackages>);
+
+    render(<DashboardPage />, { wrapper });
+
+    expect(screen.getByRole('status')).toHaveTextContent('Loading');
+  });
+
   it('renders summary metrics when saved data exists', () => {
     jest.spyOn(npmHooks, 'useFavorites').mockReturnValue({
       data: [

@@ -1,55 +1,107 @@
-import { useNpmBulkDownloads } from '@api-hooks/npm';
+import { npmQueryKeys, useNpmClient } from '@api-hooks/npm';
 import { BarChart } from '@gnome-ui/charts';
-import { Card, Text } from '@gnome-ui/react';
+import { PanelCard } from '@gnome-ui/layout/components/PanelCard';
+import { LoadingStatus } from '@gnome-ui/layout';
+import { Box, Spinner, Text, WrapBox } from '@gnome-ui/react';
+import { useQueries } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 interface DownloadsChartProps {
   packageNames: string[];
 }
 
-const BULK_DOWNLOADS_LIMIT = 128;
+const DOWNLOADS_CHART_LIMIT = 12;
+const downloadsFormatter = new Intl.NumberFormat(undefined, { notation: 'compact' });
 
 export const DownloadsChart = ({ packageNames }: DownloadsChartProps) => {
-  const chartPackageNames = packageNames.slice(0, BULK_DOWNLOADS_LIMIT);
+  const { t } = useTranslation();
+  const chartPackageNames = packageNames.slice(0, DOWNLOADS_CHART_LIMIT);
+  const client = useNpmClient();
 
-  const weekly = useNpmBulkDownloads(chartPackageNames, {
-    period: 'last-week',
-    enabled: chartPackageNames.length > 0,
+  const downloadsQueries = useQueries({
+    queries: chartPackageNames.map((name) => ({
+      queryKey: npmQueryKeys.packageDownloads(name, 'last-week'),
+      queryFn: ({ signal }: { signal: AbortSignal }) =>
+        client.package(name).downloads('last-week', signal),
+      enabled: chartPackageNames.length > 0,
+    })),
   });
-  const monthly = useNpmBulkDownloads(chartPackageNames, {
-    period: 'last-month',
-    enabled: chartPackageNames.length > 0,
+  const packageQueries = useQueries({
+    queries: chartPackageNames.map((name) => ({
+      queryKey: npmQueryKeys.package(name),
+      queryFn: ({ signal }: { signal: AbortSignal }) => client.package(name).get(signal),
+      enabled: chartPackageNames.length > 0,
+    })),
   });
 
-  const hasData =
-    (weekly.data !== null && weekly.data !== undefined) ||
-    (monthly.data !== null && monthly.data !== undefined);
+  const isLoading =
+    downloadsQueries.some((query) => query.isPending) ||
+    packageQueries.some((query) => query.isPending);
+  const chartData = chartPackageNames
+    .map((name, index) => ({
+      name,
+      downloads: downloadsQueries[index]?.data?.downloads ?? 0,
+      versions: Object.keys(packageQueries[index]?.data?.versions ?? {}).length,
+    }))
+    .filter((row) => row.downloads > 0 || row.versions > 0);
+  const hasData = chartData.length > 0;
+  const weeklyDownloads = chartData.reduce((total, row) => total + row.downloads, 0);
+  const versionsTotal = chartData.reduce((total, row) => total + row.versions, 0);
 
   if (!hasData) {
-    return null;
+    if (isLoading) {
+      return (
+        <PanelCard title={<Text variant="caption-heading">{t('downloadsChart.title')}</Text>}>
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem' }}>
+            <LoadingStatus />
+            <Spinner size="md" label="" />
+          </div>
+        </PanelCard>
+      );
+    }
+
+    return (
+      <PanelCard title={<Text variant="caption-heading">{t('downloadsChart.title')}</Text>}>
+        <Text color="dim">{t('downloadsChart.unavailable')}</Text>
+      </PanelCard>
+    );
   }
 
-  const data = chartPackageNames.map((name) => ({
-    name,
-    weekly: weekly.data?.[name]?.downloads ?? 0,
-    monthly: monthly.data?.[name]?.downloads ?? 0,
-  }));
-
   return (
-    <Card padding="md">
-      <Text variant="heading" style={{ marginBottom: '1rem' }}>
-        Downloads
-      </Text>
+    <PanelCard title={<Text variant="caption-heading">{t('downloadsChart.title')}</Text>}>
       <BarChart
-        data={data}
+        data={chartData}
         xAxisKey="name"
         series={[
-          { dataKey: 'weekly', name: 'Weekly' },
-          { dataKey: 'monthly', name: 'Monthly' },
+          {
+            dataKey: 'downloads',
+            name: t('downloadsChart.weeklySeries'),
+            color: '#3584e4',
+          },
+          {
+            dataKey: 'versions',
+            name: t('downloadsChart.versionsSeries'),
+            color: '#33d17a',
+          },
         ]}
+        height={260}
         showGrid
         showLegend
-        height={260}
       />
-    </Card>
+      <WrapBox justify="space-between" align="center" style={{ marginTop: '1rem' }}>
+        <Box spacing={2}>
+          <Text variant="caption" color="dim">
+            {t('downloadsChart.weeklyTotal')}
+          </Text>
+          <Text variant="numeric">{downloadsFormatter.format(weeklyDownloads)}</Text>
+        </Box>
+        <Box spacing={2}>
+          <Text variant="caption" color="dim">
+            {t('downloadsChart.versionsTotal')}
+          </Text>
+          <Text variant="numeric">{downloadsFormatter.format(versionsTotal)}</Text>
+        </Box>
+      </WrapBox>
+    </PanelCard>
   );
 };

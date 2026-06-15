@@ -1,4 +1,6 @@
-import { Banner, Card, Spinner, Text } from '@gnome-ui/react';
+import { LoadingStatus } from '@gnome-ui/layout';
+import { PanelCard } from '@gnome-ui/layout/components/PanelCard';
+import { Banner, Spinner, Text } from '@gnome-ui/react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,14 +15,18 @@ export const SectionCard = ({ title, isLoading, error, children }: SectionCardPr
   const { t } = useTranslation();
 
   return (
-    <Card padding="lg">
-      <Text variant="title-4" as="h2" style={{ marginBottom: '1rem' }}>
-        {title}
-      </Text>
-
+    <PanelCard
+      title={
+        <Text variant="caption-heading" as="h2">
+          {title}
+        </Text>
+      }
+      collapsible={false}
+    >
       {isLoading && (
         <div style={{ display: 'flex', justifyContent: 'center', padding: '1.5rem' }}>
-          <Spinner size="md" />
+          <LoadingStatus />
+          <Spinner size="md" label="" />
         </div>
       )}
 
@@ -29,6 +35,6 @@ export const SectionCard = ({ title, isLoading, error, children }: SectionCardPr
       )}
 
       {!isLoading && !error && children}
-    </Card>
+    </PanelCard>
   );
 };

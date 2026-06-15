@@ -2,7 +2,7 @@ import '@/lib/i18n';
 import '@gnome-ui/core/styles';
 import '@gnome-ui/react/styles';
 import '@gnome-ui/charts/styles';
-import '../node_modules/@gnome-ui/layout/dist/style.css';
+import '@gnome-ui/layout/styles';
 import './styles/global.css';
 import { ToastProvider } from '@gnome-ui/layout/components/Toast';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
