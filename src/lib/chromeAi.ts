@@ -1,3 +1,5 @@
+import i18n from '@/lib/i18n';
+
 const MAX_PAGE_CONTEXT_LENGTH = 14_000;
 const SPANISH_MARKERS = new Set([
   'aparece',
@@ -94,7 +96,7 @@ export function getCurrentPageContext(): string {
     `Application: My Npm Lens`,
     `Page title: ${document.title}`,
     `URL: ${window.location.href}`,
-    `Language: ${document.documentElement.lang || navigator.language}`,
+    `Language: ${i18n.language || navigator.language}`,
     'Visible page content:',
     trimmedText || '(No visible page text was found.)',
   ].join('\n');
@@ -103,7 +105,10 @@ export function getCurrentPageContext(): string {
 export type ResponseLanguage = 'en' | 'es';
 
 export function detectResponseLanguage(question: string): ResponseLanguage {
-  const normalized = question.toLocaleLowerCase().normalize('NFD');
+  const normalized = question
+    .toLocaleLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '');
   const words = normalized.match(/[a-z]+/g) ?? [];
   let spanishScore = /[¿¡ñáéíóúü]/i.test(question) ? 3 : 0;
   let englishScore = 0;
@@ -117,7 +122,7 @@ export function detectResponseLanguage(question: string): ResponseLanguage {
     return spanishScore > englishScore ? 'es' : 'en';
   }
 
-  const pageLanguage = document.documentElement.lang || navigator.language;
+  const pageLanguage = i18n.language || navigator.language;
   return pageLanguage.toLocaleLowerCase().startsWith('es') ? 'es' : 'en';
 }
 
