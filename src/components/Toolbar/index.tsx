@@ -1,5 +1,5 @@
 import { usePlatform } from '@gnome-ui/hooks';
-import { Add, OpenMenu } from '@gnome-ui/icons';
+import { Add, ChatMessageNew, OpenMenu } from '@gnome-ui/icons';
 import { Button, HeaderBar, Icon, PathBar } from '@gnome-ui/react';
 import { useNavigate } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
@@ -8,9 +8,11 @@ import { usePathSegments } from '@/hooks/usePathSegments';
 
 interface ToolbarProps {
   onAddClick?: () => void;
+  aiChatOpen?: boolean;
+  onAiChatClick?: () => void;
 }
 
-export const Toolbar = ({ onAddClick }: ToolbarProps) => {
+export const Toolbar = ({ onAddClick, aiChatOpen = false, onAiChatClick }: ToolbarProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isGnomeWebView } = usePlatform();
@@ -38,11 +40,25 @@ export const Toolbar = ({ onAddClick }: ToolbarProps) => {
           ) : undefined
         }
         end={
-          onAddClick ? (
-            <Button variant="suggested" onClick={onAddClick} leadingIcon={<Icon icon={Add} />}>
-              {t('toolbar.add')}
-            </Button>
-          ) : undefined
+          <div className="toolbar-actions">
+            {onAddClick && (
+              <Button variant="suggested" onClick={onAddClick} leadingIcon={<Icon icon={Add} />}>
+                {t('toolbar.add')}
+              </Button>
+            )}
+            {onAiChatClick && (
+              <Button
+                type="button"
+                variant="flat"
+                aria-label={t('aiChat.open')}
+                aria-expanded={aiChatOpen}
+                aria-controls="ai-chat-drawer"
+                onClick={onAiChatClick}
+              >
+                <Icon icon={ChatMessageNew} />
+              </Button>
+            )}
+          </div>
         }
       />
     </div>

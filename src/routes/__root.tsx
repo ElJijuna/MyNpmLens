@@ -1,6 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { AiChatDrawer } from '@/components/AiChatDrawer';
 import { AppSidebar } from '@/components/AppSidebar';
 import { OfflineBanner } from '@/components/OfflineBanner';
 import { Toolbar } from '@/components/Toolbar';
@@ -29,6 +30,7 @@ const RootLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarOverlay, setSidebarOverlay] = useState(getSidebarOverlay);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(getSidebarOverlay);
+  const [aiChatOpen, setAiChatOpen] = useState(false);
   useApplyTheme();
   useApplyLanguage();
   useApplyAccentColor();
@@ -68,7 +70,7 @@ const RootLayout = () => {
   const appContent = (
     <>
       <OfflineBanner />
-      <Toolbar />
+      <Toolbar aiChatOpen={aiChatOpen} onAiChatClick={() => setAiChatOpen((current) => !current)} />
       <Outlet />
     </>
   );
@@ -84,7 +86,9 @@ const RootLayout = () => {
     >
       {sidebarOverlay ? (
         <div className="app-shell app-shell--overlay" data-sidebar-open={sidebarOpen}>
-          <div className="app-shell__content">{appContent}</div>
+          <div className="app-shell__content" data-ai-page-context>
+            {appContent}
+          </div>
           <button
             type="button"
             className="app-shell__backdrop"
@@ -98,9 +102,12 @@ const RootLayout = () => {
       ) : (
         <div className="wide-layout">
           <AppSidebar />
-          <div className="wide-layout__content">{appContent}</div>
+          <div className="wide-layout__content" data-ai-page-context>
+            {appContent}
+          </div>
         </div>
       )}
+      <AiChatDrawer open={aiChatOpen} onClose={() => setAiChatOpen(false)} />
       {status === 'conflict' && (
         <MergeSyncDialog
           delta={delta}

@@ -25,6 +25,27 @@
     "toggleSidebar": "Toggle sidebar",
     "add": "Add"
   },
+  "aiChat": {
+    "title": "Ask Npm Lens",
+    "subtitle": "On-device help with the current page",
+    "open": "Open AI chat",
+    "close": "Close AI chat",
+    "welcomeTitle": "How can I help?",
+    "welcomeDescription": "Ask about the packages, maintainers, metrics, or other information visible on this page.",
+    "inputLabel": "Message for the AI assistant",
+    "placeholder": "Ask about this page…",
+    "contextHint": "Uses visible page context",
+    "send": "Send",
+    "stop": "Stop",
+    "thinking": "Thinking…",
+    "preparing": "Preparing Chrome AI…",
+    "downloading": "Downloading the on-device model… {{progress}}%",
+    "stopped": "Generation stopped.",
+    "unavailable": "Chrome AI is not available on this browser or device.",
+    "error": "The assistant could not generate a response.",
+    "user": "You",
+    "assistant": "Npm Lens AI"
+  },
   "settings": {
     "title": "Settings",
     "appearanceGroup": "Appearance",

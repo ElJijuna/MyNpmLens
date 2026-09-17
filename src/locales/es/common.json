@@ -25,6 +25,27 @@
     "toggleSidebar": "Alternar barra lateral",
     "add": "Agregar"
   },
+  "aiChat": {
+    "title": "Pregunta a Npm Lens",
+    "subtitle": "Ayuda local con el contexto de la página actual",
+    "open": "Abrir chat con IA",
+    "close": "Cerrar chat con IA",
+    "welcomeTitle": "¿Cómo puedo ayudarte?",
+    "welcomeDescription": "Pregunta por los paquetes, mantenedores, métricas u otra información visible en esta página.",
+    "inputLabel": "Mensaje para el asistente de IA",
+    "placeholder": "Pregunta sobre esta página…",
+    "contextHint": "Usa el contexto visible de la página",
+    "send": "Enviar",
+    "stop": "Detener",
+    "thinking": "Pensando…",
+    "preparing": "Preparando la IA de Chrome…",
+    "downloading": "Descargando el modelo local… {{progress}}%",
+    "stopped": "Generación detenida.",
+    "unavailable": "La IA de Chrome no está disponible en este navegador o dispositivo.",
+    "error": "El asistente no pudo generar una respuesta.",
+    "user": "Tú",
+    "assistant": "IA de Npm Lens"
+  },
   "settings": {
     "title": "Ajustes",
     "appearanceGroup": "Apariencia",
