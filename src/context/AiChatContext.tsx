@@ -9,12 +9,14 @@ import {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAppTools } from '@/hooks/useAppTools';
 import {
   type ChatMessage,
   clearStoredChat,
   loadChatMessages,
   saveChatMessages,
 } from '@/lib/aiChatStorage';
+import { runAssistantTurn } from '@/lib/aiToolLoop';
 import {
   buildContextualPrompt,
   createChromeAiSession,
@@ -42,6 +44,9 @@ export const AiChatProvider = ({ children }: PropsWithChildren) => {
   const abortRef = useRef<AbortController | null>(null);
   const messagesRef = useRef(messages);
   const nextIdRef = useRef(Math.max(0, ...messages.map((message) => message.id)) + 1);
+  const appTools = useAppTools();
+  const appToolsRef = useRef(appTools);
+  appToolsRef.current = appTools;
 
   useEffect(() => {
     messagesRef.current = messages;
@@ -114,23 +119,14 @@ export const AiChatProvider = ({ children }: PropsWithChildren) => {
       try {
         const session = await getSession(controller.signal);
         const prompt = await buildContextualPrompt(trimmedQuestion);
-        const reader = session.promptStreaming(prompt, { signal: controller.signal }).getReader();
-        let response = '';
-
-        while (true) {
-          const { done, value: chunk } = await reader.read();
-          if (done) {
-            break;
-          }
-          response = chunk.startsWith(response) ? chunk : response + chunk;
-          const nextResponse = response;
-          setMessages((current) =>
-            current.map((message) =>
-              message.id === assistantId ? { ...message, content: nextResponse } : message,
-            ),
-          );
-          setStatus(undefined);
-        }
+        const tools = Object.values(appToolsRef.current);
+        const response = await runAssistantTurn(session, prompt, tools, controller.signal);
+        setMessages((current) =>
+          current.map((message) =>
+            message.id === assistantId ? { ...message, content: response } : message,
+          ),
+        );
+        setStatus(undefined);
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') {
           setStatus(t('aiChat.stopped'));

@@ -1,18 +1,9 @@
-export interface WebMcpContent {
-  type: 'text';
-  text: string;
-}
-
-export interface WebMcpToolResult {
-  content: WebMcpContent[];
-}
-
 export interface WebMcpToolDescriptor<TInput = Record<string, unknown>> {
   name: string;
   description: string;
   inputSchema: Record<string, unknown>;
   annotations?: { readOnlyHint?: boolean };
-  execute: (input: TInput) => Promise<WebMcpToolResult> | WebMcpToolResult;
+  execute: (input: TInput) => Promise<string> | string;
 }
 
 interface ModelContext {
@@ -30,10 +21,6 @@ declare global {
 
 export function isWebMcpSupported(): boolean {
   return typeof document !== 'undefined' && 'modelContext' in document;
-}
-
-export function textResult(text: string): WebMcpToolResult {
-  return { content: [{ type: 'text', text }] };
 }
 
 /**

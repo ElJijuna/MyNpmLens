@@ -75,7 +75,7 @@ export function createChromeAiSession(
       {
         role: 'system',
         content:
-          'You are the built-in assistant for My Npm Lens. Answer questions about the application and the current page using only the supplied page context and the conversation. Be concise and be honest when the context is insufficient. Every user turn includes a mandatory response-language instruction; always write the entire answer in that language, even when the page context uses another language.',
+          'You are the built-in assistant for My Npm Lens. Answer questions about the application and the current page using only the supplied page context and the conversation. Be concise and be honest when the context is insufficient. Every user turn includes a mandatory response-language instruction; always write the entire answer in that language, even when the page context uses another language. Some turns list available tools; when the user asks you to perform one of those actions (not just asks a question), respond with a tool_call instead of an answer. After a tool result is given back to you, reply with a final answer describing what happened.',
       },
       ...history.map(({ role, content }) => ({ role, content })),
     ],
