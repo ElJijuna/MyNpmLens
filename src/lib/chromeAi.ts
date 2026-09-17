@@ -1,4 +1,46 @@
 const MAX_PAGE_CONTEXT_LENGTH = 14_000;
+const SPANISH_MARKERS = new Set([
+  'aparece',
+  'aparecen',
+  'aplicacion',
+  'como',
+  'cual',
+  'cuales',
+  'descargas',
+  'donde',
+  'esta',
+  'este',
+  'explica',
+  'explicar',
+  'hay',
+  'mantenedores',
+  'pagina',
+  'paquete',
+  'paquetes',
+  'para',
+  'porque',
+  'puede',
+  'puedes',
+  'que',
+  'tiene',
+]);
+const ENGLISH_MARKERS = new Set([
+  'appear',
+  'appears',
+  'application',
+  'downloads',
+  'explain',
+  'how',
+  'maintainers',
+  'package',
+  'packages',
+  'page',
+  'the',
+  'this',
+  'what',
+  'which',
+  'why',
+]);
 
 const MODEL_OPTIONS: LanguageModelCreateCoreOptions = {
   expectedInputs: [{ type: 'text', languages: ['en', 'es'] }],
@@ -26,7 +68,7 @@ export function createChromeAiSession(
       {
         role: 'system',
         content:
-          'You are the built-in assistant for My Npm Lens. Answer questions about the application and the current page using only the supplied page context and the conversation. Be concise, be honest when the context is insufficient, and reply in the language used by the user.',
+          'You are the built-in assistant for My Npm Lens. Answer questions about the application and the current page using only the supplied page context and the conversation. Be concise and be honest when the context is insufficient. Every user turn includes a mandatory response-language instruction; always write the entire answer in that language, even when the page context uses another language.',
       },
     ],
     monitor(monitor) {
@@ -39,7 +81,9 @@ export function createChromeAiSession(
 
 export function getCurrentPageContext(): string {
   const root = document.querySelector<HTMLElement>('[data-ai-page-context]');
-  const visibleText = root?.innerText.replace(/\n{3,}/g, '\n\n').trim() ?? '';
+  const visibleText = (root?.innerText ?? root?.textContent ?? '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
   const trimmedText = visibleText.slice(0, MAX_PAGE_CONTEXT_LENGTH);
 
   return [
@@ -52,6 +96,38 @@ export function getCurrentPageContext(): string {
   ].join('\n');
 }
 
+export type ResponseLanguage = 'en' | 'es';
+
+export function detectResponseLanguage(question: string): ResponseLanguage {
+  const normalized = question.toLocaleLowerCase().normalize('NFD');
+  const words = normalized.match(/[a-z]+/g) ?? [];
+  let spanishScore = /[¿¡ñáéíóúü]/i.test(question) ? 3 : 0;
+  let englishScore = 0;
+
+  for (const word of words) {
+    spanishScore += SPANISH_MARKERS.has(word) ? 1 : 0;
+    englishScore += ENGLISH_MARKERS.has(word) ? 1 : 0;
+  }
+
+  if (spanishScore !== englishScore) {
+    return spanishScore > englishScore ? 'es' : 'en';
+  }
+
+  const pageLanguage = document.documentElement.lang || navigator.language;
+  return pageLanguage.toLocaleLowerCase().startsWith('es') ? 'es' : 'en';
+}
+
 export function buildContextualPrompt(question: string): string {
-  return `<current-page-context>\n${getCurrentPageContext()}\n</current-page-context>\n\nUser question: ${question}`;
+  const responseLanguage = detectResponseLanguage(question);
+  const languageName = responseLanguage === 'es' ? 'Spanish' : 'English';
+
+  return [
+    '<current-page-context>',
+    getCurrentPageContext(),
+    '</current-page-context>',
+    '',
+    `<user-question>${question}</user-question>`,
+    `<response-language>${languageName}</response-language>`,
+    `Mandatory: Respond only in ${languageName}. Do not follow the language of the page context.`,
+  ].join('\n');
 }
