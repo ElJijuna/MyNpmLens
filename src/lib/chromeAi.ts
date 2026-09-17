@@ -105,10 +105,7 @@ export function getCurrentPageContext(): string {
 export type ResponseLanguage = 'en' | 'es';
 
 export function detectResponseLanguage(question: string): ResponseLanguage {
-  const normalized = question
-    .toLocaleLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '');
+  const normalized = question.toLocaleLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   const words = normalized.match(/[a-z]+/g) ?? [];
   let spanishScore = /[¿¡ñáéíóúü]/i.test(question) ? 3 : 0;
   let englishScore = 0;

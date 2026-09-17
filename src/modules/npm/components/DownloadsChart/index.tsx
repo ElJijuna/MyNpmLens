@@ -2,7 +2,7 @@ import { npmQueryKeys, useNpmClient } from '@api-hooks/npm';
 import { BarChart } from '@gnome-ui/charts';
 import { LoadingStatus } from '@gnome-ui/layout';
 import { PanelCard } from '@gnome-ui/layout/components/PanelCard';
-import { Box, Spinner, Text, useNumberFormatter, WrapBox } from '@gnome-ui/react';
+import { Box, Spinner, Text, useNumberFormatter, VisuallyHidden, WrapBox } from '@gnome-ui/react';
 import { useQueries } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
@@ -87,6 +87,16 @@ export const DownloadsChart = ({ packageNames }: DownloadsChartProps) => {
         showGrid
         showLegend
       />
+      <VisuallyHidden as="p">
+        Weekly downloads by package:{' '}
+        {chartData
+          .map(
+            (row) =>
+              `${row.name} — ${numberFormatter.format(row.downloads)} downloads, ${row.versions} versions`,
+          )
+          .join('; ')}
+        .
+      </VisuallyHidden>
       <WrapBox justify="space-between" align="center" style={{ marginTop: '1rem' }}>
         <Box spacing={2}>
           <Text variant="caption" color="dim">

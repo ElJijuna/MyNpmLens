@@ -1,7 +1,7 @@
 import { useNpmPackageScore } from '@api-hooks/npm';
 import { RadialBarChart } from '@gnome-ui/charts';
 import { ErrorState } from '@gnome-ui/layout/components/ErrorState';
-import { Text } from '@gnome-ui/react';
+import { Text, VisuallyHidden } from '@gnome-ui/react';
 import { useTranslation } from 'react-i18next';
 import { SectionCard } from '@/components/SectionCard';
 import { useFormatters } from '@/hooks/useFormatters';
@@ -49,6 +49,10 @@ export const ScoreSection = ({ name }: ScoreSectionProps) => {
           <Text variant="caption" color="dim">
             {t('packageDetail.scoreFinal')}: {formatPercent(data.score.final)}
           </Text>
+          <VisuallyHidden as="p">
+            Score breakdown: {chartData.map((row) => `${row.label} ${row.value}%`).join(', ')}.
+            Final score: {formatPercent(data.score.final)}.
+          </VisuallyHidden>
         </>
       )}
     </SectionCard>

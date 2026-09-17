@@ -1,6 +1,6 @@
 import { npmQueryKeys, useNpmClient } from '@api-hooks/npm';
 import { BarChart } from '@gnome-ui/charts';
-import { Card, Text } from '@gnome-ui/react';
+import { Card, Text, VisuallyHidden } from '@gnome-ui/react';
 import { useQueries } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
@@ -48,6 +48,10 @@ export const MaintainersPackagesChart = ({ usernames }: MaintainersPackagesChart
         showGrid
         height={260}
       />
+      <VisuallyHidden as="p">
+        Packages maintained per user:{' '}
+        {data.map((row) => `${row.name} — ${row.packages}`).join('; ')}.
+      </VisuallyHidden>
     </Card>
   );
 };
