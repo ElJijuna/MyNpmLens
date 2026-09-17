@@ -113,9 +113,8 @@ export const AiChatProvider = ({ children }: PropsWithChildren) => {
 
       try {
         const session = await getSession(controller.signal);
-        const reader = session
-          .promptStreaming(buildContextualPrompt(trimmedQuestion), { signal: controller.signal })
-          .getReader();
+        const prompt = await buildContextualPrompt(trimmedQuestion);
+        const reader = session.promptStreaming(prompt, { signal: controller.signal }).getReader();
         let response = '';
 
         while (true) {
