@@ -1,8 +1,9 @@
-import { Close } from '@gnome-ui/icons';
+import { Close, Delete } from '@gnome-ui/icons';
 import { Button, Icon } from '@gnome-ui/react';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiChat } from '@/components/AiChat';
+import { useAiChat } from '@/context/AiChatContext';
 
 export interface AiChatDrawerProps {
   open: boolean;
@@ -11,6 +12,7 @@ export interface AiChatDrawerProps {
 
 export const AiChatDrawer = ({ open, onClose }: AiChatDrawerProps) => {
   const { t } = useTranslation();
+  const { messages, clearConversation } = useAiChat();
   const drawerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -76,9 +78,21 @@ export const AiChatDrawer = ({ open, onClose }: AiChatDrawerProps) => {
             <h2 id="ai-chat-title">{t('aiChat.title')}</h2>
             <p>{t('aiChat.subtitle')}</p>
           </div>
-          <Button type="button" variant="flat" aria-label={t('aiChat.close')} onClick={onClose}>
-            <Icon icon={Close} />
-          </Button>
+          <div className="ai-drawer__actions">
+            {messages.length > 0 && (
+              <Button
+                type="button"
+                variant="flat"
+                aria-label={t('aiChat.newConversation')}
+                onClick={clearConversation}
+              >
+                <Icon icon={Delete} />
+              </Button>
+            )}
+            <Button type="button" variant="flat" aria-label={t('aiChat.close')} onClick={onClose}>
+              <Icon icon={Close} />
+            </Button>
+          </div>
         </header>
         <AiChat autoFocus />
       </aside>

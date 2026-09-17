@@ -30,6 +30,7 @@
     "subtitle": "Ayuda local con el contexto de la página actual",
     "open": "Abrir chat con IA",
     "close": "Cerrar chat con IA",
+    "newConversation": "Iniciar una conversación nueva",
     "welcomeTitle": "¿Cómo puedo ayudarte?",
     "welcomeDescription": "Pregunta por los paquetes, mantenedores, métricas u otra información visible en esta página.",
     "inputLabel": "Mensaje para el asistente de IA",

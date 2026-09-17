@@ -30,6 +30,7 @@
     "subtitle": "On-device help with the current page",
     "open": "Open AI chat",
     "close": "Close AI chat",
+    "newConversation": "Start a new conversation",
     "welcomeTitle": "How can I help?",
     "welcomeDescription": "Ask about the packages, maintainers, metrics, or other information visible on this page.",
     "inputLabel": "Message for the AI assistant",

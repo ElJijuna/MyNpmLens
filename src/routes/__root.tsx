@@ -5,6 +5,7 @@ import { AiChatDrawer } from '@/components/AiChatDrawer';
 import { AppSidebar } from '@/components/AppSidebar';
 import { OfflineBanner } from '@/components/OfflineBanner';
 import { Toolbar } from '@/components/Toolbar';
+import { AiChatProvider } from '@/context/AiChatContext';
 import { SidebarProvider } from '@/context/SidebarContext';
 import { useApplyAccentColor } from '@/hooks/useApplyAccentColor';
 import { useApplyLanguage } from '@/hooks/useApplyLanguage';
@@ -107,7 +108,9 @@ const RootLayout = () => {
           </div>
         </div>
       )}
-      <AiChatDrawer open={aiChatOpen} onClose={() => setAiChatOpen(false)} />
+      <AiChatProvider>
+        <AiChatDrawer open={aiChatOpen} onClose={() => setAiChatOpen(false)} />
+      </AiChatProvider>
       {status === 'conflict' && (
         <MergeSyncDialog
           delta={delta}

@@ -60,6 +60,12 @@
   font-size: 1rem;
 }
 
+.ai-drawer__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .ai-drawer__header p {
   margin-top: 2px;
   color: var(--dim-label-color, #77767b);

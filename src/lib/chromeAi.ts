@@ -57,9 +57,12 @@ export async function getChromeAiAvailability(): Promise<ChromeAiAvailability> {
   return LanguageModel.availability(MODEL_OPTIONS);
 }
 
+import type { ChatMessage } from '@/lib/aiChatStorage';
+
 export function createChromeAiSession(
   onDownloadProgress: (progress: number) => void,
   signal?: AbortSignal,
+  history: ChatMessage[] = [],
 ) {
   return LanguageModel.create({
     ...MODEL_OPTIONS,
@@ -70,6 +73,7 @@ export function createChromeAiSession(
         content:
           'You are the built-in assistant for My Npm Lens. Answer questions about the application and the current page using only the supplied page context and the conversation. Be concise and be honest when the context is insufficient. Every user turn includes a mandatory response-language instruction; always write the entire answer in that language, even when the page context uses another language.',
       },
+      ...history.map(({ role, content }) => ({ role, content })),
     ],
     monitor(monitor) {
       monitor.addEventListener('downloadprogress', (event) => {

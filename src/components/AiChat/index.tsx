@@ -2,17 +2,7 @@ import { ProcessStop, SendTo } from '@gnome-ui/icons';
 import { Button, Icon, Spinner } from '@gnome-ui/react';
 import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  buildContextualPrompt,
-  createChromeAiSession,
-  getChromeAiAvailability,
-} from '@/lib/chromeAi';
-
-interface ChatMessage {
-  id: number;
-  role: 'user' | 'assistant';
-  content: string;
-}
+import { useAiChat } from '@/context/AiChatContext';
 
 export interface AiChatProps {
   autoFocus?: boolean;
@@ -20,13 +10,8 @@ export interface AiChatProps {
 
 export const AiChat = ({ autoFocus = false }: AiChatProps) => {
   const { t } = useTranslation();
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const { messages, isGenerating, status, sendMessage, stopGeneration } = useAiChat();
   const [input, setInput] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [status, setStatus] = useState<string>();
-  const sessionRef = useRef<LanguageModel | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
-  const nextIdRef = useRef(1);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const latestContent = messages[messages.length - 1]?.content;
@@ -43,35 +28,6 @@ export const AiChat = ({ autoFocus = false }: AiChatProps) => {
     }
   }, [autoFocus]);
 
-  useEffect(
-    () => () => {
-      abortRef.current?.abort();
-      sessionRef.current?.destroy();
-    },
-    [],
-  );
-
-  async function getSession(signal: AbortSignal) {
-    if (sessionRef.current) {
-      return sessionRef.current;
-    }
-
-    const availability = await getChromeAiAvailability();
-    if (availability === 'unsupported' || availability === 'unavailable') {
-      throw new Error(t('aiChat.unavailable'));
-    }
-
-    if (availability === 'downloadable' || availability === 'downloading') {
-      setStatus(t('aiChat.preparing'));
-    }
-
-    const session = await createChromeAiSession((progress) => {
-      setStatus(t('aiChat.downloading', { progress }));
-    }, signal);
-    sessionRef.current = session;
-    return session;
-  }
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const question = input.trim();
@@ -79,60 +35,8 @@ export const AiChat = ({ autoFocus = false }: AiChatProps) => {
       return;
     }
 
-    const userMessage: ChatMessage = { id: nextIdRef.current++, role: 'user', content: question };
-    const assistantId = nextIdRef.current++;
-    setMessages((current) => [
-      ...current,
-      userMessage,
-      { id: assistantId, role: 'assistant', content: '' },
-    ]);
     setInput('');
-    setIsGenerating(true);
-    setStatus(t('aiChat.thinking'));
-
-    const controller = new AbortController();
-    abortRef.current = controller;
-
-    try {
-      const session = await getSession(controller.signal);
-      const stream = session.promptStreaming(buildContextualPrompt(question), {
-        signal: controller.signal,
-      });
-      const reader = stream.getReader();
-      let response = '';
-
-      while (true) {
-        const { done, value: chunk } = await reader.read();
-        if (done) {
-          break;
-        }
-        response = chunk.startsWith(response) ? chunk : response + chunk;
-        const nextResponse = response;
-        setMessages((current) =>
-          current.map((message) =>
-            message.id === assistantId ? { ...message, content: nextResponse } : message,
-          ),
-        );
-        setStatus(undefined);
-      }
-    } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
-        setStatus(t('aiChat.stopped'));
-      } else {
-        const message = error instanceof Error ? error.message : t('aiChat.error');
-        setMessages((current) =>
-          current.map((item) => (item.id === assistantId ? { ...item, content: message } : item)),
-        );
-        setStatus(undefined);
-      }
-    } finally {
-      abortRef.current = null;
-      setIsGenerating(false);
-    }
-  }
-
-  function stopGeneration() {
-    abortRef.current?.abort();
+    await sendMessage(question);
   }
 
   return (
