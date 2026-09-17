@@ -1,3 +1,18 @@
+## [1.23.0](https://github.com/ElJijuna/MyNpmLens/compare/v1.22.1...v1.23.0) (2026-09-17)
+
+### Features
+
+* add VisuallyHidden components for improved accessibility in various charts and sections ([4baa2b3](https://github.com/ElJijuna/MyNpmLens/commit/4baa2b3b3c3ccc32d01fa41c09813b88dec6bfc3))
+* enhance language detection and contextual prompt generation for Spanish and English ([28be8ef](https://github.com/ElJijuna/MyNpmLens/commit/28be8efe42f297d237ae95734cf0632b289e26f1))
+* enhance language detection and contextual prompt generation with async handling ([7f456a8](https://github.com/ElJijuna/MyNpmLens/commit/7f456a8730487e35edcb75e74685660eb40ff7dd))
+* implement AI chat context and storage management with conversation clearing functionality ([47cef94](https://github.com/ElJijuna/MyNpmLens/commit/47cef94624674e1554dc05f411cf3addcaeabb4d))
+* implement AI chat feature with drawer and contextual prompts ([ba2bb34](https://github.com/ElJijuna/MyNpmLens/commit/ba2bb34aa435a6dc6da6aa96484bde43b58d82d9))
+* implement AppTools for unified tool management and enhance AI chat context handling ([d15185d](https://github.com/ElJijuna/MyNpmLens/commit/d15185d2964beacbf3216dd2249f8b357700b181))
+* implement WebMCP tools for npm package management and integration ([e4ddadd](https://github.com/ElJijuna/MyNpmLens/commit/e4ddadd025184a2dcb274aed6d75ac122c598e97))
+* integrate i18n for language detection and context retrieval in Chrome AI ([b55c372](https://github.com/ElJijuna/MyNpmLens/commit/b55c3729bae90b814a59d954d17e8816dad2de32))
+* update [@gnome-ui](https://github.com/gnome-ui) dependencies to latest versions for improved functionality ([079ebf5](https://github.com/ElJijuna/MyNpmLens/commit/079ebf51a27933eb1a16f23d8b91446a06aaedc2))
+* update package.json and package-lock.json for [@gnome-ui](https://github.com/gnome-ui) dependencies to latest versions ([76c4d10](https://github.com/ElJijuna/MyNpmLens/commit/76c4d10ac77b213001aa7c1aebcbffe7370cbeac))
+
 ## [1.22.1](https://github.com/ElJijuna/MyNpmLens/compare/v1.22.0...v1.22.1) (2026-06-15)
 
 ### Bug Fixes
