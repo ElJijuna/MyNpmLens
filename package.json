@@ -26,6 +26,7 @@
     "@gnome-ui/hooks": "^1.29.0",
     "@gnome-ui/icons": "^1.43.0",
     "@gnome-ui/layout": "^1.32.1",
+    "@gnome-ui/platform": "^1.29.0",
     "@gnome-ui/react": "^1.59.0",
     "@tanstack/query-async-storage-persister": "^5.99.0",
     "@tanstack/react-pacer": "^0.22.0",
